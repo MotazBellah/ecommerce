@@ -1,7 +1,14 @@
 {% extends "store/layout.html" %}
+{% load static %}
+
 
 {% block content %}
+<h2 class="test">dsfggn</h2>
     {% for i in category %}
-        <a href="{% url 'products' i.id %}"><h2>{{ i.name }}</h2></a>
+        <div class="">
+            <img src="{{i.image.url}}" alt="">
+            <a href="{% url 'products' i.id %}">{{ i.name }}</a>
+        </div>
+
     {% endfor%}
 {% endblock %}

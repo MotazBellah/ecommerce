@@ -5,7 +5,7 @@ from .models import Category, Product
 def index(request):
     category = Category.objects.all()
     context = {
-        "category": category,
+        "category": [category[0]],
     }
 
     return render(request, 'store/index.html', context)
