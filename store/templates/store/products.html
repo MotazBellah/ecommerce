@@ -1,0 +1,7 @@
+{% extends "store/layout.html" %}
+
+{% block content %}
+    {% for i in items %}
+        <h2>{{ i.name }}</h2>
+    {% endfor%}
+{% endblock %}

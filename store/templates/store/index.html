@@ -2,6 +2,6 @@
 
 {% block content %}
     {% for i in category %}
-        <h2>{{ i.name }}</h2>
+        <a href="{% url 'products' i.id %}"><h2>{{ i.name }}</h2></a>
     {% endfor%}
 {% endblock %}
