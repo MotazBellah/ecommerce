@@ -41,3 +41,31 @@
 }
 
 /* END of Style the Card */
+
+/* Style the product card */
+
+/* Style the price to be right*/
+.price {
+    float: right;
+}
+
+/* Style the buttons to be left*/
+.buttons {
+    float: left;
+}
+
+/* Clear floats after the columns */
+.detail:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.coll {
+    flex: 1 0 29%;
+}
