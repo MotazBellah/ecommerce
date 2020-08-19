@@ -3,6 +3,7 @@
 
 {% block content %}
     {% for i in items %}
+        <img src="{{i.image1.url}}" alt="Product_image">
         <h2>{{ i.name }}</h2>
     {% endfor%}
 {% endblock %}

@@ -13,8 +13,10 @@ def index(request):
 # Get all the products per category
 def products(request, category_id):
     items = Product.objects.filter(category=category_id)
+    category = Category.objects.all()
     context = {
         'items': items,
+        "category": category,
     }
 
     return render(request, 'store/products.html', context)

@@ -23,3 +23,21 @@
 .card-info {
   padding: 2px 16px;
 }
+
+/* Clear floats after the columns */
+.card-container:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive Card - one column layout (vertical) on small screens */
+@media screen and (max-width: 600px) {
+  .card-container {
+    width: 100%;
+    display: block;
+    margin-bottom: 20px;
+  }
+}
+
+/* END of Style the Card */
