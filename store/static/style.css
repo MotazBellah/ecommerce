@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 /* Style the Card */
 
 /* Create card effect by adding shadows */
@@ -44,6 +48,39 @@
 
 /* Style the product card */
 
+
+.box-element{
+	padding: 7px;
+}
+
+.card-wrapper {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+}
+
+/* Add deeper shadow, on mouse-over */
+.card-wrapper:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.5);
+}
+
+.thumbnail{
+	width: 100%;
+	height: 250px;
+}
+
+.product{
+	border-radius: 0 0 4px 4px;
+}
+
+.col-lg-4{
+	margin-top: 10px;
+}
+
+.name {
+    height: 30px;
+}
+
+
 /* Style the price to be right*/
 .price {
     float: right;
@@ -61,11 +98,39 @@
   clear: both;
 }
 
+/* Set fixed dimenstions for each image */
+.product-img {
+    width: 630px;
+    height: 350px;
+}
+
+/* Use flex box to style the product div */
 .row {
     display: flex;
     flex-wrap: wrap;
+    align-self: flex-start;
 }
 
+/* Make three item per row */
 .coll {
-    flex: 1 0 29%;
+    flex: 1 1 20%;
+    padding: 5px;
+}
+
+
+.col-container {
+    display: table; /* Make the container element behave like a table */
+     /* Set full-width to expand the whole page */
+}
+
+.col-container .colmn {
+    display: table-cell; /* Make elements inside the container behave like table cells */
+    width: 20%;
+}
+
+@media only screen and (max-width: 600px) {
+  .colmn {
+    display: block;
+    width: 100%;
+  }
 }
