@@ -3,11 +3,12 @@
 
 
 {% block content %}
-<h2 class="test">dsfggn</h2>
     {% for i in category %}
-        <div class="">
-            <img src="{{i.image.url}}" alt="">
-            <a href="{% url 'products' i.id %}">{{ i.name }}</a>
+        <div class="card-container">
+            <img src="{{i.image.url}}" alt="Category_image">
+            <div class="card-info">
+                <a href="{% url 'products' i.id %}">{{ i.name }}</a>
+            </div>
         </div>
 
     {% endfor%}
