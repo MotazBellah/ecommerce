@@ -46,13 +46,15 @@
 
 /* END of Style the Card */
 
-/* Style the product card */
+/* Style the product Page */
 
-
+/* Set padding for box that constains info about the item */
 .box-element{
 	padding: 7px;
+    border-radius: 0 0 4px 4px;
 }
 
+/* Add shadow effect for the card */
 .card-wrapper {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
@@ -63,74 +65,22 @@
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.5);
 }
 
+/* Set fixed dimension for the images */
 .thumbnail{
 	width: 100%;
 	height: 250px;
 }
 
-.product{
-	border-radius: 0 0 4px 4px;
-}
-
-.col-lg-4{
-	margin-top: 10px;
-}
-
+/* Set fixed height for text area */
 .name {
     height: 30px;
 }
 
-
-/* Style the price to be right*/
-.price {
-    float: right;
-}
-
-/* Style the buttons to be left*/
-.buttons {
-    float: left;
-}
-
-/* Clear floats after the columns */
-.detail:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-/* Set fixed dimenstions for each image */
-.product-img {
-    width: 630px;
-    height: 350px;
-}
-
-/* Use flex box to style the product div */
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    align-self: flex-start;
-}
-
-/* Make three item per row */
-.coll {
-    flex: 1 1 20%;
-    padding: 5px;
-}
-
-
-.col-container {
-    display: table; /* Make the container element behave like a table */
-     /* Set full-width to expand the whole page */
-}
-
-.col-container .colmn {
-    display: table-cell; /* Make elements inside the container behave like table cells */
-    width: 20%;
-}
-
-@media only screen and (max-width: 600px) {
-  .colmn {
-    display: block;
-    width: 100%;
+/* Responsive Card - one column layout (vertical) on small screens */
+@media screen and (max-width: 900px) {
+  .name {
+    height: 58px;
   }
 }
+
+/* END the product Page */
