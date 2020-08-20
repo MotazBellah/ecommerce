@@ -20,3 +20,14 @@ def products(request, category_id):
     }
 
     return render(request, 'store/products.html', context)
+
+
+def item(request, product_id):
+    view_item = Product.objects.get(pk=product_id)
+    category = Category.objects.all()
+    context = {
+        'item': view_item,
+        'category': category,
+    }
+
+    return render(request, 'store/item.html', context)
