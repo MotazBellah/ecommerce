@@ -82,5 +82,32 @@
     height: 58px;
   }
 }
-
 /* END the product Page */
+
+/* Style the Item Page */
+/* Column conttainer */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* Create two unequal columns that sits next to each other */
+/* info/right column */
+.item-info {
+    flex: 40%;
+    background-color: #f1f1f1;
+    padding: 20px;
+}
+
+/* slidshow/left column */
+.item-slid {
+    flex: 60%;
+    padding: 20px;
+}
+
+.item-slid img {
+    width: 100%;
+    padding: 20px;
+}
+
+/* END the Item Page */
