@@ -13,7 +13,7 @@
 				<h6 class="name mt-1"><strong>{{ i.name }}</strong></h6>
 				<hr>
 
-				<button  class="btn btn-outline-secondary add-btn">Add to Cart</button>
+				<a  class="btn btn-outline-secondary add-btn" href="{% url 'addItem' i.id %}">Add to Cart</a>
 				<a class="btn btn-outline-success" href="{% url 'item' i.id %}">View</a>
 				<h4 style="display: inline-block; float: right"><strong>${{ i.price }}</strong></h4>
 			</div>

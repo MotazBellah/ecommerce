@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Category, Product
+from .models import Category, Product, Cart
 
 # Get all the category
 def index(request):
@@ -31,3 +31,13 @@ def item(request, product_id):
     }
 
     return render(request, 'store/item.html', context)
+
+
+def addItem(request, product_id):
+    item = Product.objects.get(pk=product_id)
+    c = Cart.objects.filter(product=item)
+    print('///////////////')
+    print(c)
+    print(item)
+    print('///////////////')
+    return render(request, 'store/cart.html')
