@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from .models import Category, Product, Cart
+import json
 
 
 # Get all the category
@@ -35,11 +36,19 @@ def item(request, product_id):
     return render(request, 'store/item.html', context)
 
 
-def addItem(request, product_id):
-    item = Product.objects.get(pk=product_id)
-    c = Cart.objects.filter(product=item)
+def addItem(request):
+    # item = Product.objects.get(pk=product_id)
+    # c = Cart.objects.filter(product=item)
+    data = json.loads(request.body)
+    id = data.get('id')
+    name = data.get('name')
+    price = data.get('price')
     print('///////////////')
-    print(c)
-    print(item)
+    print(request.is_ajax())
+    print(request.body)
+    print(json.loads(request.body))
+    print(id)
+    print(name)
+    print(price)
     print('///////////////')
-    return render(request, 'store/cart.html')
+    return JsonResponse({'Done': 'OK'}, status=200)
