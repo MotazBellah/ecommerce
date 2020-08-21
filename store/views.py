@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from django.http import HttpResponse, JsonResponse
 from .models import Category, Product, Cart
+
 
 # Get all the category
 def index(request):
