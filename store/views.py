@@ -126,7 +126,7 @@ def addItem(request):
         id = data.get('id')
         name = data.get('name')
         price = data.get('price')
-
+        print('$$$$$$$$$$$$')
         item = Product.objects.get(pk=id)
         cart = Cart(product=item, user=request.user)
         cart.save()
@@ -142,9 +142,9 @@ def addItem(request):
 def cart_view(request):
     items_in_cart = Cart.objects.filter(user=request.user)
     print('///////////////')
-    print(items_in_cart[0].product.name)
-    print(items_in_cart[0].product.description)
-    print(items_in_cart[0].product.price)
+    # print(items_in_cart[0].product.name)
+    # print(items_in_cart[0].product.description)
+    # print(items_in_cart[0].product.price)
     print('///////////////')
 
     context = {
@@ -153,3 +153,21 @@ def cart_view(request):
     }
 
     return render(request, 'store/cart.html', context)
+
+
+def up(request):
+    if request.is_ajax() and request.method == "POST":
+        data = json.loads(request.body)
+        id = data.get('id')
+        value = data.get('value')
+
+        item = Cart.objects.get(user=request.user, pk=id)
+        item.quantity = int(value)
+        item.save()
+
+        print('///////////////')
+        print(item)
+        print(id)
+        print(value)
+        print('///////////////')
+        return JsonResponse({'items': "done"}, status=200)

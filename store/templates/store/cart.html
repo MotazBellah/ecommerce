@@ -16,7 +16,7 @@
           {% for i in products %}
               <tr>
                 <td>{{ i.product.name }}</td>
-                <td>
+                <td id={{i.id}}>
                     <span>{{ i.quantity }}</span>
 
                     <a href="#"><i id="up" class="arrow up"></i></a>
@@ -30,8 +30,27 @@
         </table>
         </div>
 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script type="text/javascript">
             const cartTable = document.getElementsByClassName("table")[0]
+
+            // From Djang doc.
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
             console.log(cartTable);
             cartTable.addEventListener('click', function(e) {
                 console.log(e.target.tagName);
@@ -40,11 +59,34 @@
                     if (e.target.id === 'up') {
                         const parentDiv = e.target.parentElement.parentElement
                         const allChild = parentDiv.childNodes;
-                        console.log(allChild);
+                        // console.log(parentDiv.id);
+                        const id = parentDiv.id
                         let quantity = allChild[1];
                         let quantity_value = allChild[1].textContent
-                        console.log(quantity);
+                        // console.log(quantity);
                         quantity.innerHTML = 1 + parseInt(quantity_value)
+
+                        let total = quantity.innerHTML
+                        console.log(total);
+                        $.ajax({
+                            type: "POST",
+                            url: "/up",
+                            headers: {
+                                    'Content-Type':'application/json',
+                                    'HTTP_X_REQUESTED_WITH':'XMLHttpRequest',
+                                    'X-Requested-With':'XMLHttpRequest',
+                                    'X-CSRFToken':getCookie('csrftoken'),
+                                },
+                            data: JSON.stringify({
+                                  value: total,
+                                  id: id,
+                            }),
+                            datatype:'json',
+                            success: function(data) {
+                              // if (data['success'])
+                                
+                            }
+                        });
                         // const name = allChild[1].textContent;
                         // const price = allChild[9].textContent;
                     }
