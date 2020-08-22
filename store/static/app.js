@@ -1,4 +1,5 @@
 const addBtn = document.getElementById("add-btn")
+const noOfItems = document.getElementById("no-items")
 const rowParent = document.getElementsByClassName("row")[0]
 // const body = document.getElementsByTagName(body)
 
@@ -56,6 +57,7 @@ rowParent.addEventListener('click', function(e) {
         xhr.setRequestHeader("X-CSRFToken", csrftoken)
         xhr.onload = function() {
             console.log(xhr.response, xhr.status);
+            noOfItems.innerHTML = xhr.response['items']
         }
         xhr.send(data)
         // return

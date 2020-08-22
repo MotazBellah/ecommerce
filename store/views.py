@@ -82,8 +82,11 @@ def register(request):
 # Get all the category
 def index(request):
     category = Category.objects.all()
+    items_in_cart = Cart.objects.filter(user=request.user)
+
     context = {
         "category": category,
+        "no_of_items": len(items_in_cart),
     }
 
     return render(request, 'store/index.html', context)
@@ -92,9 +95,12 @@ def index(request):
 def products(request, category_id):
     items = Product.objects.filter(category=category_id)
     category = Category.objects.all()
+    items_in_cart = Cart.objects.filter(user=request.user)
+
     context = {
         'items': items,
         "category": category,
+        "no_of_items": len(items_in_cart),
     }
 
     return render(request, 'store/products.html', context)
@@ -103,27 +109,31 @@ def products(request, category_id):
 def item(request, product_id):
     view_item = Product.objects.get(pk=product_id)
     category = Category.objects.all()
+    items_in_cart = Cart.objects.filter(user=request.user)
+
     context = {
         'item': view_item,
         'category': category,
+        "no_of_items": len(items_in_cart),
     }
 
     return render(request, 'store/item.html', context)
 
 
 def addItem(request):
-    # item = Product.objects.get(pk=product_id)
-    # c = Cart.objects.filter(product=item)
-    data = json.loads(request.body)
-    id = data.get('id')
-    name = data.get('name')
-    price = data.get('price')
-    print('///////////////')
-    print(request.is_ajax())
-    print(request.body)
-    print(json.loads(request.body))
-    print(id)
-    print(name)
-    print(price)
-    print('///////////////')
-    return JsonResponse({'Done': 'OK'}, status=200)
+    if request.is_ajax() and request.method == "POST":
+        data = json.loads(request.body)
+        id = data.get('id')
+        name = data.get('name')
+        price = data.get('price')
+
+        item = Product.objects.get(pk=id)
+        cart = Cart(product=item, user=request.user)
+        cart.save()
+        items_in_cart = Cart.objects.filter(user=request.user)
+
+        print('///////////////')
+        print(items_in_cart)
+        print(len(items_in_cart))
+        print('///////////////')
+        return JsonResponse({'items': len(items_in_cart)}, status=200)
