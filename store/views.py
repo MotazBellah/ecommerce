@@ -141,6 +141,7 @@ def addItem(request):
 
 def cart_view(request):
     items_in_cart = Cart.objects.filter(user=request.user)
+    category = Category.objects.all()
     print('///////////////')
     # print(items_in_cart[0].product.name)
     # print(items_in_cart[0].product.description)
@@ -150,6 +151,7 @@ def cart_view(request):
     context = {
         "no_of_items": len(items_in_cart),
         'products': items_in_cart,
+        "category": category,
     }
 
     return render(request, 'store/cart.html', context)
