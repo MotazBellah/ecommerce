@@ -20,8 +20,6 @@ function getCookie(name) {
     return cookieValue;
 }
 
-
-
 rowParent.addEventListener('click', function(e) {
     // console.log(e.target.tagName);
     // console.log(e.target.id);
