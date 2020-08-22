@@ -22,7 +22,7 @@
                     <a href="#"><i id="up" class="arrow up"></i></a>
                     <a href="#"><i id="down" class="arrow down"></i></a>
                 </td>
-                <td>${{ i.get_total }}</td>
+                <td>${{ i.get_total|floatformat:"2" }}</td>
                 <td><a class="fa fa-trash fa-lg" href="#">D</a></td>
               </tr>
           {% endfor %}
@@ -59,7 +59,8 @@
                     if (e.target.id === 'up') {
                         const parentDiv = e.target.parentElement.parentElement
                         const allChild = parentDiv.childNodes;
-                        // console.log(parentDiv.id);
+                        const parentDiv2 = e.target.parentElement.parentElement.parentElement
+                        let price = parentDiv2.childNodes[5]
                         const id = parentDiv.id
                         let quantity = allChild[1];
                         let quantity_value = allChild[1].textContent
@@ -84,6 +85,7 @@
                             datatype:'json',
                             success: function(data) {
                               // if (data['success'])
+                              price.innerHTML = "$" + data['total']
 
                             }
                         });

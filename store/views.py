@@ -166,8 +166,8 @@ def up(request):
         item.save()
 
         print('///////////////')
-        print(item)
+        print(item.get_total)
         print(id)
         print(value)
         print('///////////////')
-        return JsonResponse({'items': "done"}, status=200)
+        return JsonResponse({'items': "done", 'total': item.get_total}, status=200)
