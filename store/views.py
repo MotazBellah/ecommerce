@@ -174,3 +174,16 @@ def quantity(request):
         print(value)
         print('///////////////')
         return JsonResponse({'items': "done", 'total': item.get_total}, status=200)
+
+
+def delete(request):
+    if request.is_ajax() and request.method == "POST":
+        data = json.loads(request.body)
+        id = data.get('id')
+        item = Cart.objects.get(user=request.user, pk=id)
+        item.delete()
+        print('///////////////')
+        print(data)
+        print('///////////////')
+
+        return JsonResponse({'items': "done"}, status=200)
