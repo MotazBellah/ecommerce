@@ -125,7 +125,19 @@
                         success: function(data) {
                           // if (data['success'])
                           // price.innerHTML = "$" + data['total']
-                          row.style.display = "none"
+                          // row.style.display = "none"
+                          var fadeEffect = setInterval(function () {
+                            if (!row.style.opacity) {
+                                row.style.opacity = 1;
+                            }
+                            if (row.style.opacity > 0) {
+                                row.style.opacity -= 0.1;
+                            } else {
+                                clearInterval(fadeEffect);
+                                row.style.display = "none"
+                            }
+                        }, 200);
+
 
                         }
                     });
