@@ -155,15 +155,16 @@ def cart_view(request):
     return render(request, 'store/cart.html', context)
 
 
-def up(request):
+def quantity(request):
     if request.is_ajax() and request.method == "POST":
         data = json.loads(request.body)
         id = data.get('id')
         value = data.get('value')
 
         item = Cart.objects.get(user=request.user, pk=id)
-        item.quantity = int(value)
-        item.save()
+        if int(value) != item.quantity:
+            item.quantity = int(value)
+            item.save()
 
         print('///////////////')
         print(item.get_total)

@@ -56,7 +56,6 @@
                 console.log(e.target.tagName);
                 console.log(e.target.id);
                 if (e.target.tagName === 'I') {
-                    if (e.target.id === 'up') {
                         const parentDiv = e.target.parentElement.parentElement
                         const allChild = parentDiv.childNodes;
                         const parentDiv2 = e.target.parentElement.parentElement.parentElement
@@ -65,13 +64,20 @@
                         let quantity = allChild[1];
                         let quantity_value = allChild[1].textContent
                         // console.log(quantity);
+                        if (e.target.id === 'up') {
                         quantity.innerHTML = 1 + parseInt(quantity_value)
+                        }
+                        if (e.target.id === 'down') {
+                            if (quantity.innerHTML > 1) {
+                                quantity.innerHTML = parseInt(quantity_value) - 1
+                            }
+                        }
 
                         let total = quantity.innerHTML
                         console.log(total);
                         $.ajax({
                             type: "POST",
-                            url: "/up",
+                            url: "/quantity",
                             headers: {
                                     'Content-Type':'application/json',
                                     'HTTP_X_REQUESTED_WITH':'XMLHttpRequest',
@@ -91,23 +97,6 @@
                         });
                         // const name = allChild[1].textContent;
                         // const price = allChild[9].textContent;
-                    }
-
-                    if (e.target.id === 'down') {
-                        const parentDiv = e.target.parentElement.parentElement
-                        const allChild = parentDiv.childNodes;
-                        console.log(allChild);
-                        let quantity = allChild[1];
-                        let quantity_value = allChild[1].textContent
-                        console.log(quantity);
-                        if (parseInt(quantity_value) > 1) {
-                            quantity.innerHTML = 1 - parseInt(quantity_value)
-                        }
-
-
-                        // const name = allChild[1].textContent;
-                        // const price = allChild[9].textContent;
-                    }
 
                 }
 
