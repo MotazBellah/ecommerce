@@ -28,4 +28,9 @@ class Product(models.Model):
 class Cart(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=0, null=True, blank=True)
+    quantity = models.IntegerField(default=1, null=True, blank=True)
+
+    @property
+    def get_total(self):
+        total = self.product.price * self.quantity
+        return total

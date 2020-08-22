@@ -22,7 +22,7 @@
                     <a href="#"><i id="up" class="arrow up"></i></a>
                     <a href="#"><i id="down" class="arrow down"></i></a>
                 </td>
-                <td>${{ i.product.price }}</td>
+                <td>${{ i.get_total }}</td>
                 <td><a class="fa fa-trash fa-lg" href="#">D</a></td>
               </tr>
           {% endfor %}
@@ -84,7 +84,7 @@
                             datatype:'json',
                             success: function(data) {
                               // if (data['success'])
-                                
+
                             }
                         });
                         // const name = allChild[1].textContent;
