@@ -1,8 +1,83 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
-from .models import Category, Product, Cart
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
+from .models import Category, Product, Cart, User
+from django.contrib.auth import authenticate, login, logout
 import json
 
+def login_view(request):
+    if request.method == "POST":
+
+        # Attempt to sign user in
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+
+        # Check if authentication successful
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            return render(request, "store/login.html", {
+                "message": "Invalid username and/or password."
+            })
+    else:
+        if request.user.is_anonymous:
+            return render(request, "store/login.html")
+        else:
+            return redirect('index')
+
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("index"))
+
+
+def register(request):
+    if request.method == "POST":
+        username = request.POST["username"]
+        email = request.POST["email"]
+
+        # Ensure password matches confirmation
+        password = request.POST["password"]
+        confirmation = request.POST["confirmation"]
+        if not username:
+            return render(request, "store/register.html", {
+                "message": "*Not username."})
+
+        if not email:
+            return render(request, "network/register.html", {
+                "message": "*Not email."})
+
+        if not password:
+            return render(request, "store/register.html", {
+                "message": "*Not password."})
+
+        if password != confirmation:
+            return render(request, "store/register.html", {
+                "message": "*Passwords must match."})
+        # Attempt to create new user
+        try:
+            email_already = User.objects.filter(email=email)
+            if not email_already:
+                user = User.objects.create_user(username, email, password)
+                user.save()
+            else:
+                return render(request, "store/register.html", {
+                "message": "*Email already taken."
+            })
+        except IntegrityError:
+            return render(request, "store/register.html", {
+                "message": "*Username already taken."
+            })
+        login(request, user)
+        return redirect("index")
+    else:
+        if request.user.is_anonymous:
+            return render(request, "store/register.html")
+        else:
+            return redirect('index')
 
 # Get all the category
 def index(request):

@@ -111,3 +111,26 @@
 }
 
 /* END the Item Page */
+
+
+/* Style login/register page */
+.login{
+    background-color: white;
+    padding: 16px;
+    margin: 10px;
+    margin-top: 10%;
+
+}
+
+/* Style the login/register messages */
+.data-info{
+    font-size: 36px;
+    color: red;
+ }
+
+ .info-form{
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+/* END Style login/register page */
