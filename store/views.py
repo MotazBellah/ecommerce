@@ -137,3 +137,19 @@ def addItem(request):
         print(len(items_in_cart))
         print('///////////////')
         return JsonResponse({'items': len(items_in_cart)}, status=200)
+
+
+def cart_view(request):
+    items_in_cart = Cart.objects.filter(user=request.user)
+    print('///////////////')
+    print(items_in_cart[0].product.name)
+    print(items_in_cart[0].product.description)
+    print(items_in_cart[0].product.price)
+    print('///////////////')
+
+    context = {
+        "no_of_items": len(items_in_cart),
+        'products': items_in_cart,
+    }
+
+    return render(request, 'store/cart.html', context)

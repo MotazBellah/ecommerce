@@ -1,0 +1,32 @@
+{% extends "store/layout.html" %}
+{% load static %}
+
+<div class="container">
+    {% block content %}
+    <table class="table">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+          {% for i in products %}
+              <tr>
+                <td>{{ i.product.name }}</td>
+                <td>
+                    {{ i.quantity }}
+
+                    <a href="#"><i class="arrow up"></i></a>
+                    <a href="#"><i class="arrow down"></i></a>
+                </td>
+                <td>${{ i.product.price }}</td>
+                <td><a class="fa fa-trash fa-lg" href="#">D</a></td>
+              </tr>
+          {% endfor %}
+        </tbody>
+        </table>
+    {% endblock %}
+</div>

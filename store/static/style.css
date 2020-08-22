@@ -128,9 +128,40 @@
     color: red;
  }
 
- .info-form{
+.info-form{
     margin-top: 10px;
     font-size: 16px;
 }
 
 /* END Style login/register page */
+
+
+/* Style the Cart page */
+
+/* Create arrow */
+.arrow {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+}
+
+/* Make the arrow pointer up */
+.up {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+    position:relative;
+    bottom:10px;
+    left:7px;
+}
+
+/* Make the arrow pointer down */
+.down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    position:relative;
+    bottom:-10px;
+    left:-7px;
+}
+
+/* END Style Cart page */
