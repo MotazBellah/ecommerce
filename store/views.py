@@ -191,4 +191,4 @@ def delete(request):
 
 def checkout(request):
 
-    return render(request, 'store/checkout.html', context)
+    return render(request, 'store/checkout.html')
