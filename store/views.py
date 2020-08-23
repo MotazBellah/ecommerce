@@ -187,3 +187,8 @@ def delete(request):
         print('///////////////')
 
         return JsonResponse({'items': "done"}, status=200)
+
+
+def checkout(request):
+
+    return render(request, 'store/checkout.html', context)
