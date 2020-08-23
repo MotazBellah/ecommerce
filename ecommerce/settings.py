@@ -126,3 +126,9 @@ STATICFILES_DIRS = (
 
 MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'store/static/images')
+
+# Braintree stettings
+BT_ENVIRONMENT = 'sandbox'
+BT_MERCHANT_ID = '737btdq3sw7ysw2s'
+BT_PUBLIC_KEY = '6w543sw56mby44yq'
+BT_PRIVATE_KEY = '4e168b23e1d089145698cc664bde1ad1'

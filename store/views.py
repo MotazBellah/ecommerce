@@ -1,10 +1,32 @@
 from django.shortcuts import render
+from django.conf import settings
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from .models import Category, Product, Cart, User
+# from .extras import transact, generate_client_token
 from django.contrib.auth import authenticate, login, logout
 import json
+import braintree
+
+gateway = braintree.BraintreeGateway(
+    braintree.Configuration(
+        environment=settings.BT_ENVIRONMENT,
+        merchant_id=settings.BT_MERCHANT_ID,
+        public_key=settings.BT_PUBLIC_KEY,
+        private_key=settings.BT_PRIVATE_KEY,
+    )
+)
+
+def generate_client_token():
+    return gateway.client_token.generate()
+
+def transact(options):
+    return gateway.transaction.sale(options)
+
+def find_transaction(id):
+    return gateway.transaction.find(id)
+
 
 def login_view(request):
     if request.method == "POST":
@@ -142,6 +164,7 @@ def addItem(request):
 def cart_view(request):
     items_in_cart = Cart.objects.filter(user=request.user)
     category = Category.objects.all()
+    client_token = generate_client_token()
     print('///////////////')
     # print(items_in_cart[0].product.name)
     # print(items_in_cart[0].product.description)
@@ -152,6 +175,7 @@ def cart_view(request):
         "no_of_items": len(items_in_cart),
         'products': items_in_cart,
         "category": category,
+        "client_token":client_token,
     }
 
     return render(request, 'store/cart.html', context)
@@ -189,6 +213,30 @@ def delete(request):
         return JsonResponse({'items': "done"}, status=200)
 
 
-def checkout(request):
+# def checkout(request):
+#     item = Cart.objects.get(user=request.user)
+#
+#     return render(request, 'store/checkout.html')
 
-    return render(request, 'store/checkout.html')
+
+def checkout(request):
+    # items = Cart.objects.get(user=request.user)
+    # client_token = generate_client_token()
+    if request.method == 'POST':
+        print('&&&&&&&&&&&&&&&&&&&&&&')
+        result = transact({
+            'amount': request.POST['amount'],
+            'payment_method_nonce': request.POST['payment_method_nonce'],
+            'options': {
+                "submit_for_settlement": True
+            }
+        })
+        print('^^^^^^^^^^^^^^^^^^^66')
+        if result.is_success or result.transaction:
+            print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+            return JsonResponse({'items': "done"}, status=200)
+            # return redirect(url_for('show_checkout',transaction_id=result.transaction.id))
+        else:
+            return JsonResponse({'items': "Not"}, status=500)
+        # for x in result.errors.deep_errors: flash('Error: %s: %s' % (x.code, x.message))
+        # return redirect(url_for('new_checkout'))
