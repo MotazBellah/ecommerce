@@ -5,13 +5,21 @@
 
 {% block content %}
 <div class="container">
+    <div class="row mt-3">
+
+
     {% for i in info %}
-        <img src="{{i.0}}" alt="">
-        <p>{{i.1}}</p>
-        <p>{{i.2}}</p>
-        <p>{{i.3}}</p>
-        <p>{{i.4}}</p>
+        <div class="col">
+            <img  src="{{i.0}}" alt="{{i.0}}">
+            <a href="https://www.tinydeal.com/{{i.2}}">
+                <p>{{i.1}}</p>
+            </a>
+            <p><span class="text-secondary mr-2" class="mb-3"><s>{{i.4}}</s></span>{{i.3}}</p>
+
+        </div>
+
     {% endfor %}
+    </div>
 </div>
 
 {% endblock content %}
