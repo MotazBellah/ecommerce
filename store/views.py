@@ -8,6 +8,8 @@ from .models import Category, Product, Cart, User
 from django.contrib.auth import authenticate, login, logout
 import json
 import braintree
+from urllib.request import Request, urlopen
+from bs4 import BeautifulSoup, SoupStrainer
 
 gateway = braintree.BraintreeGateway(
     braintree.Configuration(
@@ -240,3 +242,49 @@ def checkout(request):
             return JsonResponse({'items': "Not"}, status=500)
         # for x in result.errors.deep_errors: flash('Error: %s: %s' % (x.code, x.message))
         # return redirect(url_for('new_checkout'))
+
+
+def amazon(request):
+    # req = Request("https://www.amazon.com/s?k=labtop", headers={'User-Agent': 'Mozilla/5.0'})
+    req = Request("https://www.tinydeal.com/buy/headphone.html", headers={'User-Agent': 'Mozilla/5.0'})
+    response = urlopen(req).read()
+    soup = BeautifulSoup(response, 'html.parser')
+    # divs = soup.find_all('div', {'class': 'r_b_c'})
+    lis = soup.find_all('li', {'class': 'productListing-even'})
+    print(len(lis))
+    image = []
+    link = []
+    price = []
+    info = []
+    for i in lis:
+        img = i.find('img', {'class': 'lazy_load'})
+        p1 = i.find('span', {'class': 'productSpecialPrice'})
+        p2 = i.find('span', {'class': 'normalprice'})
+        anchr = i.find('a', {'class': 'p_box_title'})
+        # image.append(img.attrs['data-original'])
+        # link.append((anchr.get_text(), anchr.attrs['href']))
+        # price.append((p1.get_text(), p2.get_text()))
+        info.append((img.attrs['data-original'], anchr.get_text(), anchr.attrs['href'], p1.get_text(), p2.get_text()))
+        # print('////////////////////////')
+        # print(img.attrs['data-original'])
+        # print('==========')
+        # print(p1.get_text())
+        # print('==========')
+        # print(p2.get_text())
+        # print('==========')
+        # print(anchr.get_text())
+        # print('==========')
+        # print(anchr.attrs['href'])
+        # print('==========')
+
+    context = {
+        "image": image,
+        "link": link,
+        "price": price,
+        "range": len(link),
+        "info": info
+    }
+
+
+
+    return render(request, 'store/amazon.html', context)

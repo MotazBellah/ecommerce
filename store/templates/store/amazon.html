@@ -1,0 +1,17 @@
+{% extends "store/layout.html" %}
+{% load static %}
+
+
+
+{% block content %}
+<div class="container">
+    {% for i in info %}
+        <img src="{{i.0}}" alt="">
+        <p>{{i.1}}</p>
+        <p>{{i.2}}</p>
+        <p>{{i.3}}</p>
+        <p>{{i.4}}</p>
+    {% endfor %}
+</div>
+
+{% endblock content %}
