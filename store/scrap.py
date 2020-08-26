@@ -1,5 +1,10 @@
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup, SoupStrainer
+from ebaysdk.finding import Connection
+
+from ebaysdk import finding
+
+ebayapi = "MoatazGh-test-PRD-16e4c7d7e-e927c4f5"
 
 
 def ebay(name):
@@ -46,3 +51,20 @@ def olx(name):
             pass
 
     return info
+
+
+def ebay_API(name):
+    api = Connection(appid=ebayapi, siteid="EBAY-US", config_file=None)
+    api_request = {'keywords' : 'iphone x', 'outputSelector': "SellserInfo", 'sortOrder': 'CurrentPriceHighest'}
+
+    response = api.execute("findItemsByKeywords", api_request)
+
+    x = api.response.dict()
+    # print(x['searchResult']['item'][0])
+    print(x['searchResult']['item'][0]['title'])
+    print(x['searchResult']['item'][0]['shippingInfo'])
+    print(x['searchResult']['item'][0]['galleryURL'])
+    print(x['searchResult']['item'][0]['viewItemURL'])
+    print(x['searchResult']['item'][0]['sellingStatus']['currentPrice'])
+
+    return '(((((((((((((())))))))))))))'

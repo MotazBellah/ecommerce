@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from .models import Category, Product, Cart, User
 # from .extras import transact, generate_client_token
-from .scrap import ebay, olx
+from .scrap import ebay, olx, ebay_API
 from django.contrib.auth import authenticate, login, logout
 import json
 import braintree
@@ -289,6 +289,7 @@ def amazon(request):
         "info": info
     }
 
-    print(olx('a'))
+    # print(olx('a'))
+    print(ebay_API('a'))
 
     return render(request, 'store/amazon.html', context)
