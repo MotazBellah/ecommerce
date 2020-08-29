@@ -3,7 +3,7 @@ from django.conf import settings
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from .models import Category, Product, Cart, User
+from .models import Category, Product, Cart, User, ShippingInfo
 # from .extras import transact, generate_client_token
 from .scrap import ebay, olx, ebay_API, get_amazon
 from django.contrib.auth import authenticate, login, logout
@@ -261,6 +261,10 @@ def shipping_info(request):
         print(city)
         print(zip)
         print('////////////////////')
+
+        shipping_info = ShippingInfo(address1=address1, address2=address2, user=request.user,
+                            phone=phone, city=city, zip=zip)
+        shipping_info.save()
 
         return JsonResponse({'items': "done"}, status=200)
 
