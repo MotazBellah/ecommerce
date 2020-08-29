@@ -164,4 +164,28 @@
     left:-7px;
 }
 
+.address {
+    float: left;
+    width: 40%
+    padding:16px;
+}
+
+.payment {
+    float: right;
+    width: 60%;
+    padding: 16px;
+}
+
+.cart-checkout:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+@media screen and (max-width: 600px) {
+  .address, .payment {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
 /* END Style Cart page */
