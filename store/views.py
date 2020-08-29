@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from .models import Category, Product, Cart, User
 # from .extras import transact, generate_client_token
-from .scrap import ebay, olx, ebay_API
+from .scrap import ebay, olx, ebay_API, get_amazon
 from django.contrib.auth import authenticate, login, logout
 import json
 import braintree
@@ -166,10 +166,11 @@ def addItem(request):
 
 def cart_view(request):
     items_in_cart = Cart.objects.filter(user=request.user)
+    total = sum((i.get_total for i in items_in_cart), 0)
     category = Category.objects.all()
     client_token = generate_client_token()
     print('///////////////')
-    # print(items_in_cart[0].product.name)
+    # print(total)
     # print(items_in_cart[0].product.description)
     # print(items_in_cart[0].product.price)
     print('///////////////')
@@ -179,6 +180,7 @@ def cart_view(request):
         'products': items_in_cart,
         "category": category,
         "client_token":client_token,
+        "total": total
     }
 
     return render(request, 'store/cart.html', context)
@@ -216,12 +218,6 @@ def delete(request):
         return JsonResponse({'items': "done"}, status=200)
 
 
-# def checkout(request):
-#     item = Cart.objects.get(user=request.user)
-#
-#     return render(request, 'store/checkout.html')
-
-
 def checkout(request):
     # items = Cart.objects.get(user=request.user)
     # client_token = generate_client_token()
@@ -247,7 +243,7 @@ def checkout(request):
 
 def amazon(request):
     # req = Request("https://www.amazon.com/s?k=labtop", headers={'User-Agent': 'Mozilla/5.0'})
-    req = Request("https://www.tinydeal.com/buy/phones.html", headers={'User-Agent': 'Mozilla/5.0'})
+    req = Request("https://www.tinydeal.com/buy/iphone.html", headers={'User-Agent': 'Mozilla/5.0'})
     response = urlopen(req).read()
     soup = BeautifulSoup(response, 'html.parser')
     # divs = soup.find_all('div', {'class': 'r_b_c'})
@@ -290,6 +286,7 @@ def amazon(request):
     }
 
     # print(olx('a'))
-    print(ebay_API('a'))
+    # print(ebay_API('a'))
+    # print(get_amazon('a'))
 
     return render(request, 'store/amazon.html', context)

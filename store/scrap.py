@@ -52,6 +52,30 @@ def olx(name):
 
     return info
 
+def get_amazon(name):
+    req = Request("https://www.alibaba.com/products/iphone_x.html?IndexArea=product_en", headers={'User-Agent': 'Mozilla/5.0'})
+    response = urlopen(req).read()
+    soup = BeautifulSoup(response, 'html.parser')
+    # divs = soup.find_all('div', {'class': 'r_b_c'})
+    lis = soup.find_all('div', {'class': 'organic-offer-wrapper'})
+    print(soup)
+    info = []
+    for i in lis[:3]:
+        try:
+            img = i.find('img', {'class': 'J-img-switcher-item'})
+            p1 = i.find('p', {'class': 'elements-title-normal__content'})
+            p2 = i.find('p', {'class': 'elements-offer-price-normal'})
+            p3 = i.find('span', {'class': 'element-offer-minorder-normal__value'})
+            anchr = i.find('a', {'class': 'elements-title-normal one-line'})
+            # image.append(img.attrs['data-original'])
+            # link.append((anchr.get_text(), anchr.attrs['href']))
+            # price.append((p1.get_text(), p2.get_text()))
+            info.append((img.attrs['src'], anchr.attrs['title'], anchr.attrs['href'], p1.get_text(), p2.get_text(), p3.get_text()))
+        except Exception as e:
+            pass
+
+    return info
+
 
 def ebay_API(name):
     api = Connection(appid=ebayapi, siteid="EBAY-US", config_file=None)
