@@ -30,7 +30,7 @@
         </table>
 
         <h4>Total Price: $<span id="total-price">{{total|floatformat:"2"}}</span></h4>
-        {% if user_address %}
+        {% if not user_address %}
             <div class="address mt-4">
                 <form method="post" id='post-form'>
                     {% csrf_token %}

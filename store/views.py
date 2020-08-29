@@ -170,9 +170,9 @@ def cart_view(request):
     total = sum((i.get_total for i in items_in_cart), 0)
     category = Category.objects.all()
     client_token = generate_client_token()
-    user_address = True
+    user_address = False
     if shipping_info:
-        user_address = False
+        user_address = True
     print('///////////////')
     # print(total)
     # print(items_in_cart[0].product.description)
@@ -253,6 +253,10 @@ def checkout(request):
 
 def shipping_info(request):
     if request.method == 'POST':
+        info = ShippingInfo.objects.get(user=request.user)
+        if info:
+            return JsonResponse({'message': "User already have shipping info"}, status=200)
+
         address1 = request.POST['address1']
         address2 = request.POST.get('address2')
         phone = request.POST['phone']
