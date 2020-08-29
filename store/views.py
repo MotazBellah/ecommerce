@@ -245,7 +245,7 @@ def checkout(request):
         # for x in result.errors.deep_errors: flash('Error: %s: %s' % (x.code, x.message))
         # return redirect(url_for('new_checkout'))
 
-def Shipping_info(request):
+def shipping_info(request):
 
     if request.method == 'POST':
         address1 = request.POST['address1']

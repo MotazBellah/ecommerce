@@ -32,7 +32,7 @@
         <h4>Total Price: $<span id="total-price">{{total|floatformat:"2"}}</span></h4>
 
         <div class="address mt-4">
-            <form method="post" action="{% url 'Shipping' %}">
+            <form method="post" id='post-form'>
                 {% csrf_token %}
               <div class="form-group">
                 <label for="inputAddress">Address</label>
@@ -44,7 +44,7 @@
               </div>
               <div class="form-group">
                 <label for="inputAddress2">Phone Number</label>
-                <input type="tel" name="phone" class="form-control" placeholder="+201069090037" required>
+                <input type="tel" name="phone" id="inputPhone" class="form-control" placeholder="+201069090037" required>
               </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
@@ -227,6 +227,31 @@
                 }
 
             })
+
+
+            $(document).on('submit', '#post-form',function(e){
+                e.preventDefault();
+                $.ajax({
+                    type:'POST',
+                    url:'{% url "shipping" %}',
+                    data:{
+                        address1:$('#inputAddress').val(),
+                        address2:$('#inputAddress2').val(),
+                        phone:$('#inputPhone').val(),
+                        zip:$('#inputZip').val(),
+                        city:$('#inputCity').val(),
+                        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                        action: 'post'
+                    },
+                    success:function(response){
+                        document.getElementById("post-form").reset();
+                        console.log(response);
+                    },
+                    error : function(xhr,errmsg,err) {
+                        console.log(xhr.status + ": " + xhr.responseText);
+                }
+                });
+            });
 
 
         </script>
