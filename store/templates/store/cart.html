@@ -29,7 +29,7 @@
         </tbody>
         </table>
 
-        <h4>Total Price: ${{total}}</h4>
+        <h4>Total Price: $<span id="total-price">{{total|floatformat:"2"}}</span></h4>
 
         <div class="address mt-4">
             <form>
@@ -132,10 +132,11 @@
             }
 
             console.log(cartTable);
-            let action = ''
+            let totalPrice = document.getElementById("total-price")
             cartTable.addEventListener('click', function(e) {
                 console.log(e.target.tagName);
                 console.log(e.target.id);
+
                 if (e.target.tagName === 'I') {
                         const parentDiv = e.target.parentElement.parentElement
                         const allChild = parentDiv.childNodes;
@@ -177,6 +178,7 @@
                             success: function(data) {
                               // if (data['success'])
                               price.innerHTML = "$" + data['total']
+                              totalPrice.innerHTML = data['total_price']
 
                             }
                         });
@@ -218,7 +220,7 @@
                             }
                         }, 200);
 
-
+                        totalPrice.innerHTML = data['total_price']
                         }
                     });
                 }

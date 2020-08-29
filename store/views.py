@@ -193,6 +193,8 @@ def quantity(request):
         value = data.get('value')
 
         item = Cart.objects.get(user=request.user, pk=id)
+        total_item = Cart.objects.filter(user=request.user)
+        total_price = sum((i.get_total for i in total_item), 0)
         if int(value) != item.quantity:
             item.quantity = int(value)
             item.save()
@@ -202,7 +204,7 @@ def quantity(request):
         print(id)
         print(value)
         print('///////////////')
-        return JsonResponse({'items': "done", 'total': item.get_total}, status=200)
+        return JsonResponse({'items': "done", 'total': item.get_total, "total_price": total_price}, status=200)
 
 
 def delete(request):
@@ -211,11 +213,14 @@ def delete(request):
         id = data.get('id')
         item = Cart.objects.get(user=request.user, pk=id)
         item.delete()
+
+        total_item = Cart.objects.filter(user=request.user)
+        total_price = sum((i.get_total for i in total_item), 0)
         print('///////////////')
         print(data)
         print('///////////////')
 
-        return JsonResponse({'items': "done"}, status=200)
+        return JsonResponse({'items': "done", "total_price": total_price}, status=200)
 
 
 def checkout(request):
