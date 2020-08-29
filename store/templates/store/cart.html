@@ -61,7 +61,7 @@
             </div>
         {% else %}
             <p>If you want to check your shipping info, please click <a href="#" data-toggle="modal" data-target="#readShipping">here</a></p>
-            <p>If you want to change/update your shipping info, please click here</p>
+            <p>If you want to change/update your shipping info, please click <a href="#" data-toggle="modal" data-target="#updateShipping">here</a></p>
 
             <div id="readShipping" class="modal fade" role="dialog">
               <div class="modal-dialog">
@@ -77,6 +77,47 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div id="updateShipping" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-body">
+                        <form method="post" id='update-form'>
+                            {% csrf_token %}
+                          <div class="form-group">
+                            <label for="inputAddress">Address</label>
+                            <input type="text" name="address1" class="form-control" id="inputAddress" placeholder="{{shipping_info.address1}}" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="inputAddress2">Address 2</label>
+                            <input type="text" name="address2" class="form-control" id="inputAddress2" placeholder="{{shipping_info.address2}}">
+                          </div>
+                          <div class="form-group">
+                            <label for="inputAddress2">Phone Number</label>
+                            <input type="tel" name="phone" id="inputPhone" class="form-control" placeholder="{{shipping_info.phone}}" required>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-md-6">
+                              <label for="inputCity">City</label>
+                              <input type="text" name="city" class="form-control" id="inputCity" placeholder="{{shipping_info.city}}" required>
+                            </div>
+                            <div class="form-group col-md-4">
+                              <label for="inputZip">Zip</label>
+                              <input type="text" name="zip" class="form-control" placeholder="{{shipping_info.zip}}" id="inputZip">
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Add Shipping Info</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                          </div>
+                      </form>
                   </div>
                 </div>
 
