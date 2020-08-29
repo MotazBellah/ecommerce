@@ -30,35 +30,59 @@
         </table>
 
         <h4>Total Price: $<span id="total-price">{{total|floatformat:"2"}}</span></h4>
+        {% if user_address %}
+            <div class="address mt-4">
+                <form method="post" id='post-form'>
+                    {% csrf_token %}
+                  <div class="form-group">
+                    <label for="inputAddress">Address</label>
+                    <input type="text" name="address1" class="form-control" id="inputAddress" placeholder="1234 Main St" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputAddress2">Address 2</label>
+                    <input type="text" name="address2" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+                  </div>
+                  <div class="form-group">
+                    <label for="inputAddress2">Phone Number</label>
+                    <input type="tel" name="phone" id="inputPhone" class="form-control" placeholder="+201069090037" required>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="inputCity">City</label>
+                      <input type="text" name="city" class="form-control" id="inputCity" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="inputZip">Zip</label>
+                      <input type="text" name="zip" class="form-control" id="inputZip">
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary mb-4">Add Shipping Info</button>
+                </form>
+            </div>
+        {% else %}
+            <p>If you want to check your shipping info, please click <a href="#" data-toggle="modal" data-target="#readShipping">here</a></p>
+            <p>If you want to change/update your shipping info, please click here</p>
 
-        <div class="address mt-4">
-            <form method="post" id='post-form'>
-                {% csrf_token %}
-              <div class="form-group">
-                <label for="inputAddress">Address</label>
-                <input type="text" name="address1" class="form-control" id="inputAddress" placeholder="1234 Main St" required>
-              </div>
-              <div class="form-group">
-                <label for="inputAddress2">Address 2</label>
-                <input type="text" name="address2" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-              </div>
-              <div class="form-group">
-                <label for="inputAddress2">Phone Number</label>
-                <input type="tel" name="phone" id="inputPhone" class="form-control" placeholder="+201069090037" required>
-              </div>
-              <div class="form-row">
-                <div class="form-group col-md-6">
-                  <label for="inputCity">City</label>
-                  <input type="text" name="city" class="form-control" id="inputCity" required>
+            <div id="readShipping" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <p><strong>Address1: </strong>{{shipping_info.address1}}</p>
+                    <p><strong>Address2: </strong>{{shipping_info.address2}}</p>
+                    <p><strong>Phone Number: </strong>{{shipping_info.phone}}</p>
+                    <p><strong>City: </strong>{{shipping_info.city}}</p>
+                    <p><strong>Zip: </strong>{{shipping_info.zip}}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
                 </div>
-                <div class="form-group col-md-4">
-                  <label for="inputZip">Zip</label>
-                  <input type="text" name="zip" class="form-control" id="inputZip">
-                </div>
+
               </div>
-              <button type="submit" class="btn btn-primary mb-4">Add Shipping Info</button>
-            </form>
-        </div>
+            </div>
+        {% endif %}
 
         <div class="payment">
             <form id="payment-form" method="post" action="{% url 'checkout' %}">

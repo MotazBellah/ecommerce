@@ -166,9 +166,13 @@ def addItem(request):
 
 def cart_view(request):
     items_in_cart = Cart.objects.filter(user=request.user)
+    shipping_info = ShippingInfo.objects.get(user=request.user)
     total = sum((i.get_total for i in items_in_cart), 0)
     category = Category.objects.all()
     client_token = generate_client_token()
+    user_address = True
+    if shipping_info:
+        user_address = False
     print('///////////////')
     # print(total)
     # print(items_in_cart[0].product.description)
@@ -180,7 +184,9 @@ def cart_view(request):
         'products': items_in_cart,
         "category": category,
         "client_token":client_token,
-        "total": total
+        "total": total,
+        "user_address": user_address,
+        "shipping_info": shipping_info,
     }
 
     return render(request, 'store/cart.html', context)
@@ -249,10 +255,10 @@ def shipping_info(request):
 
     if request.method == 'POST':
         address1 = request.POST['address1']
-        address2 = request.POST['address2']
+        address2 = request.POST.get('address2')
         phone = request.POST['phone']
         city = request.POST['city']
-        zip = request.POST['zip']
+        zip = request.POST.get('zip')
 
         print('////////////////////')
         print(address1)
