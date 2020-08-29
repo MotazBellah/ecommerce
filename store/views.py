@@ -166,7 +166,7 @@ def addItem(request):
 
 def cart_view(request):
     items_in_cart = Cart.objects.filter(user=request.user)
-    shipping_info = ShippingInfo.objects.filter(user=request.user)
+    shipping_info = ShippingInfo.objects.get(user=request.user)
     total = sum((i.get_total for i in items_in_cart), 0)
     category = Category.objects.all()
     client_token = generate_client_token()
@@ -186,7 +186,7 @@ def cart_view(request):
         "client_token":client_token,
         "total": total,
         "user_address": user_address,
-        "shipping_info": shipping_info[0],
+        "shipping_info": shipping_info,
     }
 
     return render(request, 'store/cart.html', context)
@@ -252,7 +252,6 @@ def checkout(request):
         # return redirect(url_for('new_checkout'))
 
 def shipping_info(request):
-
     if request.method == 'POST':
         address1 = request.POST['address1']
         address2 = request.POST.get('address2')
@@ -269,10 +268,43 @@ def shipping_info(request):
         print('////////////////////')
 
         shipping_info = ShippingInfo(address1=address1, address2=address2, user=request.user,
-                            phone=phone, city=city, zip=zip)
+                                    phone=phone, city=city, zip=zip)
         shipping_info.save()
 
         return JsonResponse({'items': "done"}, status=200)
+
+
+def update_shipping_info(request):
+    if request.method == 'POST':
+        info = ShippingInfo.objects.get(user=request.user)
+        address1 = request.POST.get('address1') or None
+        address2 = request.POST.get('address2') or None
+        phone = request.POST.get('phone') or None
+        city = request.POST.get('city') or None
+        zip = request.POST.get('zip') or None
+
+        changed_info = False
+
+        if address1 and address1 != info.address1:
+            info.address1 = address1
+            changed_info = True
+        if address2 and address2 != info.address2:
+            info.address2 = address2
+            changed_info = True
+        if phone and phone != info.phone:
+            info.phone = phone
+            changed_info = True
+        if zip and zip != info.zip:
+            info.zip = zip
+            changed_info = True
+        if city and city != info.city:
+            info.city = city
+            changed_info = True
+
+        if changed_info:
+            info.save()
+
+        return JsonResponse({'items': "doneeeee"}, status=200)
 
 def amazon(request):
     # req = Request("https://www.amazon.com/s?k=labtop", headers={'User-Agent': 'Mozilla/5.0'})
