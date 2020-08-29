@@ -245,6 +245,24 @@ def checkout(request):
         # for x in result.errors.deep_errors: flash('Error: %s: %s' % (x.code, x.message))
         # return redirect(url_for('new_checkout'))
 
+def Shipping_info(request):
+
+    if request.method == 'POST':
+        address1 = request.POST['address1']
+        address2 = request.POST['address2']
+        phone = request.POST['phone']
+        city = request.POST['city']
+        zip = request.POST['zip']
+
+        print('////////////////////')
+        print(address1)
+        print(address2)
+        print(phone)
+        print(city)
+        print(zip)
+        print('////////////////////')
+
+        return JsonResponse({'items': "done"}, status=200)
 
 def amazon(request):
     # req = Request("https://www.amazon.com/s?k=labtop", headers={'User-Agent': 'Mozilla/5.0'})
