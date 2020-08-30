@@ -29,7 +29,9 @@
         </tbody>
         </table>
 
-        <h4>Total Price: $<span id="total-price">{{total|floatformat:"2"}}</span></h4>
+        <h4>Total Price: $<span id="total-price">{{total|floatformat:"2"}}</span></h4><br>
+        <hr>
+        <h4>Shipping Info:</h4>
         {% if not user_address %}
             <div class="address mt-4">
                 <form method="post" id='post-form'>
@@ -122,7 +124,7 @@
                 </div>
 
               </div>
-            </div>
+            </div><br><hr>
         {% endif %}
 
         <div class="payment">
