@@ -318,44 +318,14 @@ def update_shipping_info(request):
         return JsonResponse({'items': "doneeeee"}, status=200)
 
 def get_data(request):
-    # req = Request("https://www.amazon.com/s?k=labtop", headers={'User-Agent': 'Mozilla/5.0'})
-    req = Request("https://www.tinydeal.com/buy/iphone.html", headers={'User-Agent': 'Mozilla/5.0'})
-    response = urlopen(req).read()
-    soup = BeautifulSoup(response, 'html.parser')
-    # divs = soup.find_all('div', {'class': 'r_b_c'})
-    lis = soup.find_all('li', {'class': 'productListing-even'})
-    print(len(lis))
-    info = []
-    for i in lis:
-        try:
-            img = i.find('img', {'class': 'lazy_load'})
-            p1 = i.find('span', {'class': 'productSpecialPrice'})
-            p2 = i.find('span', {'class': 'normalprice'})
-            anchr = i.find('a', {'class': 'p_box_title'})
-            # image.append(img.attrs['data-original'])
-            # link.append((anchr.get_text(), anchr.attrs['href']))
-            # price.append((p1.get_text(), p2.get_text()))
-            info.append((img.attrs['data-original'], anchr.get_text(), anchr.attrs['href'], p1.get_text(), p2.get_text()))
-        except Exception as e:
-            pass
-        # print('////////////////////////')
-        # print(img.attrs['data-original'])
-        # print('==========')
-        # print(p1.get_text())
-        # print('==========')
-        # print(p2.get_text())
-        # print('==========')
-        # print(anchr.get_text())
-        # print('==========')
-        # print(anchr.attrs['href'])
-        # print('==========')
+    if request.method == 'POST':
+        name = request.POST.get('product') or None
+        resource = request.POST.getlist('resources')
 
+        print("*****************")
+        print(name)
+        print(resource)
     context = {
-        "info": info
+        "info": []
     }
-
-    # print(olx('a'))
-    # print(ebay_API('a'))
-    # print(get_amazon('a'))
-
-    return render(request, 'store/amazon.html', context)
+    return render(request, 'store/scrap_data.html', context)

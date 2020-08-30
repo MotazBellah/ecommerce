@@ -8,22 +8,22 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-body">
-            <form method="post" id='search-form'>
+            <form method="post" id='search-form' action="{% url 'get_data' %}">
                 {% csrf_token %}
               <div class="form-group">
                 <label for="inputAddress">Product Name</label>
-                <input type="text" name="product" class="form-control" id="updateInputAddress" placeholder="iphone x">
+                <input type="text" name="product" class="form-control" id="updateInputAddress" placeholder="iphone x" required>
               </div>
               <p>Please select one or more of the following resources: </p>
               <div class="form-check">
                 <div class="checkbox">
-                    <label><input name="resources" type="checkbox" value=""> ebay</label>
+                    <label><input name="resources" type="checkbox" value="ebay"> ebay</label>
                 </div>
                 <div class="checkbox">
-                    <label><input name="resources" type="checkbox" value=""> OLX</label>
+                    <label><input name="resources" type="checkbox" value="OLX"> OLX</label>
                 </div>
                 <div class="checkbox">
-                    <label><input name="resources" type="checkbox" value=""> Tinydeal</label>
+                    <label><input name="resources" type="checkbox" value="Tinydeal"> Tinydeal</label>
                 </div>
               </div>
               <div class="modal-footer">
