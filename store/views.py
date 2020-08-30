@@ -249,7 +249,7 @@ def checkout(request):
             print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
             for i in total_item:
                 Purchase(product=i.product, quantity=i.quantity, Total_price=i.get_total, user=request.user).save()
-                
+
             total_item.delete()
             return HttpResponseRedirect(reverse("cart"))
             # return redirect(url_for('show_checkout',transaction_id=result.transaction.id))
@@ -325,10 +325,6 @@ def amazon(request):
     # divs = soup.find_all('div', {'class': 'r_b_c'})
     lis = soup.find_all('li', {'class': 'productListing-even'})
     print(len(lis))
-    image = []
-    link = []
-    price = []
-    info = []
     for i in lis:
         try:
             img = i.find('img', {'class': 'lazy_load'})

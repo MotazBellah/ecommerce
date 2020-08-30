@@ -1,0 +1,38 @@
+<p class="mt-2">If you can't find the product, we can help you to bring
+    your product from other websitses, please click <a href="#" data-toggle="modal" data-target="#searchProduct">here</a>
+</p>
+
+<div id="searchProduct" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-body">
+            <form method="post" id='search-form'>
+                {% csrf_token %}
+              <div class="form-group">
+                <label for="inputAddress">Product Name</label>
+                <input type="text" name="product" class="form-control" id="updateInputAddress" placeholder="iphone x">
+              </div>
+              <p>Please select one or more of the following resources: </p>
+              <div class="form-check">
+                <div class="checkbox">
+                    <label><input name="resources" type="checkbox" value=""> ebay</label>
+                </div>
+                <div class="checkbox">
+                    <label><input name="resources" type="checkbox" value=""> OLX</label>
+                </div>
+                <div class="checkbox">
+                    <label><input name="resources" type="checkbox" value=""> Tinydeal</label>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Search</button>
+                <button type="button" id="close" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+          </form>
+      </div>
+    </div>
+
+  </div>
+</div>

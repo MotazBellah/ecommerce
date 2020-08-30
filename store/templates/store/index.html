@@ -1,15 +1,16 @@
 {% extends "store/layout.html" %}
 {% load static %}
 
-<div class="container">
-    {% block content %}
-        {% for i in category %}
-            <div class="card-container">
-                <img src="{{i.image.url}}" alt="Category_image">
-                <div class="card-info">
-                    <a href="{% url 'products' i.id %}">{{ i.name }}</a>
+{% block content %}
+    <div class="container">
+        {% include "components/searchModal.html" %}
+            {% for i in category %}
+                <div class="card-container">
+                    <img src="{{i.image.url}}" alt="Category_image">
+                    <div class="card-info">
+                        <a href="{% url 'products' i.id %}">{{ i.name }}</a>
+                    </div>
                 </div>
-            </div>
-        {% endfor%}
-    {% endblock %}
-</div>
+            {% endfor%}
+    </div>
+{% endblock %}
