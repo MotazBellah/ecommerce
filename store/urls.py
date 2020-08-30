@@ -14,7 +14,7 @@ urlpatterns = [
     path("quantity", views.quantity, name="quantity"),
     path("delete", views.delete, name="delete"),
     path("checkout", views.checkout, name="checkout"),
-    path("amazon", views.amazon, name="amazon"),
+    path("get_data", views.get_data, name="get_data"),
     path("shipping_info", views.shipping_info, name="shipping"),
     path("update_shipping_info", views.update_shipping_info, name="updateShipping"),
 ]

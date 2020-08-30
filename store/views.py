@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from .models import Category, Product, Cart, User, ShippingInfo, Purchase
 # from .extras import transact, generate_client_token
-from .scrap import ebay, olx, ebay_API, get_amazon
+from .scrap import ebay, olx, ebay_API, get_amazon, tinydeal
 from django.contrib.auth import authenticate, login, logout
 import json
 import braintree
@@ -317,7 +317,7 @@ def update_shipping_info(request):
 
         return JsonResponse({'items': "doneeeee"}, status=200)
 
-def amazon(request):
+def get_data(request):
     # req = Request("https://www.amazon.com/s?k=labtop", headers={'User-Agent': 'Mozilla/5.0'})
     req = Request("https://www.tinydeal.com/buy/iphone.html", headers={'User-Agent': 'Mozilla/5.0'})
     response = urlopen(req).read()
@@ -325,6 +325,7 @@ def amazon(request):
     # divs = soup.find_all('div', {'class': 'r_b_c'})
     lis = soup.find_all('li', {'class': 'productListing-even'})
     print(len(lis))
+    info = []
     for i in lis:
         try:
             img = i.find('img', {'class': 'lazy_load'})
@@ -350,10 +351,6 @@ def amazon(request):
         # print('==========')
 
     context = {
-        "image": image,
-        "link": link,
-        "price": price,
-        "range": len(link),
         "info": info
     }
 
