@@ -36,6 +36,15 @@ class Cart(models.Model):
         total = self.product.price * self.quantity
         return total
 
+class Purchase(models.Model):
+    order = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    price = models.FloatField(default=0.0)
+
+    def __str__(self):
+        return f"{self.user}, {self.order}, {self.price}"
+
+
 
 class ShippingInfo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -3,7 +3,7 @@ from django.conf import settings
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from .models import Category, Product, Cart, User, ShippingInfo
+from .models import Category, Product, Cart, User, ShippingInfo, Purchase
 # from .extras import transact, generate_client_token
 from .scrap import ebay, olx, ebay_API, get_amazon
 from django.contrib.auth import authenticate, login, logout
