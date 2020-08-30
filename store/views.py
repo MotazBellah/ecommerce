@@ -234,8 +234,11 @@ def checkout(request):
     # client_token = generate_client_token()
     if request.method == 'POST':
         print('&&&&&&&&&&&&&&&&&&&&&&')
+        total_item = Cart.objects.filter(user=request.user)
+        total_price = sum((i.get_total for i in total_item), 0)
+
         result = transact({
-            'amount': request.POST['amount'],
+            'amount': str(total_price),
             'payment_method_nonce': request.POST['payment_method_nonce'],
             'options': {
                 "submit_for_settlement": True
@@ -244,7 +247,8 @@ def checkout(request):
         print('^^^^^^^^^^^^^^^^^^^66')
         if result.is_success or result.transaction:
             print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-            return JsonResponse({'items': "done"}, status=200)
+            total_item.delete()
+            return HttpResponseRedirect(reverse("cart"))
             # return redirect(url_for('show_checkout',transaction_id=result.transaction.id))
         else:
             return JsonResponse({'items': "Not"}, status=500)

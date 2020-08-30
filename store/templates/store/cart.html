@@ -114,7 +114,7 @@
                             </div>
                           </div>
                           <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Add Shipping Info</button>
+                            <button type="submit" class="btn btn-primary">Update Shipping Info</button>
                             <button type="button" id="close" class="btn btn-default" data-dismiss="modal">Close</button>
                           </div>
                       </form>
@@ -129,20 +129,13 @@
             <form id="payment-form" method="post" action="{% url 'checkout' %}">
                 {% csrf_token %}
               <section>
-                <label for="amount">
-                  <span class="input-label">Amount</span>
-                  <div class="input-wrapper amount-wrapper">
-                    <input id="amount" name="amount" type="tel" min="1" placeholder="Amount" value="10">
-                  </div>
-                </label>
-
                 <div class="bt-drop-in-wrapper">
                   <div id="bt-dropin"></div>
                 </div>
               </section>
 
               <input type="hidden" id="nonce" name="payment_method_nonce" />
-              <button class="button" type="submit" id="submit-button"><span>Test Transaction</span></button>
+              <button class="button btn btn-primary" type="submit" id="submit-button"><span>Submit Payment</span></button>
             </form>
         </div>
         </div>
