@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
+from datetime import datetime
 
 # Create your models here.
 class Category(models.Model):
@@ -37,12 +38,14 @@ class Cart(models.Model):
         return total
 
 class Purchase(models.Model):
-    order = models.TextField()
+    product = models.CharField(max_length=64)
+    quantity = models.IntegerField(default=1)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    price = models.FloatField(default=0.0)
+    Total_price = models.FloatField(default=0.0)
+    date_added = models.DateTimeField(default=datetime.now, blank=True)
 
     def __str__(self):
-        return f"{self.user}, {self.order}, {self.price}"
+        return f"{self.user}, {self.product}, {self.quantity}, {self.Total_price}"
 
 
 

@@ -247,6 +247,9 @@ def checkout(request):
         print('^^^^^^^^^^^^^^^^^^^66')
         if result.is_success or result.transaction:
             print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+            for i in total_item:
+                Purchase(product=i.product, quantity=i.quantity, Total_price=i.get_total, user=request.user).save()
+                
             total_item.delete()
             return HttpResponseRedirect(reverse("cart"))
             # return redirect(url_for('show_checkout',transaction_id=result.transaction.id))
