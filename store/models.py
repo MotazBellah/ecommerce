@@ -37,6 +37,7 @@ class Cart(models.Model):
         total = self.product.price * self.quantity
         return total
 
+
 class Purchase(models.Model):
     product = models.CharField(max_length=64)
     quantity = models.IntegerField(default=1)
