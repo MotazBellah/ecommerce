@@ -15,17 +15,11 @@
                 <input type="text" name="product" class="form-control" id="updateInputAddress" placeholder="iphone x" required>
               </div>
               <p>Please select one or more of the following resources: </p>
-              <div class="form-check">
-                <div class="checkbox">
-                    <label><input name="resources" type="checkbox" value="ebay"> ebay</label>
-                </div>
-                <div class="checkbox">
-                    <label><input name="resources" type="checkbox" value="OLX"> OLX</label>
-                </div>
-                <div class="checkbox">
-                    <label><input name="resources" type="checkbox" value="Tinydeal"> Tinydeal</label>
-                </div>
-              </div>
+              <select class="form-control my-2"  multiple name="resources" required>
+                    <option value="ebay">ebay</option>
+                    <option value="OLX">OLX</option>
+                    <option value="Tinydeal">Tinydeal</option>
+              </select>
               <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Search</button>
                 <button type="button" id="close" class="btn btn-default" data-dismiss="modal">Close</button>
