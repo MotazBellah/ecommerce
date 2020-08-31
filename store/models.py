@@ -9,6 +9,13 @@ class Category(models.Model):
     name = models.CharField(max_length=64)
     image = models.ImageField(blank=True, null=True)
 
+
+    def serialize(self):
+        return {
+            "name": self.name
+        }
+
+
     def __str__(self):
         return f'{self.name}'
 

@@ -347,3 +347,12 @@ def get_data(request):
         "ebay_data": ebay_data,
     }
     return render(request, 'store/scrap_data.html', context)
+
+
+def category_api(request):
+    categories = Category.objects.all()
+
+    data = {
+        
+    }
+    return JsonResponse(data, status=200)
