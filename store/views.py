@@ -16,7 +16,7 @@ from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup, SoupStrainer
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
-from rest_framework.authtoken.models import Token
+
 
 gateway = braintree.BraintreeGateway(
     braintree.Configuration(
