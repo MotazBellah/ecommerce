@@ -3,6 +3,9 @@ from django.conf import settings
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .serializers import CategorySerializer, ProductSerializer
 from .models import Category, Product, Cart, User, ShippingInfo, Purchase
 # from .extras import transact, generate_client_token
 from .scrap import ebay, olx, ebay_API, get_amazon, tinydeal
@@ -349,10 +352,9 @@ def get_data(request):
     return render(request, 'store/scrap_data.html', context)
 
 
-def category_api(request):
-    categories = Category.objects.all()
-
-    data = {
-        
-    }
-    return JsonResponse(data, status=200)
+class category_api(APIView):
+    def get(self, request, format=None):
+        category = Category.objects.all()
+        serializer = CategorySerializer(category, many=True)
+        return Response(serializer.data)
+    

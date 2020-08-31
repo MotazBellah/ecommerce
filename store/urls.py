@@ -17,4 +17,5 @@ urlpatterns = [
     path("get_data", views.get_data, name="get_data"),
     path("shipping_info", views.shipping_info, name="shipping"),
     path("update_shipping_info", views.update_shipping_info, name="updateShipping"),
+    path("api/category", views.category_api.as_view(), name="category_list"),
 ]
