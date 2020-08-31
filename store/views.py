@@ -321,11 +321,22 @@ def get_data(request):
     if request.method == 'POST':
         name = request.POST.get('product') or None
         resource = request.POST.getlist('resources')
+        ebay_list = []
+        tinydeal_list = []
+        olx_list = []
+        if name and resource:
+            for i in resource:
+                if i == "ebay":
+                    ebay_API(name)
+                elif i == "Tinydeal":
+                    tinydeal_list = tinydeal(name)
+                else:
+                    olx(name)
 
         print("*****************")
         print(name)
         print(resource)
     context = {
-        "info": []
+        "info": tinydeal_list,
     }
     return render(request, 'store/scrap_data.html', context)

@@ -31,7 +31,8 @@ def ebay(name):
 
 
 def olx(name):
-    req = Request("https://www.olx.com.eg/en/ads/q-iphone-x/", headers={'User-Agent': 'Mozilla/5.0'})
+    name = name.replace(' ', '-')
+    req = Request(f"https://www.olx.com.eg/en/ads/q-{name}/", headers={'User-Agent': 'Mozilla/5.0'})
     response = urlopen(req).read()
     soup = BeautifulSoup(response, 'html.parser')
     # divs = soup.find_all('div', {'class': 'r_b_c'})
@@ -94,7 +95,8 @@ def ebay_API(name):
     return '(((((((((((((())))))))))))))'
 
 def tinydeal(name):
-    req = Request("https://www.tinydeal.com/buy/iphone.html", headers={'User-Agent': 'Mozilla/5.0'})
+    name = name.replace(' ', "+")
+    req = Request(f"https://www.tinydeal.com/buy/{name}.html", headers={'User-Agent': 'Mozilla/5.0'})
     response = urlopen(req).read()
     soup = BeautifulSoup(response, 'html.parser')
     # divs = soup.find_all('div', {'class': 'r_b_c'})
