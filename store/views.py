@@ -331,12 +331,13 @@ def get_data(request):
                 elif i == "Tinydeal":
                     tinydeal_list = tinydeal(name)
                 else:
-                    olx(name)
+                    olx_list = olx(name)
 
         print("*****************")
         print(name)
         print(resource)
     context = {
         "info": tinydeal_list,
+        "olx": olx_list,
     }
     return render(request, 'store/scrap_data.html', context)
