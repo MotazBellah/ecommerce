@@ -14,7 +14,7 @@ import json
 import braintree
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup, SoupStrainer
-from rest_framework import permissions
+from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 
@@ -356,6 +356,8 @@ def get_data(request):
 
 
 class category_api(APIView):
+    # permission_classes = (IsAuthenticated, )
+
     def get(self, request, format=None):
         category = Category.objects.all()
         serializer = CategorySerializer(category, many=True)
@@ -363,6 +365,8 @@ class category_api(APIView):
 
 
 class product_api(APIView):
+    # permission_classes = (IsAuthenticated, )
+
     def get(self, request, format=None):
         products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
