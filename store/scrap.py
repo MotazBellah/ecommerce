@@ -8,7 +8,8 @@ ebayapi = "MoatazGh-test-PRD-16e4c7d7e-e927c4f5"
 
 
 def ebay(name):
-    req = Request("https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313&_nkw=iphone+x&_sacat=0", headers={'User-Agent': 'Mozilla/5.0'})
+    name = name.replace(' ', '+')
+    req = Request(f"https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313&_nkw={name}&_sacat=0", headers={'User-Agent': 'Mozilla/5.0'})
     response = urlopen(req).read()
     soup = BeautifulSoup(response, 'html.parser')
     # divs = soup.find_all('div', {'class': 'r_b_c'})
@@ -80,19 +81,31 @@ def get_amazon(name):
 
 def ebay_API(name):
     api = Connection(appid=ebayapi, siteid="EBAY-US", config_file=None)
-    api_request = {'keywords' : 'iphone x', 'outputSelector': "SellserInfo", 'sortOrder': 'CurrentPriceHighest'}
+    api_request = {'keywords' : f'{name}', 'outputSelector': "SellserInfo", 'sortOrder': 'CurrentPriceHighest'}
 
     response = api.execute("findItemsByKeywords", api_request)
 
     x = api.response.dict()
     # print(x['searchResult']['item'][0])
+    info = []
+    for i in x['searchResult']['item']:
+        try:
+            title = i["title"]
+            img = i['galleryURL']
+            a = i['viewItemURL']
+            p = i['sellingStatus']['currentPrice']['value']
+            info.append((img, title, a, p))
+        except Exception as e:
+            print(e)
+             
+
     print(x['searchResult']['item'][0]['title'])
     print(x['searchResult']['item'][0]['shippingInfo'])
     print(x['searchResult']['item'][0]['galleryURL'])
     print(x['searchResult']['item'][0]['viewItemURL'])
-    print(x['searchResult']['item'][0]['sellingStatus']['currentPrice'])
+    print(x['searchResult']['item'][0]['sellingStatus']['currentPrice']['value'])
 
-    return '(((((((((((((())))))))))))))'
+    return info
 
 def tinydeal(name):
     name = name.replace(' ', "+")

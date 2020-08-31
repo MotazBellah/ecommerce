@@ -324,10 +324,14 @@ def get_data(request):
         ebay_list = []
         tinydeal_list = []
         olx_list = []
+        ebay_data = []
         if name and resource:
             for i in resource:
                 if i == "ebay":
-                    ebay_API(name)
+                    # print(ebay_API(name))
+                    # print('HHHHH')
+                    ebay_data = ebay_API(name)
+                    # ebay_list = ebay(name)
                 elif i == "Tinydeal":
                     tinydeal_list = tinydeal(name)
                 else:
@@ -339,5 +343,7 @@ def get_data(request):
     context = {
         "info": tinydeal_list,
         "olx": olx_list,
+        "ebay": ebay_list,
+        "ebay_data": ebay_data,
     }
     return render(request, 'store/scrap_data.html', context)
