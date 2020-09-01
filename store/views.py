@@ -174,7 +174,7 @@ def addItem(request):
 
 def cart_view(request):
     items_in_cart = Cart.objects.filter(user=request.user)
-    shipping_info = ShippingInfo.objects.get(user=request.user)
+    shipping_info = ShippingInfo.objects.filter(user=request.user).first()
     total = sum((i.get_total for i in items_in_cart), 0)
     category = Category.objects.all()
     client_token = generate_client_token()
