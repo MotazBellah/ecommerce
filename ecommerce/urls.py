@@ -23,6 +23,7 @@ from rest_framework.authtoken import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include('store.urls')),
+    path('accounts/', include('allauth.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
