@@ -16,6 +16,7 @@ from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup, SoupStrainer
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 
 
 gateway = braintree.BraintreeGateway(
@@ -94,6 +95,7 @@ def register(request):
             if not email_already:
                 user = User.objects.create_user(username, email, password)
                 user.save()
+                token = Token.objects.get(user=user)
             else:
                 return render(request, "store/register.html", {
                 "message": "*Email already taken."
@@ -356,7 +358,7 @@ def get_data(request):
 
 
 class category_api(APIView):
-    # permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, )
 
     def get(self, request, format=None):
         category = Category.objects.all()
@@ -365,7 +367,7 @@ class category_api(APIView):
 
 
 class product_api(APIView):
-    # permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, )
 
     def get(self, request, format=None):
         products = Product.objects.all()

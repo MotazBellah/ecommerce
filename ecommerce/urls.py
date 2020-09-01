@@ -23,7 +23,6 @@ from rest_framework.authtoken import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include('store.urls')),
-    path("api-token-auth/", views.obtain_auth_token, name="api-token-auth"),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
