@@ -159,3 +159,19 @@ BT_ENVIRONMENT = 'sandbox'
 BT_MERCHANT_ID = '737btdq3sw7ysw2s'
 BT_PUBLIC_KEY = '6w543sw56mby44yq'
 BT_PRIVATE_KEY = '4e168b23e1d089145698cc664bde1ad1'
+
+
+LOGIN_REDIRECT_URL = "/"
+USE_X_FORWARDED_HOST = True
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
