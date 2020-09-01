@@ -10,6 +10,7 @@ from .models import Category, Product, Cart, User, ShippingInfo, Purchase
 # from .extras import transact, generate_client_token
 from .scrap import ebay, olx, ebay_API, get_amazon, tinydeal
 from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import Paginator
 import json
 import braintree
 from urllib.request import Request, urlopen
@@ -130,10 +131,15 @@ def products(request, category_id):
     category = Category.objects.all()
     items_in_cart = Cart.objects.filter(user=request.user)
 
+    paginator = Paginator(items, per_page=3)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
     context = {
-        'items': items,
+        'items': page_obj.object_list,
         "category": category,
         "no_of_items": len(items_in_cart),
+        "paginator": paginator,
+        "page_number": int(page_number),
     }
 
     return render(request, 'store/products.html', context)
