@@ -1,8 +1,8 @@
 {% extends "store/layout.html" %}
 {% load static %}
 
+{% block content %}
 <div class="container login">
-    {% block content %}
         {% if message %}
             <div class="data-info">{{ message }}</div>
         {% endif %}
@@ -24,5 +24,6 @@
         </form>
 
         <p class="info-form">Already have an account? <a href="{% url 'login' %}">Log In here.</a></p>
-    {% endblock %}
+        {% include "components/facebook.html" %}
 </div>
+{% endblock %}
