@@ -4,18 +4,20 @@
 
 
 {% block content %}
-<div class="container">
+<div class="container-fluid">
 	{% include "components/searchModal.html" %}
-	<div class="row mt-2">
+	<div class="row justify-content-md-center">
         {% for i in items %}
-		<div class="col-md-4 my-2 mx-0.5 card-wrapper">
+		<div class="col-sm-3 card-wr p-1">
+			<div class="card-wrap p-2">
 			<img class="thumbnail" src="{{i.image1.url}}">
-			<div id="{{i.id}}" class="box-element">
-				<h6 class="name mt-1"><strong>{{ i.name }}</strong></h6>
+			<div id="{{i.id}}" class="box-eleme">
+				<p class="name mt-1"><strong>{{ i.name }}</strong></p>
 				<hr>
+				<h4><strong>${{ i.price }}</strong></h4>
 				<a  id="add-btn" class="btn btn-outline-secondary add-btn">Add to Cart</a>
 				<a class="btn btn-outline-success" href="{% url 'item' i.id %}">View</a>
-				<h4 style="display: inline-block; float: right"><strong>${{ i.price }}</strong></h4>
+			</div>
 			</div>
 		</div>
         {% endfor%}
