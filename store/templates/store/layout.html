@@ -16,11 +16,15 @@
     <title>Store</title>
   </head>
   <body>
-    {% include "components/navbar.html" %}
+    <div class="wrap">
+        {% include "components/navbar.html" %}
+
+            {% block content %}
+            {% endblock %}
+    </div>
 
 
-        {% block content %}
-        {% endblock %}
+    {% include "components/footer.html" %}
 
 
 

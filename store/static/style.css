@@ -170,3 +170,22 @@
     width: 205px;
     height: 145px;
 }
+
+.wrap {
+    min-height: calc(100vh - 89px);
+}
+
+.footer {
+
+  min-height: 89px;
+  width: 100%;
+  background-color: red;
+  color: white;
+  text-align: center;
+}
+
+@media (min-width: 769) {
+    .wrap {
+        min-height: calc(100vh - 89px);
+    }
+}

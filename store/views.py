@@ -131,7 +131,7 @@ def products(request, category_id):
     category = Category.objects.all()
     items_in_cart = Cart.objects.filter(user=request.user)
 
-    paginator = Paginator(items, per_page=3)
+    paginator = Paginator(items, per_page=5)
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
     context = {
