@@ -182,20 +182,52 @@
 }
 
 .wrap {
-    min-height: calc(100vh - 89px);
+    min-height: calc(100vh - 64px);
 }
 
 .footer {
-
-  min-height: 89px;
-  width: 100%;
-  background-color: #808080;
-  color: white;
-  text-align: center;
+    font-size: 0.75em;
+    text-align: center;
+    padding-top: 50px;
+    color: #999;
+    border-bottom: 10px solid #17506b;
+    width: 100%;
 }
 
 @media (min-width: 769) {
     .wrap {
         min-height: calc(100vh - 89px);
     }
+}
+
+.social-icon {
+    width: 20px;
+    height: 20px;
+    margin: 0 5px;
+
+}
+
+.contact-info {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.9em;
+}
+
+.contact-info a {
+    /* display: block; */
+    min-height: 20px;
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    padding: 0 0 0 30px;
+    margin: 0 0 10px;
+}
+
+
+.contact-info li.phone a {
+    background-image: url('../static/telephone.png');
+}
+
+.contact-info li.mail a {
+    background-image: url('../static/envelope.png');
 }
