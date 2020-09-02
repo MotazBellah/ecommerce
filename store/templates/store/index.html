@@ -4,13 +4,17 @@
 {% block content %}
     <div class="container">
         {% include "components/searchModal.html" %}
+        <div class="row justify-content-md-center">
+
+
             {% for i in category %}
-                <div class="card-container">
-                    <img src="{{i.image.url}}" alt="Category_image">
-                    <div class="card-info">
+                <div class="col-md-auto card-wrapper">
+                    <img class="thumbnail" src="{{i.image.url}}" alt="Category_image">
+                    <div>
                         <a href="{% url 'products' i.id %}">{{ i.name }}</a>
                     </div>
                 </div>
             {% endfor%}
+        </div>
     </div>
 {% endblock content %}
