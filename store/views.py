@@ -9,6 +9,7 @@ from .serializers import CategorySerializer, ProductSerializer
 from .models import Category, Product, Cart, User, ShippingInfo, Purchase
 # from .extras import transact, generate_client_token
 from .scrap import ebay, olx, ebay_API, get_amazon, tinydeal
+from .forms import ShippingForm
 from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator
 import json
