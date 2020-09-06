@@ -245,36 +245,32 @@ def delete(request):
 
 
 def checkout(request):
-    # items = Cart.objects.get(user=request.user)
-    # client_token = generate_client_token()
     if request.method == 'POST':
-        print('&&&&&&&&&&&&&&&&&&&&&&')
         total_item = Cart.objects.filter(user=request.user)
-        total_price = sum((i.get_total for i in total_item), 7000)
-        print(total_price)
-        result = transact({
-            'amount': str(round(total_price,2)),
-            'payment_method_nonce': request.POST['payment_method_nonce'],
-            'options': {
-                "submit_for_settlement": True
-            }
-        })
-        print('^^^^^^^^^^^^^^^^^^^66')
-        print(result)
+        total_price = sum((i.get_total for i in total_item), 0)
+        try:
+            result = transact({
+                'amount': str(round(total_price,2)),
+                'payment_method_nonce': request.POST['payment_method_nonce'],
+                'options': {
+                    "submit_for_settlement": True
+                }
+            })
+        except Exception as e:
+            print(e)
+            return JsonResponse({'error': "Something went wrong"})
+
         if result.is_success or result.transaction:
-            print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-            print(total_item)
             for i in total_item:
                 Purchase(product=i.product, quantity=i.quantity, Total_price=i.get_total, user=request.user).save()
 
             total_item.delete()
-            # return HttpResponseRedirect(reverse("cart"))
+
             return JsonResponse({'items': "Done"}, status=200)
-            # return redirect(url_for('show_checkout',transaction_id=result.transaction.id))
+
         else:
-            return JsonResponse({'items': "Not"}, status=500)
-        # for x in result.errors.deep_errors: flash('Error: %s: %s' % (x.code, x.message))
-        # return redirect(url_for('new_checkout'))
+            return JsonResponse({'error': "Something went wrong"})
+
 
 def shipping_info(request):
     if request.method == 'POST':

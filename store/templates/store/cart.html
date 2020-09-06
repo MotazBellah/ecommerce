@@ -183,25 +183,24 @@
                            action: 'post'
                        },
                        success:function(response){
-                           // document.getElementById("payment-form").reset();
-                           console.log(response);
-                           // window.location.href = '/cart'
-                           // window.location.reload(true)
-                           // $('#table-content').hide()
-                           // $('#total-price').val('0.00')
-                            document.getElementById("flashConetent").innerHTML = "Your payment has been processed successfully"
-                            document.getElementById("flashConetent").classList.add("success")
-                            $('#flashMessage').slideDown(1000).delay(2000).slideUp(1000);
-                            setTimeout(function(){location.reload()}, 4000);
+                            console.log(response);
+
+                            if ('error' in response) {
+                                createFlashMessages('flashMessage', 'flashConetent', "Something went wrong, please try again later!", "error")
+                                setTimeout(function(){location.reload()}, 4000);
+                            } else {
+                                createFlashMessages('flashMessage', 'flashConetent', "Your payment has been processed successfully", "success")
+
+                                setTimeout(function(){location.reload()}, 4000);
+                            }
+
                             // window.location.reload(true)
                            // alert('HHHHH')
                        },
                        error : function(xhr,errmsg,err) {
 
                            console.log(xhr.status + ": " + xhr.responseText);
-                           document.getElementById("flashConetent").innerHTML = "Something went wrong, please try again later!"
-                           document.getElementById("flashConetent").classList.add("error")
-                           $('#flashMessage').slideDown(1000).delay(2000).slideUp(1000);
+                           createFlashMessages('flashMessage', 'flashConetent', "Something went wrong, please try again later!", "error")
                            setTimeout(function(){location.reload()}, 4000);
                    }
                    });
@@ -210,6 +209,12 @@
                });
              });
 
+
+            function createFlashMessages(flash_div, flash_content, message, class_name) {
+                document.getElementById(flash_content).innerHTML = message
+                document.getElementById(flash_content).classList.add(class_name)
+                $('#'+flash_div).slideDown(1000).delay(2000).slideUp(1000);
+            }
 
             const cartTable = document.getElementsByClassName("table")[0]
 
