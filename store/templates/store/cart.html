@@ -12,7 +12,7 @@
           <th>Delete</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="table-content">
           {% for i in products %}
               <tr id={{i.id}}>
                 <td>{{ i.product.name }}</td>
@@ -127,6 +127,10 @@
             </div><br><hr>
         {% endif %}
 
+        <div id="flashMessage">
+            <p id="flashConetent"></p>
+        </div>
+
         <div class="payment">
             <form id="payment-form" method="post">
                 {% csrf_token %}
@@ -145,9 +149,9 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://js.braintreegateway.com/web/dropin/1.23.0/js/dropin.min.js"></script>
         <script type="text/javascript">
-
+            $('#flashMessage').hide()
             var form = document.querySelector('#payment-form');
-             var client_token = '{{ client_token }}';
+            var client_token = '{{ client_token }}';
 
              braintree.dropin.create({
                authorization: client_token,
@@ -182,10 +186,23 @@
                            // document.getElementById("payment-form").reset();
                            console.log(response);
                            // window.location.href = '/cart'
-                           window.location.reload(true)
+                           // window.location.reload(true)
+                           // $('#table-content').hide()
+                           // $('#total-price').val('0.00')
+                            document.getElementById("flashConetent").innerHTML = "Your payment has been processed successfully"
+                            document.getElementById("flashConetent").classList.add("success")
+                            $('#flashMessage').slideDown(1000).delay(2000).slideUp(1000);
+                            setTimeout(function(){location.reload()}, 4000);
+                            // window.location.reload(true)
+                           // alert('HHHHH')
                        },
                        error : function(xhr,errmsg,err) {
+
                            console.log(xhr.status + ": " + xhr.responseText);
+                           document.getElementById("flashConetent").innerHTML = "Something went wrong, please try again later!"
+                           document.getElementById("flashConetent").classList.add("error")
+                           $('#flashMessage').slideDown(1000).delay(2000).slideUp(1000);
+                           setTimeout(function(){location.reload()}, 4000);
                    }
                    });
 

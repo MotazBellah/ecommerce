@@ -251,16 +251,16 @@ def checkout(request):
         print('&&&&&&&&&&&&&&&&&&&&&&')
         total_item = Cart.objects.filter(user=request.user)
         total_price = sum((i.get_total for i in total_item), 7000)
-
+        print(total_price)
         result = transact({
-            'amount': str(total_price),
+            'amount': str(round(total_price,2)),
             'payment_method_nonce': request.POST['payment_method_nonce'],
             'options': {
                 "submit_for_settlement": True
             }
         })
         print('^^^^^^^^^^^^^^^^^^^66')
-        # print(request.POST['payment_method_nonce'])
+        print(result)
         if result.is_success or result.transaction:
             print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
             print(total_item)

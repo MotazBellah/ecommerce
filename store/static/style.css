@@ -231,3 +231,26 @@
 .contact-info li.mail a {
     background-image: url('../static/envelope.png');
 }
+
+
+#flashMessage {
+    color: white;
+}
+
+.success {
+    background-color: #64ce83;
+    padding: 15px;
+    border-radius: 5px;
+    display: block;
+    width: calc(100% - 100px);
+    margin-bottom: 40px;
+}
+
+.error {
+    background-color: red;
+    padding: 15px;
+    border-radius: 5px;
+    display: block;
+    width: calc(100% - 100px);
+    margin-bottom: 40px;
+}
