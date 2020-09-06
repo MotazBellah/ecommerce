@@ -295,6 +295,8 @@ def shipping_info(request):
 def update_shipping_info(request):
     if request.method == 'POST':
         info = ShippingInfo.objects.filter(user=request.user).first()
+        if not info:
+            return JsonResponse({'error': "You don not have a shipping information yet"})
         address1 = request.POST.get('address1') or None
         address2 = request.POST.get('address2') or None
         phone = request.POST.get('phone') or None
