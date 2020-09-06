@@ -412,10 +412,18 @@
                     success:function(response){
                         var closeModal = document.getElementById('close');
                         closeModal.click()
+                        createFlashMessages('shippingFlashMessage', 'shippingflashConetent', "Your shipping info has been updated", "success")
                         console.log(response);
+                        document.getElementById("shippingAdress1").innerHTML = response['info']['address1']
+                        document.getElementById("shippingAdress2").innerHTML = response['info']['address2']
+                        document.getElementById("shippingPhone").innerHTML = response['info']['phone']
+                        document.getElementById("shippingCity").innerHTML = response['info']['city']
+                        document.getElementById("shippingZip").innerHTML = response['info']['zip']
+
                     },
                     error : function(xhr,errmsg,err) {
                         console.log(xhr.status + ": " + xhr.responseText);
+                        createFlashMessages('shippingFlashMessage', 'shippingflashConetent', "Something went wrong :(", "error")
                 }
                 });
             });

@@ -294,7 +294,7 @@ def shipping_info(request):
 
 def update_shipping_info(request):
     if request.method == 'POST':
-        info = ShippingInfo.objects.get(user=request.user)
+        info = ShippingInfo.objects.filter(user=request.user).first()
         address1 = request.POST.get('address1') or None
         address2 = request.POST.get('address2') or None
         phone = request.POST.get('phone') or None
@@ -322,7 +322,7 @@ def update_shipping_info(request):
         if changed_info:
             info.save()
 
-        return JsonResponse({'items': "doneeeee"}, status=200)
+        return JsonResponse({'items': "doneeeee", "info": info.serialize()}, status=200)
 
 def get_data(request):
     if request.method == 'POST':
