@@ -189,7 +189,7 @@ def cart_view(request):
     if shipping_info:
         user_address = True
     print('///////////////')
-    # print(total)
+    # print(client_token)
     # print(items_in_cart[0].product.description)
     # print(items_in_cart[0].product.price)
     print('///////////////')
@@ -250,7 +250,7 @@ def checkout(request):
     if request.method == 'POST':
         print('&&&&&&&&&&&&&&&&&&&&&&')
         total_item = Cart.objects.filter(user=request.user)
-        total_price = sum((i.get_total for i in total_item), 0)
+        total_price = sum((i.get_total for i in total_item), 7000)
 
         result = transact({
             'amount': str(total_price),
@@ -260,13 +260,16 @@ def checkout(request):
             }
         })
         print('^^^^^^^^^^^^^^^^^^^66')
+        # print(request.POST['payment_method_nonce'])
         if result.is_success or result.transaction:
             print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+            print(total_item)
             for i in total_item:
                 Purchase(product=i.product, quantity=i.quantity, Total_price=i.get_total, user=request.user).save()
 
             total_item.delete()
-            return HttpResponseRedirect(reverse("cart"))
+            # return HttpResponseRedirect(reverse("cart"))
+            return JsonResponse({'items': "Done"}, status=200)
             # return redirect(url_for('show_checkout',transaction_id=result.transaction.id))
         else:
             return JsonResponse({'items': "Not"}, status=500)

@@ -128,7 +128,7 @@
         {% endif %}
 
         <div class="payment">
-            <form id="payment-form" method="post" action="{% url 'checkout' %}">
+            <form id="payment-form" method="post">
                 {% csrf_token %}
               <section>
                 <div class="bt-drop-in-wrapper">
@@ -164,10 +164,31 @@
                      console.log('Error', err);
                      return;
                    }
+                   // else
+                   // Added ajax
 
                    // Add the nonce to the form and submit
                    document.querySelector('#nonce').value = payload.nonce;
-                   form.submit();
+                   // form.submit();
+                   $.ajax({
+                       type:'POST',
+                       url:'{% url "checkout" %}',
+                       data:{
+                           payment_method_nonce: $('#nonce').val(),
+                           csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                           action: 'post'
+                       },
+                       success:function(response){
+                           // document.getElementById("payment-form").reset();
+                           console.log(response);
+                           // window.location.href = '/cart'
+                           window.location.reload(true)
+                       },
+                       error : function(xhr,errmsg,err) {
+                           console.log(xhr.status + ": " + xhr.responseText);
+                   }
+                   });
+
                  });
                });
              });
