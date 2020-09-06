@@ -185,9 +185,9 @@ def cart_view(request):
     total = sum((i.get_total for i in items_in_cart), 0)
     category = Category.objects.all()
     client_token = generate_client_token()
-    user_address = False
+    user_address = 0
     if shipping_info:
-        user_address = True
+        user_address = 1
     print('///////////////')
     # print(client_token)
     # print(items_in_cart[0].product.description)
@@ -274,7 +274,7 @@ def checkout(request):
 
 def shipping_info(request):
     if request.method == 'POST':
-        info = ShippingInfo.objects.get(user=request.user)
+        info = ShippingInfo.objects.filter(user=request.user).first()
         if info:
             return JsonResponse({'message': "User already have shipping info"}, status=200)
 
@@ -284,19 +284,12 @@ def shipping_info(request):
         city = request.POST['city']
         zip = request.POST.get('zip')
 
-        print('////////////////////')
-        print(address1)
-        print(address2)
-        print(phone)
-        print(city)
-        print(zip)
-        print('////////////////////')
-
         shipping_info = ShippingInfo(address1=address1, address2=address2, user=request.user,
                                     phone=phone, city=city, zip=zip)
         shipping_info.save()
+        info = ShippingInfo.objects.filter(user=request.user).first()
 
-        return JsonResponse({'items': "done"}, status=200)
+        return JsonResponse({'items': "done", "info": info.serialize()}, status=200)
 
 
 def update_shipping_info(request):

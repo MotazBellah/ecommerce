@@ -13,7 +13,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
 
-        
+
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=64)
@@ -75,3 +75,12 @@ class ShippingInfo(models.Model):
     phone = models.CharField(validators=[phone_regex], max_length=17)
     city = models.CharField(max_length=20)
     zip = models.IntegerField()
+
+    def serialize(self):
+        return {
+            "address1": self.address1,
+            "address2": self.address2,
+            "phone": self.phone,
+            "city": self.city,
+            "zip": self.zip,
+        }

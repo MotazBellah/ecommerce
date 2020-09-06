@@ -31,9 +31,12 @@
 
         <h4>Total Price: $<span id="total-price">{{total|floatformat:"2"}}</span></h4><br>
         <hr>
+        <div id="shippingFlashMessage">
+            <p id="shippingflashConetent"></p>
+        </div>
         <h4>Shipping Info:</h4>
-        {% if not user_address %}
-            <div class="address mt-4">
+
+            <div id="address" class="address mt-4">
                 <form method="post" id='post-form'>
                     {% csrf_token %}
                   <div class="form-group">
@@ -61,7 +64,10 @@
                   <button type="submit" class="btn btn-primary mb-4">Add Shipping Info</button>
                 </form>
             </div>
-        {% else %}
+
+            <div id="updating-info">
+
+
             <p>If you want to check your shipping info, please click <a href="#" data-toggle="modal" data-target="#readShipping">here</a></p>
             <p>If you want to change/update your shipping info, please click <a href="#" data-toggle="modal" data-target="#updateShipping">here</a></p>
 
@@ -71,11 +77,11 @@
                 <!-- Modal content-->
                 <div class="modal-content">
                   <div class="modal-body">
-                    <p><strong>Address1: </strong>{{shipping_info.address1}}</p>
-                    <p><strong>Address2: </strong>{{shipping_info.address2}}</p>
-                    <p><strong>Phone Number: </strong>{{shipping_info.phone}}</p>
-                    <p><strong>City: </strong>{{shipping_info.city}}</p>
-                    <p><strong>Zip: </strong>{{shipping_info.zip}}</p>
+                    <p><strong>Address1: </strong><span id="shippingAdress1">{{shipping_info.address1}}</span></p>
+                    <p><strong>Address2: </strong><span id="shippingAdress2">{{shipping_info.address2}}</span></p>
+                    <p><strong>Phone Number: </strong><span id="shippingPhone">{{shipping_info.phone}}</span></p>
+                    <p><strong>City: </strong><span id="shippingCity">{{shipping_info.city}}</span></p>
+                    <p><strong>Zip: </strong><span id="shippingZip">{{shipping_info.zip}}</span></p>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -124,8 +130,9 @@
                 </div>
 
               </div>
+            </div>
             </div><br><hr>
-        {% endif %}
+
 
         <div id="flashMessage">
             <p id="flashConetent"></p>
@@ -150,10 +157,21 @@
         <script src="https://js.braintreegateway.com/web/dropin/1.23.0/js/dropin.min.js"></script>
         <script type="text/javascript">
             $('#flashMessage').hide()
+            $('#shippingFlashMessage').hide()
+
             var form = document.querySelector('#payment-form');
             var client_token = '{{ client_token }}';
             var total_value = '{{ total }}'
-            
+            var user_shipping_adress = '{{ user_address }}'
+
+             if (user_shipping_adress === '1') {
+                 $('#updating-info').show()
+                 $('#address').hide()
+             } else {
+                 $('#address').show()
+                 $('#updating-info').hide()
+             }
+
             if (total_value == '0') {
                 document.getElementById("submit-button").disabled = true;
             } else {
@@ -356,9 +374,23 @@
                     success:function(response){
                         document.getElementById("post-form").reset();
                         console.log(response);
+                        createFlashMessages('shippingFlashMessage', 'shippingflashConetent', "Your shipping info has been added", "success")
+
+                        setTimeout(function(){
+                            user_shipping_adress === '1'
+                            $('#updating-info').show()
+                            $('#address').hide()
+                        }, 2000);
+                        document.getElementById("shippingAdress1").innerHTML = response['info']['address1']
+                        document.getElementById("shippingAdress2").innerHTML = response['info']['address2']
+                        document.getElementById("shippingPhone").innerHTML = response['info']['phone']
+                        document.getElementById("shippingCity").innerHTML = response['info']['city']
+                        document.getElementById("shippingZip").innerHTML = response['info']['zip']
+
                     },
                     error : function(xhr,errmsg,err) {
                         console.log(xhr.status + ": " + xhr.responseText);
+                        createFlashMessages('shippingFlashMessage', 'shippingflashConetent', "Something went wrong :(", "error")
                 }
                 });
             });

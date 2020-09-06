@@ -233,7 +233,7 @@
 }
 
 
-#flashMessage {
+#flashMessage, #shippingFlashMessage {
     color: white;
 }
 
