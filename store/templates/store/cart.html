@@ -152,6 +152,13 @@
             $('#flashMessage').hide()
             var form = document.querySelector('#payment-form');
             var client_token = '{{ client_token }}';
+            var total_value = '{{ total }}'
+            
+            if (total_value == '0') {
+                document.getElementById("submit-button").disabled = true;
+            } else {
+                document.getElementById("submit-button").disabled = false;
+            }
 
              braintree.dropin.create({
                authorization: client_token,
