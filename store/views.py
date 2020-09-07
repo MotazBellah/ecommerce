@@ -19,6 +19,7 @@ from bs4 import BeautifulSoup, SoupStrainer
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
+from datetime import datetime
 
 
 gateway = braintree.BraintreeGateway(
@@ -377,7 +378,9 @@ def comment_book(request):
         user_comment = Review(product=product_obj, comment=comment, user=request.user)
         user_comment.save()
 
-        return JsonResponse({'user': request.user.username,'comment': comment})
+        return JsonResponse({'user': request.user.username,
+                             'comment': comment,
+                             'date': datetime.now()})
 
 
 class category_api(APIView):
