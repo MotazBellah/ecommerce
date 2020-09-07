@@ -242,13 +242,13 @@ def delete(request):
         item = Cart.objects.get(user=request.user, pk=id)
         item.delete()
 
-        total_item = Cart.objects.filter(user=request.user)
-        total_price = sum((i.get_total for i in total_item), 0)
+        items_in_cart = Cart.objects.filter(user=request.user)
+        total_price = sum((i.get_total for i in items_in_cart), 0)
         print('///////////////')
         print(data)
         print('///////////////')
 
-        return JsonResponse({'items': "done", "total_price": total_price}, status=200)
+        return JsonResponse({'items': len(items_in_cart), "total_price": total_price}, status=200)
 
 
 def checkout(request):
