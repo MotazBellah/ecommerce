@@ -126,10 +126,13 @@
 /* Style login/register page */
 .login{
     background-color: white;
-    padding: 16px;
-    margin: 10px;
-    margin-top: 10%;
+    margin: 0 auto;
+    width: 60%;
+}
 
+.social-icon {
+    width: 25px;
+    height: 25px;
 }
 
 /* Style the login/register messages */
