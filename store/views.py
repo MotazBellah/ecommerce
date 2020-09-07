@@ -107,7 +107,7 @@ def register(request):
             return render(request, "store/register.html", {
                 "message": "*Username already taken."
             })
-        login(request, user)
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect("index")
     else:
         if request.user.is_anonymous:
