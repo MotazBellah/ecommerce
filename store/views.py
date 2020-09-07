@@ -118,7 +118,10 @@ def register(request):
 # Get all the category
 def index(request):
     category = Category.objects.all()
-    items_in_cart = Cart.objects.filter(user=request.user)
+    if request.user.is_authenticated:
+        items_in_cart = Cart.objects.filter(user=request.user)
+    else:
+        items_in_cart = []
 
     context = {
         "category": category,
