@@ -2,29 +2,35 @@
 {% load static %}
 
 {% block content %}
-<div class="container login">
+<div class="container">
         {% if message %}
             <div class="data-info">{{ message }}</div>
         {% endif %}
-        <form action="{% url 'register' %}" method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                <input class="form-control" autofocus type="text" name="username" placeholder="Username">
-            </div>
-            <div class="form-group">
-                <input class="form-control" type="email" name="email" placeholder="Email Address">
-            </div>
-            <div class="form-group">
-                <input class="form-control" type="password" name="password" placeholder="Password">
-            </div>
-            <div class="form-group">
-                <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
-            </div>
-            <input class="btn btn-outline-dark login-buttom save" type="submit" value="Register">
-        </form>
+        <div class="login mt-5">
+            <h3 class="mb-5">Create new account and start shopping</h3>
+            <form action="{% url 'register' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input class="form-control" autofocus type="text" name="username" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="email" name="email" placeholder="Email Address">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="password" name="password" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
+                </div>
+                <input class="btn btn-outline-dark login-buttom save" type="submit" value="Register">
+            </form><br>
 
-        <p class="info-form">Already have an account? <a href="{% url 'login' %}">Log In here.</a></p>
-        {% include "components/facebook.html" %}
-        {% include "components/github.html" %}
+            <p class="info-form">Already have an account? <a href="{% url 'login' %}">Log In here.</a></p>
+            <hr>
+            <p>Or you can login using your social accounts</p>
+            {% include "components/facebook.html" %}
+            {% include "components/github.html" %}
+        </div>
+
 </div>
 {% endblock %}
