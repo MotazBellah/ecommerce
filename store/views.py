@@ -382,7 +382,18 @@ def comment_book(request):
 
         return JsonResponse({'user': request.user.username,
                              'comment': comment,
-                             'date': today.strftime("%b %d %Y %H:%M %p")})
+                             'date': today.strftime("%b %d %Y %H:%M %p"),
+                             'id': user_comment.id})
+
+
+def deleteComments(request):
+    if request.is_ajax() and request.method == "POST":
+        data = json.loads(request.body)
+        id = data.get('id')
+        comment = Review.objects.get(user=request.user, pk=id)
+        comment.delete()
+
+        return JsonResponse({'items': "done"}, status=200)
 
 
 class category_api(APIView):

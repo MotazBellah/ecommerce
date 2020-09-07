@@ -21,5 +21,6 @@ urlpatterns = [
     path("api/category", views.category_api.as_view(), name="category_list"),
     path("api/products", views.product_api.as_view(), name="product_list"),
     path('comment_book', views.comment_book, name='comment_book'),
+    path('deleteComments', views.deleteComments, name='deleteComments'),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
 ]
