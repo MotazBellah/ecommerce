@@ -55,7 +55,10 @@
                         <p><strong>{{ comment.user.username }}</strong>
                            <small>{{comment.date_added}}</small></p>
 
-                        <p>{{ comment.comment }}</p><br>
+                        <p>{{ comment.comment }}<a id="delete_comment" class="float-right" href="#">Delete</a></p>
+
+                        <br>
+
                     {% endfor %}
                 {% else %}
                     <h5 id="no_comments">There are no comments yet!</h5>
@@ -105,6 +108,14 @@
                 //  Create prograph tage, hold the comment
                 var p2 = document.createElement("p");
                 p2.innerHTML = response['comment']
+
+                var a = document.createElement("a");
+                a.innerHTML = 'Delete'
+                a.classList.add("float-right");
+                a.setAttribute("id", "delete_comment");
+                a.setAttribute("href", "#");
+
+                p2.appendChild(a)
                 // create a line breaker
                 var br = document.createElement("br");
 
