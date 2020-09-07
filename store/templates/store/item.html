@@ -52,15 +52,16 @@
             <div class="comment_area">
                 {% if comments %}
                     {% for comment in comments %}
-                        <p><strong>{{ comment.name }}</strong></p>
-                        <p>{{ comment.coment }}</p><br>
+                        <p><strong>{{ comment.user.username }}</strong></p>
+                        <p>{{ comment.comment }}</p><br>
                     {% endfor %}
                 {% else %}
                     <h5 id="no_comments">There are no comments yet!</h5>
                 {% endif %}
             </div>
             <div class="user_commenting">
-                    <form  id="submit_comment">
+                    <form  id="submit_comment" method="post">
+                        {% csrf_token %}
                         <input id='input_text' type="text" class="form-control" name="name" placeholder="Write a comment">
                         <input type="submit" class="btn btn-primary mt-2 mb-4" value="post">
                     </form>
@@ -69,4 +70,47 @@
     </div>
 </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).on('submit', '#submit_comment',function(e){
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url:'{% url "comment_book" %}',
+            data:{
+                value: $('#input_text').val(),
+                product_id: {{ product_id }},
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success:function(response){
+                document.getElementById("submit_comment").reset();
+                console.log(response);
+
+                var coment_div = document.getElementsByClassName('comment_area')[0];
+                //  Create a strong element that contain the user name
+                var strong = document.createElement("strong");
+                strong.innerHTML = response['user']
+                // Create a prograph tag
+                var p = document.createElement("p");
+                
+                p.appendChild(strong)
+                //  Create prograph tage, hold the comment
+                var p2 = document.createElement("p");
+                p2.innerHTML = response['comment']
+                // create a line breaker
+                var br = document.createElement("br");
+
+                coment_div.appendChild(p)
+                coment_div.appendChild(p2)
+                coment_div.appendChild(br)
+
+            },
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+                // createFlashMessages('shippingFlashMessage', 'shippingflashConetent', "Something went wrong :(", "error")
+        }
+        });
+    });
+
+</script>
 {% endblock content %}

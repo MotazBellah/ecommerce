@@ -20,5 +20,6 @@ urlpatterns = [
     path("update_shipping_info", views.update_shipping_info, name="updateShipping"),
     path("api/category", views.category_api.as_view(), name="category_list"),
     path("api/products", views.product_api.as_view(), name="product_list"),
-     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
+    path('comment_book', views.comment_book, name='comment_book'),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
 ]

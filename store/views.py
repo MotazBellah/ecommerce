@@ -6,7 +6,7 @@ from django.urls import reverse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import CategorySerializer, ProductSerializer
-from .models import Category, Product, Cart, User, ShippingInfo, Purchase
+from .models import Category, Product, Cart, User, ShippingInfo, Purchase, Review
 # from .extras import transact, generate_client_token
 from .scrap import ebay, olx, ebay_API, get_amazon, tinydeal
 from .forms import ShippingForm
@@ -150,11 +150,14 @@ def item(request, product_id):
     view_item = Product.objects.get(pk=product_id)
     category = Category.objects.all()
     items_in_cart = Cart.objects.filter(user=request.user)
+    comments = Review.objects.all()
 
     context = {
         'item': view_item,
         'category': category,
         "no_of_items": len(items_in_cart),
+        "comments": comments,
+        "product_id": product_id,
     }
 
     return render(request, 'store/item.html', context)
@@ -357,6 +360,24 @@ def get_data(request):
         "ebay_data": ebay_data,
     }
     return render(request, 'store/scrap_data.html', context)
+
+
+def comment_book(request):
+    if request.method == 'POST':
+        # get the value from the form
+        comment = request.POST['value']
+        product_id = request.POST['product_id']
+        print('/////////')
+
+        # Check if the input is valid
+        if len(comment) == 0 or comment.isspace():
+            return JsonResponse({'error': "something went wrong!"})
+
+        product_obj = Product.objects.get(pk=product_id)
+        user_comment = Review(product=product_obj, comment=comment, user=request.user)
+        user_comment.save()
+
+        return JsonResponse({'user': request.user.username,'comment': comment})
 
 
 class category_api(APIView):
