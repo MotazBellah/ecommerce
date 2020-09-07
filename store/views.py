@@ -378,9 +378,11 @@ def comment_book(request):
         user_comment = Review(product=product_obj, comment=comment, user=request.user)
         user_comment.save()
 
+        today = datetime.now()
+
         return JsonResponse({'user': request.user.username,
                              'comment': comment,
-                             'date': datetime.now()})
+                             'date': today.strftime("%b %d %Y %H:%M %p")})
 
 
 class category_api(APIView):
