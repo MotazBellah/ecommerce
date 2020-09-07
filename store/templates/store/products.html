@@ -4,15 +4,15 @@
 
 
 {% block content %}
-<div class="container-fluid">
+<div class="container">
 	{% include "components/searchModal.html" %}
 	<div class="row justify-content-md-center">
         {% for i in items %}
-		<div class="col-sm-3 card-wr p-1">
+		<div class="col-sm-4 card-wr p-1">
 			<div class="card-wrap p-2">
 			<img class="thumbnail" src="{{i.image1.url}}">
 			<div id="{{i.id}}" class="box-eleme">
-				<p class="name mt-1"><strong>{{ i.name }}</strong></p>
+				<p class="name mt-1" title={{i.name}}>{{ i.name }}</p>
 				<hr>
 				<h4><strong>${{ i.price }}</strong></h4>
 				<a  id="add-btn" class="btn btn-outline-secondary add-btn">Add to Cart</a>
@@ -21,15 +21,17 @@
 			</div>
 		</div>
         {% endfor%}
+	</div><br>
+	<div class="text-center">
+		<ul class="pagination justify-content-center">
+			{% for i in paginator.page_range %}
+				<li class="page-item {% if i == page_number %} active {% endif %}">
+					<a class="page-link" href="?page={{i}}">{{i}}</a>
+				</li>
+			{% endfor %}
+		</ul>
 	</div>
 
-	<ul class="pagination">
-		{% for i in paginator.page_range %}
-			<li class="page-item {% if i == page_number %} active {% endif %}">
-				<a class="page-link" href="?page={{i}}">{{i}}</a>
-			</li>
-		{% endfor %}
-	</ul>
 </div>
 
 {% endblock content %}
