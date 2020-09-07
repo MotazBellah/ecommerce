@@ -97,7 +97,7 @@ def ebay_API(name):
             info.append((img, title, a, p))
         except Exception as e:
             print(e)
-             
+
 
     print(x['searchResult']['item'][0]['title'])
     print(x['searchResult']['item'][0]['shippingInfo'])

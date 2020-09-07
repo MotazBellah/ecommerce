@@ -343,6 +343,7 @@ def get_data(request):
                     # ebay_list = ebay(name)
                 elif i == "Tinydeal":
                     tinydeal_list = tinydeal(name)
+                    print(tinydeal_list)
                 else:
                     olx_list = olx(name)
 

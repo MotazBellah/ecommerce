@@ -55,6 +55,16 @@ class Cart(models.Model):
         return total
 
 
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    comment = models.TextField()
+
+    def __str__(self):
+        return f"{self.comment}"
+
+
+
 class Purchase(models.Model):
     product = models.CharField(max_length=64)
     quantity = models.IntegerField(default=1)

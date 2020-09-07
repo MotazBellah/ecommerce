@@ -96,7 +96,7 @@
 
 /* Style the Item Page */
 /* Column conttainer */
-.row {
+.roww {
     display: flex;
     flex-wrap: wrap;
 }
