@@ -23,7 +23,7 @@
                     <a href="#"><i id="down" class="arrow down"></i></a>
                 </td>
                 <td>${{ i.get_total|floatformat:"2" }}</td>
-                <td><a id="del" class="fa fa-trash fa-lg" href="#"></a></td>
+                <td><a id="del" class="fa fa-trash fa-lg"></a></td>
               </tr>
           {% endfor %}
         </tbody>
@@ -306,6 +306,7 @@
                             datatype:'json',
                             success: function(data) {
                               // if (data['success'])
+                              // console.log(data);
                               price.innerHTML = "$" + data['total']
                               totalPrice.innerHTML = data['total_price']
 
