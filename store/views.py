@@ -151,7 +151,7 @@ def item(request, product_id):
     view_item = Product.objects.get(pk=product_id)
     category = Category.objects.all()
     items_in_cart = Cart.objects.filter(user=request.user)
-    comments = Review.objects.all()
+    comments = Review.objects.filter(product=view_item)
 
     context = {
         'item': view_item,
