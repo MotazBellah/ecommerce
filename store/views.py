@@ -134,7 +134,10 @@ def index(request):
 def products(request, category_id):
     items = Product.objects.filter(category=category_id)
     category = Category.objects.all()
-    items_in_cart = Cart.objects.filter(user=request.user)
+    if request.user.is_authenticated:
+        items_in_cart = Cart.objects.filter(user=request.user)
+    else:
+        items_in_cart = []
 
     paginator = Paginator(items, per_page=5)
     page_number = request.GET.get('page', 1)
