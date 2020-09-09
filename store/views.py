@@ -161,8 +161,12 @@ def searched_products(request):
         items_in_cart = []
 
     if request.method == "POST":
-        name = ''
+
+        name = request.POST['name']
+        print('////////////')
+        print(name)
         items = Product.objects.filter(name__contains=name)
+        print(items)
 
     context = {
         'items': items,
