@@ -19,6 +19,7 @@ from bs4 import BeautifulSoup, SoupStrainer
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
+from rest_framework import filters, generics
 from datetime import datetime
 
 
@@ -442,3 +443,10 @@ class product_api(APIView):
         products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
+
+
+class search_product_api(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']
