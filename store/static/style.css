@@ -83,15 +83,9 @@
 
 /* Set fixed height for text area */
 .name {
-    height: 30px;
+    height: auto;
 }
 
-/* Responsive Card - one column layout (vertical) on small screens */
-@media screen and (max-width: 900px) {
-  .name {
-    height: 58px;
-  }
-}
 /* END the product Page */
 
 /* Style the Item Page */
@@ -279,9 +273,6 @@
 }
 
 @media only screen and (max-width: 768px) {
-  body {
-    background-color: lightblue;
-  }
   .searchBar {
       display: none;
   }
