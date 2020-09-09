@@ -153,6 +153,25 @@ def products(request, category_id):
     return render(request, 'store/products.html', context)
 
 
+def searched_products(request, name):
+    category = Category.objects.all()
+    if request.user.is_authenticated:
+        items_in_cart = Cart.objects.filter(user=request.user)
+    else:
+        items_in_cart = []
+
+    if request.method == "POST":
+        items = Product.objects.filter(name__contains=name)
+
+    context = {
+        'items': items,
+        "category": category,
+        "no_of_items": len(items_in_cart),
+    }
+
+    return render(request, 'store/search.html', context)
+
+
 def item(request, product_id):
     view_item = Product.objects.get(pk=product_id)
     category = Category.objects.all()

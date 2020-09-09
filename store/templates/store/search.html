@@ -1,0 +1,28 @@
+{% extends "store/layout.html" %}
+{% load static %}
+
+
+
+{% block content %}
+<div class="container">
+	{% include "components/searchModal.html" %}
+	<div class="row justify-content-md-center">
+        {% for i in items %}
+		<div class="col-sm-4 card-wr p-1">
+			<div class="card-wrap p-2">
+			<img class="thumbnail" src="{{i.image1.url}}">
+			<div id="{{i.id}}" class="box-eleme">
+				<p class="name mt-1" title={{i.name}}>{{ i.name }}</p>
+				<hr>
+				<h4><strong>${{ i.price }}</strong></h4>
+				<a  id="add-btn" class="btn btn-outline-secondary add-btn">Add to Cart</a>
+				<a class="btn btn-outline-success" href="{% url 'item' i.id %}">View</a>
+			</div>
+			</div>
+		</div>
+        {% endfor%}
+	</div><br>
+
+</div>
+
+{% endblock content %}
