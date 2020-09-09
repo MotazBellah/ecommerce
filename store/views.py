@@ -153,7 +153,7 @@ def products(request, category_id):
     return render(request, 'store/products.html', context)
 
 
-def searched_products(request, name):
+def searched_products(request):
     category = Category.objects.all()
     if request.user.is_authenticated:
         items_in_cart = Cart.objects.filter(user=request.user)
@@ -161,6 +161,7 @@ def searched_products(request, name):
         items_in_cart = []
 
     if request.method == "POST":
+        name = ''
         items = Product.objects.filter(name__contains=name)
 
     context = {
