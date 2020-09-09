@@ -257,3 +257,37 @@
     width: calc(100% - 100px);
     margin-bottom: 40px;
 }
+
+.searchItems {
+    width: 70%;
+    padding: 5px;
+    padding-top: 10px;
+}
+
+.searchInput {
+    width: 60%;
+    margin-right: 5px;
+    padding: 6px 10px;
+    box-sizing: border-box;
+    border: 1px solid lightblue;
+    border-radius: 4px;
+    margin-bottom: 1px;
+}
+
+.searchItems {
+    display: none;
+}
+
+@media only screen and (max-width: 768px) {
+  body {
+    background-color: lightblue;
+  }
+  .searchBar {
+      display: none;
+  }
+
+  .searchItems {
+      display: block;
+  }
+
+}

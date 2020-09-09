@@ -1,4 +1,4 @@
-<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark">
   <a class="navbar-brand" href="{% url 'index' %}">Store</a>
 
   <ul class="navbar-nav mr-auto">
@@ -6,11 +6,7 @@
       <a class="nav-link" href="{% url 'cart' %}">Cart<span id="no-items" class="badge badge-light ml-1">{{no_of_items}}</span></a>
     </li>
   </ul>
-  <form class="form-inline" method="post" action='{% url "searched_products" %}'>
-      {% csrf_token %}
-    <input class="form-control mr-sm-2" name="name" type="search" placeholder="Search" aria-label="Search">
-    <button class="btn btn-outline-success m-2 my-sm-0" type="submit">Search</button>
-  </form>
+
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -28,6 +24,14 @@
         </div>
       </li>
     </ul>
+    <div class="searchBar">
+        <form class="form-inline" method="post" action='{% url "searched_products" %}'>
+            {% csrf_token %}
+          <input class="form-control mr-sm-2" name="name" type="search" placeholder="Search" aria-label="Search" required>
+          <button class="btn btn-outline-success m-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+
     {% if request.user.is_authenticated%}
         <a class="btn btn-outline-danger m-2 my-sm-0" href="{% url 'logout' %}">Log Out</a>
     {% else %}

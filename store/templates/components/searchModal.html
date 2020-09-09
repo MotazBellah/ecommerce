@@ -1,3 +1,11 @@
+<div class="searchItems">
+    <form class="form-inline" method="post" action='{% url "searched_products" %}'>
+        {% csrf_token %}
+      <input autofocus class="searchInput" name="name" type="search" placeholder="Search" aria-label="Search" required>
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+</div>
+
 <p class="mt-2">If you can't find the product, we can help you to bring
     your product from other websitses, please click <a href="#" data-toggle="modal" data-target="#searchProduct">here</a>
 </p>
