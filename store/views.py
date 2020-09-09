@@ -446,6 +446,7 @@ class product_api(APIView):
 
 
 class search_product_api(generics.ListAPIView):
+    permission_classes = (IsAuthenticated, )
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [filters.SearchFilter]
