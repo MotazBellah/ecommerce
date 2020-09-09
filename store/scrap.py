@@ -130,3 +130,31 @@ def tinydeal(name):
             pass
 
     return info
+
+
+
+def souq(name):
+    name = name.replace(' ', "-")
+    req = Request(f"https://egypt.souq.com/eg-en/{name}/s/?as=1", headers={'User-Agent': 'Mozilla/5.0'})
+    response = urlopen(req).read()
+    soup = BeautifulSoup(response, 'html.parser')
+    # divs = soup.find_all('div', {'class': 'r_b_c'})
+    lis = soup.find_all('div', {'class': 'column column-block block-list-large single-item'})
+    print('###########')
+    print(lis[0])
+    info = []
+    # print(len(lis))
+    for i in lis:
+        try:
+            img = i.find('img', {'class': 'img-size-medium imageUrl lazy-loaded'})
+            p1 = i.find('h3', {'class': 'itemPrice'})
+            # p2 = i.find('span', {'class': 'normalprice'})
+            anchr = i.find('a', {'class': 'itemLink sk-clr2 sPrimaryLink'})
+            # image.append(img.attrs['data-original'])
+            # link.append((anchr.get_text(), anchr.attrs['href']))
+            # price.append((p1.get_text(), p2.get_text()))
+            info.append((img.attrs['src'], anchr.attrs['title'], anchr.attrs['href'], p1.get_text()))
+        except Exception as e:
+            pass
+
+    return info

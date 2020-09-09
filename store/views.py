@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from .serializers import CategorySerializer, ProductSerializer
 from .models import Category, Product, Cart, User, ShippingInfo, Purchase, Review
 # from .extras import transact, generate_client_token
-from .scrap import ebay, olx, ebay_API, get_amazon, tinydeal
+from .scrap import ebay, olx, ebay_API, get_amazon, tinydeal, souq
 from .forms import ShippingForm
 from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator
@@ -362,6 +362,7 @@ def update_shipping_info(request):
         return JsonResponse({'items': "doneeeee", "info": info.serialize()}, status=200)
 
 def get_data(request):
+    print(souq('iphon x'))
     if request.method == 'POST':
         name = request.POST.get('product') or None
         resource = request.POST.getlist('resources')
