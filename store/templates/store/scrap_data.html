@@ -37,6 +37,16 @@
         </div>
     {% endfor %}
 
+    {% for i in souq_data %}
+        <div class="col">
+            <img  src="{{i.0}}" alt="{{i.0}}">
+            <a href="{{i.2}}">
+                <p>{{i.1}}</p>
+            </a>
+            <p>${{i.3}}</p>
+        </div>
+    {% endfor %}
+
     {% for i in olx %}
         <div class="col">
             <img  class="olx_img" src="{{i.0}}" alt="{{i.0}}">

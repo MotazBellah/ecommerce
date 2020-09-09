@@ -362,7 +362,7 @@ def update_shipping_info(request):
         return JsonResponse({'items': "doneeeee", "info": info.serialize()}, status=200)
 
 def get_data(request):
-    print(souq('iphon x'))
+    # print(souq('iphon x'))
     if request.method == 'POST':
         name = request.POST.get('product') or None
         resource = request.POST.getlist('resources')
@@ -370,16 +370,18 @@ def get_data(request):
         tinydeal_list = []
         olx_list = []
         ebay_data = []
+        souq_data = []
         if name and resource:
             for i in resource:
+                print(i)
                 if i == "ebay":
-                    # print(ebay_API(name))
-                    # print('HHHHH')
                     ebay_data = ebay_API(name)
-                    # ebay_list = ebay(name)
                 elif i == "Tinydeal":
                     tinydeal_list = tinydeal(name)
                     print(tinydeal_list)
+                elif i == "Souq":
+                    souq_data = souq(name)
+                    print(souq_data)
                 else:
                     olx_list = olx(name)
 
@@ -391,6 +393,7 @@ def get_data(request):
         "olx": olx_list,
         "ebay": ebay_list,
         "ebay_data": ebay_data,
+        "souq_data": souq_data,
     }
     return render(request, 'store/scrap_data.html', context)
 

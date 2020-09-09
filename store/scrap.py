@@ -155,6 +155,7 @@ def souq(name):
             # price.append((p1.get_text(), p2.get_text()))
             info.append((img.attrs['src'], anchr.attrs['title'], anchr.attrs['href'], p1.get_text()))
         except Exception as e:
+            print(e)
             pass
 
     return info
