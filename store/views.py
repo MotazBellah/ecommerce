@@ -21,6 +21,7 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework import filters, generics
 from datetime import datetime
+import re
 
 
 gateway = braintree.BraintreeGateway(
@@ -228,7 +229,7 @@ def cart_view(request):
     # print(items_in_cart[0].product.description)
     # print(items_in_cart[0].product.price)
     print('///////////////')
-
+    form = ShippingForm()
     context = {
         "no_of_items": len(items_in_cart),
         'products': items_in_cart,
@@ -237,6 +238,7 @@ def cart_view(request):
         "total": total,
         "user_address": user_address,
         "shipping_info": shipping_info,
+        "form": form
     }
 
     return render(request, 'store/cart.html', context)
@@ -318,6 +320,14 @@ def shipping_info(request):
         phone = request.POST['phone']
         city = request.POST['city']
         zip = request.POST.get('zip')
+
+        phone_regex = re.findall(r'^\+\d{9,15}$', phone)
+        if not phone_regex or len(phone) > 15 or len(phone) < 7:
+            return JsonResponse({'error': "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."})
+
+        if len(str(zip)) != 5:
+            return JsonResponse({'error': "The zip code must contain 5 digits."})
+
 
         shipping_info = ShippingInfo(address1=address1, address2=address2, user=request.user,
                                     phone=phone, city=city, zip=zip)

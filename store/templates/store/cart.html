@@ -237,6 +237,18 @@
 
             function createFlashMessages(flash_div, flash_content, message, class_name) {
                 document.getElementById(flash_content).innerHTML = message
+                 try {
+                         if (class_name == 'error') {
+                            document.getElementById(flash_content).classList.remove('success')
+                         }
+                         if (class_name == 'success') {
+                            document.getElementById(flash_content).classList.remove('error')
+                         }
+
+                     }
+                     catch(err) {
+                          // pass
+                     }
                 document.getElementById(flash_content).classList.add(class_name)
                 $('#'+flash_div).slideDown(1000).delay(2000).slideUp(1000);
             }
@@ -373,6 +385,11 @@
                         action: 'post'
                     },
                     success:function(response){
+
+                        if ('error' in response) {
+                            createFlashMessages('shippingFlashMessage', 'shippingflashConetent', response['error'], "error")
+                            return
+                        }
                         document.getElementById("post-form").reset();
                         console.log(response);
                         createFlashMessages('shippingFlashMessage', 'shippingflashConetent', "Your shipping info has been added", "success")
