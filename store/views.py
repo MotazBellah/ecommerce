@@ -357,9 +357,14 @@ def update_shipping_info(request):
             info.address2 = address2
             changed_info = True
         if phone and phone != info.phone:
+            phone_regex = re.findall(r'^\+\d{9,15}$', phone)
+            if not phone_regex or len(phone) > 15 or len(phone) < 7:
+                return JsonResponse({'error': "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."})
             info.phone = phone
             changed_info = True
         if zip and zip != info.zip:
+            if len(str(zip)) != 5:
+                return JsonResponse({'error': "The zip code must contain 5 digits."})
             info.zip = zip
             changed_info = True
         if city and city != info.city:
