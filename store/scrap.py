@@ -139,21 +139,49 @@ def souq(name):
     response = urlopen(req).read()
     soup = BeautifulSoup(response, 'html.parser')
     # divs = soup.find_all('div', {'class': 'r_b_c'})
+    lis2 = []
     lis = soup.find_all('div', {'class': 'column column-block block-list-large single-item'})
+    if not lis:
+        lis2 = soup.find_all('div', {'class': 'column column-block block-grid-large single-item'})
     print('###########')
-    print(lis[0])
+    print(len(lis2))
     info = []
     # print(len(lis))
     for i in lis:
         try:
-            img = i.find('img', {'class': 'img-size-medium imageUrl lazy-loaded'})
+            img_wrap = i.find('a', {'class': 'img-bucket img-link itemLink sPrimaryLink'})
+            img = i.find('img', {'class': 'img-size-medium imageUrl'})
             p1 = i.find('h3', {'class': 'itemPrice'})
             # p2 = i.find('span', {'class': 'normalprice'})
             anchr = i.find('a', {'class': 'itemLink sk-clr2 sPrimaryLink'})
             # image.append(img.attrs['data-original'])
             # link.append((anchr.get_text(), anchr.attrs['href']))
             # price.append((p1.get_text(), p2.get_text()))
-            info.append((img.attrs['src'], anchr.attrs['title'], anchr.attrs['href'], p1.get_text()))
+            # print(img)
+            # print('&&&&&&&&&&&&&&&&&&&&')
+            # print(p1)
+            # print('&&&&&&&&&&&&&&&&&&&&')
+            # print(anchr)
+            # print('&&&&&&&&&&&&&&&&&&&&')
+            info.append((img.attrs['data-src'], anchr.attrs['title'], anchr.attrs['href'], p1.get_text()))
+        except Exception as e:
+            print(e)
+            pass
+
+    for i in lis2:
+        try:
+            p1 = i.find('span', {'class': 'itemPrice'})
+            anchr = i.find('a', {'class': 'img-link quickViewAction sPrimaryLink'})
+            # image.append(img.attrs['data-original'])
+            # link.append((anchr.get_text(), anchr.attrs['href']))
+            # price.append((p1.get_text(), p2.get_text()))
+            # print(p1)
+            # print('&&&&&&&&&&&&&&&&&&&&')
+            # print(p2)
+            # print('&&&&&&&&&&&&&&&&&&&&')
+            # print(anchr)
+            # print('&&&&&&&&&&&&&&&&&&&&')
+            info.append((anchr.attrs['data-img'], anchr.attrs['data-title'], anchr.attrs['href'], p1.get_text()))
         except Exception as e:
             print(e)
             pass

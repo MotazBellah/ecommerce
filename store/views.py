@@ -381,7 +381,7 @@ def get_data(request):
                     print(tinydeal_list)
                 elif i == "Souq":
                     souq_data = souq(name)
-                    print(souq_data)
+                    # print(souq_data)
                 else:
                     olx_list = olx(name)
 
