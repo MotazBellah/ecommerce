@@ -446,6 +446,9 @@ def deleteComments(request):
         return JsonResponse({'items': "done"}, status=200)
 
 
+def map_location(request):
+    return render(request, 'components/maps.html')
+
 class category_api(APIView):
     permission_classes = (IsAuthenticated, )
 

@@ -1,0 +1,52 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>🌏 Google Maps Geolocation Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style media="screen">
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            height: 100%;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .map {
+            flex: 1;
+        }
+
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <div id="map" class="map"></div>
+    </main>
+
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZIcwXQboeeExXLJHMqwsYoRAdjipERdM&callback=init"></script>
+
+    <script type="text/javascript">
+    function init() {
+      const initialPosition = { lat: 59.325, lng: 18.069 };
+
+      const map = new google.maps.Map(document.getElementById('map'), {
+        center: initialPosition,
+        zoom: 15
+      });
+
+      const marker = new google.maps.Marker({ map, position: initialPosition });
+    }
+    </script>
+  </body>
+</html>
