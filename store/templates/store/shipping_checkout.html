@@ -120,7 +120,7 @@
         <div id="flashMessage">
             <p id="flashConetent"></p>
         </div>
-        <h5>Total Price: $<span>{{total|floatformat:"2"}}</span></h5>
+        <h5>Total Price: $<span id="total_amount">{{total|floatformat:"2"}}</span></h5>
         <div class="payment">
             <form id="payment-form" method="post">
                 {% csrf_token %}
@@ -208,8 +208,9 @@
                                 setTimeout(function(){location.reload()}, 4000);
                             } else {
                                 createFlashMessages('flashMessage', 'flashConetent', "Your payment has been processed successfully", "success")
-
-                                setTimeout(function(){location.reload()}, 4000);
+                                document.getElementById("total_amount").innerHTML = '0.00'
+                                document.getElementById("submit-button").disabled = true;
+                                // setTimeout(function(){location.reload()}, 4000);
                             }
 
                             // window.location.reload(true)
