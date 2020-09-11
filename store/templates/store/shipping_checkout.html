@@ -147,9 +147,14 @@
             var client_token = '{{ client_token }}';
             var total_value = '{{ total }}'
             var user_shipping_adress = '{{ user_address }}'
-            var latitude = 38.685516
-            var longitude = -101.073324
-            var mapTitle = "Initial Title"
+            var latitude = {{ location.0 }}
+            var longitude = {{ location.1 }}
+            var mapTitle = '{{address}}'
+            init()
+
+            console.log("TTTTTTTTTTTT");
+            console.log(latitude);
+            console.log(longitude);
 
              if (user_shipping_adress === '1') {
                  $('#updating-info').show()
@@ -290,6 +295,7 @@
                             $('#updating-info').show()
                             $('#address').hide()
                         }, 2000);
+
                         latitude = response['location'][0]
                         longitude = response['location'][1]
                         mapTitle = response['mapTitle']

@@ -96,3 +96,8 @@ class ShippingInfo(models.Model):
             "city": self.city,
             "zip": self.zip,
         }
+
+    @property
+    def get_address(self):
+        complete_address = self.address1.strip() + ', ' + self.city.strip() + ', ' + self.country.strip()
+        return complete_address

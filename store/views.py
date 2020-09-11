@@ -238,8 +238,12 @@ def shipping_checkout(request):
     category = Category.objects.all()
     client_token = generate_client_token()
     user_address = 0
+    address = 'Initial Title'
+    location = 38.685516, -101.073324
     if shipping_info:
         user_address = 1
+        address = shipping_info.get_address
+        location = getGeocodeLocation(address.replace(', ', '+'))
 
     context = {
         "no_of_items": len(items_in_cart),
@@ -249,6 +253,8 @@ def shipping_checkout(request):
         "total": total,
         "user_address": user_address,
         "shipping_info": shipping_info,
+        'address': address,
+        'location': location,
     }
 
     return render(request, 'store/shipping_checkout.html', context)
@@ -400,7 +406,7 @@ def update_shipping_info(request):
                              "location": location,
                              'mapTitle': total_address.replace('+', ", ")
                              }, status=200)
-                             
+
 
 def get_data(request):
     # print(souq('iphon x'))
