@@ -346,7 +346,7 @@ def shipping_info(request):
                                     phone=phone, city=city, zip=zip, country=country)
         shipping_info.save()
         info = ShippingInfo.objects.filter(user=request.user).first()
-        total_address = address1.strip() + '+' + city.strip() + '+' + country.strip()
+        total_address = country.strip() + '+' + city.strip() + '+' + address1.strip()
         location = getGeocodeLocation(total_address)
 
         return JsonResponse({'items': "done",
@@ -398,7 +398,7 @@ def update_shipping_info(request):
         if changed_info:
             info.save()
 
-        total_address = address1.strip() + '+' + city.strip() + '+' + country.strip()
+        total_address = country.strip() + '+' + city.strip() + '+' + address1.strip()
         location = getGeocodeLocation(total_address)
 
         return JsonResponse({'items': "doneeeee",
