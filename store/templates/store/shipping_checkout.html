@@ -139,7 +139,7 @@
         <script src="https://js.braintreegateway.com/web/dropin/1.23.0/js/dropin.min.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDexCJ9aMiGdT3y_HtPEYfR9JsVcj8RbQA&v=3&callback=init"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        
+
         <script type="text/javascript">
             $('#flashMessage').hide()
             $('#shippingFlashMessage').hide()
@@ -301,7 +301,7 @@
                         longitude = response['location'][1]
                         mapTitle = response['mapTitle']
 
-                        // init()
+                        init()
                         document.getElementById("shippingAdress1").innerHTML = response['info']['address1']
                         document.getElementById("shippingAdress2").innerHTML = response['info']['address2']
                         document.getElementById("shippingPhone").innerHTML = response['info']['phone']
@@ -345,7 +345,7 @@
                         longitude = response['location'][1]
                         mapTitle = response['mapTitle']
 
-                        // init()
+                        init()
 
                         createFlashMessages('shippingFlashMessage', 'shippingflashConetent', "Your shipping info has been updated", "success")
                         console.log(response);
