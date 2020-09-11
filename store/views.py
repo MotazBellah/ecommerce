@@ -340,8 +340,10 @@ def shipping_info(request):
                                     phone=phone, city=city, zip=zip, country=country)
         shipping_info.save()
         info = ShippingInfo.objects.filter(user=request.user).first()
+        total_address = address1.strip() + '+' + city.strip() + '+' + country.strip()
+        location = getGeocodeLocation(total_address)
 
-        return JsonResponse({'items': "done", "info": info.serialize()}, status=200)
+        return JsonResponse({'items': "done", "info": info.serialize(), "location": location}, status=200)
 
 
 def update_shipping_info(request):
@@ -386,7 +388,10 @@ def update_shipping_info(request):
         if changed_info:
             info.save()
 
-        return JsonResponse({'items': "doneeeee", "info": info.serialize()}, status=200)
+        total_address = address1.strip() + '+' + city.strip() + '+' + country.strip()
+        location = getGeocodeLocation(total_address)
+
+        return JsonResponse({'items': "doneeeee", "info": info.serialize(), "location": location}, status=200)
 
 def get_data(request):
     # print(souq('iphon x'))
