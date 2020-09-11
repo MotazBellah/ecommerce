@@ -156,9 +156,11 @@
         infowindow.marker = marker;
         infowindow.setContent('<div>' + marker.title + '</div>');
         infowindow.open(map, marker);
+        marker.setAnimation(google.maps.Animation.BOUNCE)
         // Make sure the marker property is cleared if the infowindow is closed.
         infowindow.addListener('closeclick', function() {
           infowindow.marker = null;
+          marker.setAnimation(null);
         });
       }
     }
