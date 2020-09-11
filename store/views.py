@@ -218,6 +218,21 @@ def addItem(request):
 
 def cart_view(request):
     items_in_cart = Cart.objects.filter(user=request.user)
+    total = sum((i.get_total for i in items_in_cart), 0)
+    category = Category.objects.all()
+
+    context = {
+        "no_of_items": len(items_in_cart),
+        'products': items_in_cart,
+        "category": category,
+        "total": total,
+    }
+
+    return render(request, 'store/cart.html', context)
+
+
+def shipping_checkout(request):
+    items_in_cart = Cart.objects.filter(user=request.user)
     shipping_info = ShippingInfo.objects.filter(user=request.user).first()
     total = sum((i.get_total for i in items_in_cart), 0)
     category = Category.objects.all()
@@ -225,12 +240,7 @@ def cart_view(request):
     user_address = 0
     if shipping_info:
         user_address = 1
-    print('///////////////')
-    # print(client_token)
-    # print(items_in_cart[0].product.description)
-    # print(items_in_cart[0].product.price)
-    print('///////////////')
-    form = ShippingForm()
+
     context = {
         "no_of_items": len(items_in_cart),
         'products': items_in_cart,
@@ -239,11 +249,9 @@ def cart_view(request):
         "total": total,
         "user_address": user_address,
         "shipping_info": shipping_info,
-        "form": form
     }
 
-    return render(request, 'store/cart.html', context)
-
+    return render(request, 'store/shipping_checkout.html', context)
 
 def quantity(request):
     if request.is_ajax() and request.method == "POST":
@@ -252,17 +260,13 @@ def quantity(request):
         value = data.get('value')
 
         item = Cart.objects.get(user=request.user, pk=id)
-        total_item = Cart.objects.filter(user=request.user)
-        total_price = sum((i.get_total for i in total_item), 0)
         if int(value) != item.quantity:
             item.quantity = int(value)
             item.save()
 
-        print('///////////////')
-        print(item.get_total)
-        print(id)
-        print(value)
-        print('///////////////')
+        total_item = Cart.objects.filter(user=request.user)
+        total_price = sum((i.get_total for i in total_item), 0)
+
         return JsonResponse({'items': "done", 'total': item.get_total, "total_price": total_price}, status=200)
 
 
@@ -449,7 +453,8 @@ def deleteComments(request):
 
 def map_location(request):
     print('%%%%%%%%%%%')
-    print(getGeocodeLocation('Egypt Alexandria'))
+    x = 'District 8, Villa 122,  New Borg El-Arab, Alexandria, Egypt'
+    print(getGeocodeLocation(x))
     return render(request, 'components/maps.html')
 
 class category_api(APIView):

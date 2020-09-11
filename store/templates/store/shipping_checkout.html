@@ -1,0 +1,328 @@
+{% extends "store/layout.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container cart-checkout">
+        <br>
+        <div id="shippingFlashMessage">
+            <p id="shippingflashConetent"></p>
+        </div>
+        <h4>Shipping Info:</h4>
+            <div id="address" class="address mt-4">
+                <form method="post" id='post-form'>
+                    {% csrf_token %}
+                  <div class="form-group">
+                    <label for="inputAddress">Address</label>
+                    <input type="text" name="address1" class="form-control" id="inputAddress" placeholder="1234 Main St" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputAddress2">Address 2</label>
+                    <input type="text" name="address2" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+                  </div>
+                  <div class="form-group">
+                    <label for="inputAddress2">Phone Number</label>
+                    <input type="tel" name="phone" id="inputPhone" class="form-control" placeholder="+201069090037" required>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="inputCity">City</label>
+                      <input type="text" name="city" class="form-control" id="inputCity" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="inputZip">Zip</label>
+                      <input type="text" name="zip" class="form-control" id="inputZip">
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary mb-4">Add Shipping Info</button>
+                </form>
+            </div>
+
+            <div id="updating-info">
+
+
+            <p>If you want to check your shipping info, please click <a href="#" data-toggle="modal" data-target="#readShipping">here</a></p>
+            <p>If you want to change/update your shipping info, please click <a href="#" data-toggle="modal" data-target="#updateShipping">here</a></p>
+
+            <div id="readShipping" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <p><strong>Address1: </strong><span id="shippingAdress1">{{shipping_info.address1}}</span></p>
+                    <p><strong>Address2: </strong><span id="shippingAdress2">{{shipping_info.address2}}</span></p>
+                    <p><strong>Phone Number: </strong><span id="shippingPhone">{{shipping_info.phone}}</span></p>
+                    <p><strong>City: </strong><span id="shippingCity">{{shipping_info.city}}</span></p>
+                    <p><strong>Zip: </strong><span id="shippingZip">{{shipping_info.zip}}</span></p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div id="updateShipping" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-body">
+                        <form method="post" id='update-form'>
+                            {% csrf_token %}
+                          <div class="form-group">
+                            <label for="inputAddress">Address</label>
+                            <input type="text" name="address1" class="form-control" id="updateInputAddress" value="{{shipping_info.address1}}">
+                          </div>
+                          <div class="form-group">
+                            <label for="inputAddress2">Address 2</label>
+                            <input type="text" name="address2" class="form-control" id="updateInputAddress2" value="{{shipping_info.address2}}">
+                          </div>
+                          <div class="form-group">
+                            <label for="inputAddress2">Phone Number</label>
+                            <input type="tel" name="phone" id="updateInputPhone" class="form-control" value="{{shipping_info.phone}}">
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-md-6">
+                              <label for="inputCity">City</label>
+                              <input type="text" name="city" class="form-control" id="updateInputCity" value="{{shipping_info.city}}">
+                            </div>
+                            <div class="form-group col-md-4">
+                              <label for="inputZip">Zip</label>
+                              <input type="text" name="zip" class="form-control" placeholder="{{shipping_info.zip}}" id="updateInputZip">
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Update Shipping Info</button>
+                            <button type="button" id="close" class="btn btn-default" data-dismiss="modal">Close</button>
+                          </div>
+                      </form>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            </div><br><hr>
+
+
+        <div id="flashMessage">
+            <p id="flashConetent"></p>
+        </div>
+
+        <div class="payment">
+            <form id="payment-form" method="post">
+                {% csrf_token %}
+              <section>
+                <div class="bt-drop-in-wrapper">
+                  <div id="bt-dropin"></div>
+                </div>
+              </section>
+
+              <input type="hidden" id="nonce" name="payment_method_nonce" />
+              <button class="button btn btn-primary" type="submit" id="submit-button"><span>Submit Payment</span></button>
+            </form>
+        </div>
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://js.braintreegateway.com/web/dropin/1.23.0/js/dropin.min.js"></script>
+        <script type="text/javascript">
+            $('#flashMessage').hide()
+            $('#shippingFlashMessage').hide()
+
+            var form = document.querySelector('#payment-form');
+            var client_token = '{{ client_token }}';
+            var total_value = '{{ total }}'
+            var user_shipping_adress = '{{ user_address }}'
+
+             if (user_shipping_adress === '1') {
+                 $('#updating-info').show()
+                 $('#address').hide()
+             } else {
+                 $('#address').show()
+                 $('#updating-info').hide()
+             }
+
+            if (total_value == '0') {
+                document.getElementById("submit-button").disabled = true;
+            } else {
+                document.getElementById("submit-button").disabled = false;
+            }
+
+             braintree.dropin.create({
+               authorization: client_token,
+               container: '#bt-dropin',
+               paypal: {
+                 flow: 'vault'
+               }
+             }, function (createErr, instance) {
+               form.addEventListener('submit', function (event) {
+                 event.preventDefault();
+
+                 instance.requestPaymentMethod(function (err, payload) {
+                   if (err) {
+                     console.log('Error', err);
+                     return;
+                   }
+                   // else
+                   // Added ajax
+
+                   // Add the nonce to the form and submit
+                   document.querySelector('#nonce').value = payload.nonce;
+                   // form.submit();
+                   $.ajax({
+                       type:'POST',
+                       url:'{% url "checkout" %}',
+                       data:{
+                           payment_method_nonce: $('#nonce').val(),
+                           csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                           action: 'post'
+                       },
+                       success:function(response){
+                            console.log(response);
+
+                            if ('error' in response) {
+                                createFlashMessages('flashMessage', 'flashConetent', "Something went wrong, please try again later!", "error")
+                                setTimeout(function(){location.reload()}, 4000);
+                            } else {
+                                createFlashMessages('flashMessage', 'flashConetent', "Your payment has been processed successfully", "success")
+
+                                setTimeout(function(){location.reload()}, 4000);
+                            }
+
+                            // window.location.reload(true)
+                           // alert('HHHHH')
+                       },
+                       error : function(xhr,errmsg,err) {
+
+                           console.log(xhr.status + ": " + xhr.responseText);
+                           createFlashMessages('flashMessage', 'flashConetent', "Something went wrong, please try again later!", "error")
+                           setTimeout(function(){location.reload()}, 4000);
+                   }
+                   });
+
+                 });
+               });
+             });
+
+
+            function createFlashMessages(flash_div, flash_content, message, class_name) {
+                document.getElementById(flash_content).innerHTML = message
+                 try {
+                         if (class_name == 'error') {
+                            document.getElementById(flash_content).classList.remove('success')
+                         }
+                         if (class_name == 'success') {
+                            document.getElementById(flash_content).classList.remove('error')
+                         }
+
+                     }
+                     catch(err) {
+                          // pass
+                     }
+                document.getElementById(flash_content).classList.add(class_name)
+                $('#'+flash_div).slideDown(1000).delay(2000).slideUp(1000);
+            }
+
+
+            // From Djang doc.
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+
+
+            $(document).on('submit', '#post-form',function(e){
+                e.preventDefault();
+                $.ajax({
+                    type:'POST',
+                    url:'{% url "shipping" %}',
+                    data:{
+                        address1:$('#inputAddress').val(),
+                        address2:$('#inputAddress2').val(),
+                        phone:$('#inputPhone').val(),
+                        zip:$('#inputZip').val(),
+                        city:$('#inputCity').val(),
+                        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                        action: 'post'
+                    },
+                    success:function(response){
+
+                        if ('error' in response) {
+                            createFlashMessages('shippingFlashMessage', 'shippingflashConetent', response['error'], "error")
+                            return
+                        }
+                        document.getElementById("post-form").reset();
+                        console.log(response);
+                        createFlashMessages('shippingFlashMessage', 'shippingflashConetent', "Your shipping info has been added", "success")
+
+                        setTimeout(function(){
+                            user_shipping_adress === '1'
+                            $('#updating-info').show()
+                            $('#address').hide()
+                        }, 2000);
+                        document.getElementById("shippingAdress1").innerHTML = response['info']['address1']
+                        document.getElementById("shippingAdress2").innerHTML = response['info']['address2']
+                        document.getElementById("shippingPhone").innerHTML = response['info']['phone']
+                        document.getElementById("shippingCity").innerHTML = response['info']['city']
+                        document.getElementById("shippingZip").innerHTML = response['info']['zip']
+
+                    },
+                    error : function(xhr,errmsg,err) {
+                        console.log(xhr.status + ": " + xhr.responseText);
+                        createFlashMessages('shippingFlashMessage', 'shippingflashConetent', "Something went wrong :(", "error")
+                }
+                });
+            });
+
+            $(document).on('submit', '#update-form',function(e){
+                e.preventDefault();
+                $.ajax({
+                    type:'POST',
+                    url:'{% url "updateShipping" %}',
+                    data:{
+                        address1:$('#updateInputAddress').val(),
+                        address2:$('#updateInputAddress2').val(),
+                        phone:$('#updateInputPhone').val(),
+                        zip:$('#updateInputZip').val(),
+                        city:$('#updateInputCity').val(),
+                        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                        action: 'post'
+                    },
+                    success:function(response){
+                        var closeModal = document.getElementById('close');
+                        closeModal.click()
+                        createFlashMessages('shippingFlashMessage', 'shippingflashConetent', "Your shipping info has been updated", "success")
+                        console.log(response);
+                        document.getElementById("shippingAdress1").innerHTML = response['info']['address1']
+                        document.getElementById("shippingAdress2").innerHTML = response['info']['address2']
+                        document.getElementById("shippingPhone").innerHTML = response['info']['phone']
+                        document.getElementById("shippingCity").innerHTML = response['info']['city']
+                        document.getElementById("shippingZip").innerHTML = response['info']['zip']
+
+                    },
+                    error : function(xhr,errmsg,err) {
+                        console.log(xhr.status + ": " + xhr.responseText);
+                        createFlashMessages('shippingFlashMessage', 'shippingflashConetent', "Something went wrong :(", "error")
+                }
+                });
+            });
+
+
+        </script>
+
+
+{% endblock content %}
