@@ -343,7 +343,11 @@ def shipping_info(request):
         total_address = address1.strip() + '+' + city.strip() + '+' + country.strip()
         location = getGeocodeLocation(total_address)
 
-        return JsonResponse({'items': "done", "info": info.serialize(), "location": location}, status=200)
+        return JsonResponse({'items': "done",
+                             "info": info.serialize(),
+                             "location": location,
+                             'mapTitle': total_address.replace('+', ", ")
+                             }, status=200)
 
 
 def update_shipping_info(request):
@@ -391,7 +395,12 @@ def update_shipping_info(request):
         total_address = address1.strip() + '+' + city.strip() + '+' + country.strip()
         location = getGeocodeLocation(total_address)
 
-        return JsonResponse({'items': "doneeeee", "info": info.serialize(), "location": location}, status=200)
+        return JsonResponse({'items': "doneeeee",
+                             "info": info.serialize(),
+                             "location": location,
+                             'mapTitle': total_address.replace('+', ", ")
+                             }, status=200)
+                             
 
 def get_data(request):
     # print(souq('iphon x'))

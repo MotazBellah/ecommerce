@@ -147,6 +147,9 @@
             var client_token = '{{ client_token }}';
             var total_value = '{{ total }}'
             var user_shipping_adress = '{{ user_address }}'
+            var latitude = 38.685516
+            var longitude = -101.073324
+            var mapTitle = "Initial Title"
 
              if (user_shipping_adress === '1') {
                  $('#updating-info').show()
@@ -287,6 +290,11 @@
                             $('#updating-info').show()
                             $('#address').hide()
                         }, 2000);
+                        latitude = response['location'][0]
+                        longitude = response['location'][1]
+                        mapTitle = response['mapTitle']
+
+                        init()
                         document.getElementById("shippingAdress1").innerHTML = response['info']['address1']
                         document.getElementById("shippingAdress2").innerHTML = response['info']['address2']
                         document.getElementById("shippingPhone").innerHTML = response['info']['phone']
@@ -325,6 +333,12 @@
                             createFlashMessages('shippingFlashMessage', 'shippingflashConetent', response['error'], "error")
                             return
                         }
+
+                        latitude = response['location'][0]
+                        longitude = response['location'][1]
+                        mapTitle = response['mapTitle']
+
+                        init()
 
                         createFlashMessages('shippingFlashMessage', 'shippingflashConetent', "Your shipping info has been updated", "success")
                         console.log(response);
@@ -412,13 +426,16 @@
                         ]
                       }
                     ];
-                const initialPosition = { lat: 30.8468631, lng: 29.5885765 };
+                var initialPosition = { lat: latitude, lng: longitude };
 
                 const map = new google.maps.Map(document.getElementById('map'), {
                     center: initialPosition,
                     zoom: 15,
                     styles: styles,
                   });
+
+                console.log("MAP");
+                console.log(initialPosition);
 
                 var largeInfowindow = new google.maps.InfoWindow();
 
@@ -431,7 +448,7 @@
                 var marker = new google.maps.Marker({
                       map,
                       position: initialPosition,
-                      title: 'Alexandria, Egypt',
+                      title: " ",
                       animation: google.maps.Animation.DROP,
                       icon: defaultIcon,
                       id: 1
@@ -461,6 +478,7 @@
               // Check to make sure the infowindow is not already opened on this marker.
               if (infowindow.marker != marker) {
                 infowindow.marker = marker;
+                marker.title = mapTitle
                 infowindow.setContent('<div>' + marker.title + '</div>');
                 infowindow.open(map, marker);
                 marker.setAnimation(google.maps.Animation.BOUNCE)
