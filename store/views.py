@@ -253,6 +253,7 @@ def shipping_checkout(request):
 
     return render(request, 'store/shipping_checkout.html', context)
 
+
 def quantity(request):
     if request.is_ajax() and request.method == "POST":
         data = json.loads(request.body)
