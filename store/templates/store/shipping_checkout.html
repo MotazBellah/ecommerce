@@ -23,14 +23,18 @@
                     <label for="inputAddress2">Phone Number</label>
                     <input type="tel" name="phone" id="inputPhone" class="form-control" placeholder="+201069090037" required>
                   </div>
+                  <div class="form-group">
+                    <label for="inputCountry">Country</label>
+                    <input type="text" name="country" class="form-control" id="inputCountry" placeholder="Egypt" required>
+                  </div>
                   <div class="form-row">
                     <div class="form-group col-md-6">
                       <label for="inputCity">City</label>
-                      <input type="text" name="city" class="form-control" id="inputCity" required>
+                      <input type="text" name="city" class="form-control" id="inputCity" placeholder="Alexandria" required>
                     </div>
                     <div class="form-group col-md-4">
                       <label for="inputZip">Zip</label>
-                      <input type="text" name="zip" class="form-control" id="inputZip">
+                      <input type="text" name="zip" class="form-control" placeholder="11111" id="inputZip">
                     </div>
                   </div>
                   <button type="submit" class="btn btn-primary mb-4">Add Shipping Info</button>
@@ -52,6 +56,7 @@
                     <p><strong>Address1: </strong><span id="shippingAdress1">{{shipping_info.address1}}</span></p>
                     <p><strong>Address2: </strong><span id="shippingAdress2">{{shipping_info.address2}}</span></p>
                     <p><strong>Phone Number: </strong><span id="shippingPhone">{{shipping_info.phone}}</span></p>
+                    <p><strong>Country: </strong><span id="shippingCountry">{{shipping_info.country}}</span></p>
                     <p><strong>City: </strong><span id="shippingCity">{{shipping_info.city}}</span></p>
                     <p><strong>Zip: </strong><span id="shippingZip">{{shipping_info.zip}}</span></p>
                   </div>
@@ -82,6 +87,10 @@
                           <div class="form-group">
                             <label for="inputAddress2">Phone Number</label>
                             <input type="tel" name="phone" id="updateInputPhone" class="form-control" value="{{shipping_info.phone}}">
+                          </div>
+                          <div class="form-group">
+                            <label for="inputCountry">Country</label>
+                            <input type="text" name="country" class="form-control" id="updateInputCountry" value="{{shipping_info.country}}" >
                           </div>
                           <div class="form-row">
                             <div class="form-group col-md-6">
@@ -256,6 +265,7 @@
                         phone:$('#inputPhone').val(),
                         zip:$('#inputZip').val(),
                         city:$('#inputCity').val(),
+                        country:$('#inputCountry').val(),
                         csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
                         action: 'post'
                     },
@@ -277,6 +287,7 @@
                         document.getElementById("shippingAdress1").innerHTML = response['info']['address1']
                         document.getElementById("shippingAdress2").innerHTML = response['info']['address2']
                         document.getElementById("shippingPhone").innerHTML = response['info']['phone']
+                        document.getElementById("shippingCountry").innerHTML = response['info']['country']
                         document.getElementById("shippingCity").innerHTML = response['info']['city']
                         document.getElementById("shippingZip").innerHTML = response['info']['zip']
 
@@ -298,6 +309,7 @@
                         address2:$('#updateInputAddress2').val(),
                         phone:$('#updateInputPhone').val(),
                         zip:$('#updateInputZip').val(),
+                        country:$('#updateInputCountry').val(),
                         city:$('#updateInputCity').val(),
                         csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
                         action: 'post'
@@ -305,11 +317,18 @@
                     success:function(response){
                         var closeModal = document.getElementById('close');
                         closeModal.click()
+                        if ('error' in response) {
+                            
+                            createFlashMessages('shippingFlashMessage', 'shippingflashConetent', response['error'], "error")
+                            return
+                        }
+
                         createFlashMessages('shippingFlashMessage', 'shippingflashConetent', "Your shipping info has been updated", "success")
                         console.log(response);
                         document.getElementById("shippingAdress1").innerHTML = response['info']['address1']
                         document.getElementById("shippingAdress2").innerHTML = response['info']['address2']
                         document.getElementById("shippingPhone").innerHTML = response['info']['phone']
+                        document.getElementById("shippingCountry").innerHTML = response['info']['country']
                         document.getElementById("shippingCity").innerHTML = response['info']['city']
                         document.getElementById("shippingZip").innerHTML = response['info']['zip']
 

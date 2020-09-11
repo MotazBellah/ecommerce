@@ -324,6 +324,7 @@ def shipping_info(request):
         address2 = request.POST.get('address2')
         phone = request.POST['phone']
         city = request.POST['city']
+        country = request.POST['country']
         zip = request.POST.get('zip')
 
         phone_regex = re.findall(r'^\+\d{9,15}$', phone)
@@ -335,7 +336,7 @@ def shipping_info(request):
 
 
         shipping_info = ShippingInfo(address1=address1, address2=address2, user=request.user,
-                                    phone=phone, city=city, zip=zip)
+                                    phone=phone, city=city, zip=zip, country=country)
         shipping_info.save()
         info = ShippingInfo.objects.filter(user=request.user).first()
 
@@ -350,6 +351,7 @@ def update_shipping_info(request):
         address1 = request.POST.get('address1') or None
         address2 = request.POST.get('address2') or None
         phone = request.POST.get('phone') or None
+        country = request.POST.get('country') or None
         city = request.POST.get('city') or None
         zip = request.POST.get('zip') or None
 
@@ -375,7 +377,11 @@ def update_shipping_info(request):
         if city and city != info.city:
             info.city = city
             changed_info = True
-
+        if country and country != info.country:
+            info.country = country
+            changed_info = True
+        print('****************')
+        print(country)
         if changed_info:
             info.save()
 

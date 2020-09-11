@@ -92,6 +92,7 @@ class ShippingInfo(models.Model):
             "address1": self.address1,
             "address2": self.address2,
             "phone": self.phone,
+            "country": self.country,
             "city": self.city,
             "zip": self.zip,
         }
