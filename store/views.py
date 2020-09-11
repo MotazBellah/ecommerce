@@ -22,6 +22,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework import filters, generics
 from datetime import datetime
 import re
+from .geocode import getGeocodeLocation
 
 
 gateway = braintree.BraintreeGateway(
@@ -447,6 +448,8 @@ def deleteComments(request):
 
 
 def map_location(request):
+    print('%%%%%%%%%%%')
+    print(getGeocodeLocation('Egypt Alexandria'))
     return render(request, 'components/maps.html')
 
 class category_api(APIView):
