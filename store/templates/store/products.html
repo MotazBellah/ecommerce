@@ -22,15 +22,17 @@
 		</div>
         {% endfor%}
 	</div><br>
-	<div class="text-center">
-		<ul class="pagination justify-content-center">
-			{% for i in paginator.page_range %}
-				<li class="page-item {% if i == page_number %} active {% endif %}">
-					<a class="page-link" href="?page={{i}}">{{i}}</a>
-				</li>
-			{% endfor %}
-		</ul>
-	</div>
+	{% if items %}
+		<div class="text-center">
+			<ul class="pagination justify-content-center">
+				{% for i in paginator.page_range %}
+					<li class="page-item {% if i == page_number %} active {% endif %}">
+						<a class="page-link" href="?page={{i}}">{{i}}</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	{% endif %}
 
 </div>
 
