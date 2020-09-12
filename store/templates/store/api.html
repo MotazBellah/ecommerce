@@ -1,0 +1,39 @@
+{% extends "store/layout.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <h4 class="my-3">API Documentation</h4>
+        <h5>Introduction</h5>
+        <p>The Store API provides a simple <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">RESTful</a> interface
+            with lightweight <a href="https://en.wikipedia.org/wiki/JSON">JSON</a>-formatted responses to use many of Store's website features,
+            including listing all the categories, listing all the products, and searching for products, using token authentication to allow the access to stors' data.
+            This document provides information to developers on how to integrate with the Store API.</p><br>
+
+        <h5>Authentication</h5>
+        <p>The Store API requires a token that is provided during app registration.
+            The token identifies your application to the Store web service.
+            It's passed using the standard Authentication header.</p><br>
+
+        <h5>API Requests</h5>
+        <p>The Store API uses a RESTful calling style that works with standard <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> calls.
+            Any web programming language (PHP, Ruby, Perl, Python, Java, Objective C, C#...) should be able to make and receive HTTP networking calls.</p><br>
+
+        <h5>Request URLs</h5>
+        <p>In a RESTful API, each resource or collection of resources is identified by a unique URL</p>
+        <span>To list all categories</span>
+        <code> http://localhost:8000/api/category 'Authorization: Token 9054f7aa9305e012b3c2300408c3dfdf390fcddf' </code><br>
+        <span>To list all products</span>
+        <code> http://localhost:8000/api/products 'Authorization: Token 9054f7aa9305e012b3c2300408c3dfdf390fcddf' </code><br>
+        <span>To search for products</span>
+        <code> http://localhost:8000/api/searched-products?search=VALUE 'Authorization: Token 9054f7aa9305e012b3c2300408c3dfdf390fcddf' </code><br>
+        <p>As you notice for each URL you should add Authorization token header</p><br>
+
+        <h5>Quick Start</h5>
+        <p>In order to start access the API you should have an account to get authentication token, Please click <a href="{% url 'register' %}">here</a> for Registration</p>
+        <p>If you already have an account, Please click <a href="{% url 'login' %}">here</a> to log in</p>
+        <p>Logged In, great, now you can get your Token</p>
+
+    </div>
+
+{% endblock content %}

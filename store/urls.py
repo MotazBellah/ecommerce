@@ -5,7 +5,6 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("map", views.map_location, name="map"),
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
@@ -24,6 +23,7 @@ urlpatterns = [
     path("api/category", views.category_api.as_view(), name="category_list"),
     path("api/products", views.product_api.as_view(), name="product_list"),
     path("api/searched-products", views.search_product_api.as_view(), name="search_list"),
+    path("api/doc", views.api_doc, name="api_doc"),
     path('comment_book', views.comment_book, name='comment_book'),
     path('deleteComments', views.deleteComments, name='deleteComments'),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),

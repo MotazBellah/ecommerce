@@ -478,11 +478,9 @@ def deleteComments(request):
         return JsonResponse({'items': "done"}, status=200)
 
 
-def map_location(request):
-    print('%%%%%%%%%%%')
-    x = 'District 8, Villa 122,  New Borg El-Arab, Alexandria, Egypt'
-    print(getGeocodeLocation(x))
-    return render(request, 'components/maps.html')
+def api_doc(request):
+    return render(request, 'store/api.html')
+
 
 class category_api(APIView):
     permission_classes = (IsAuthenticated, )
