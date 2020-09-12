@@ -36,7 +36,53 @@
         <div id="tokenArea">
             <p>Your token is:  <strong><span id="userToken"></span></strong></p>
         </div>
+        <p>After getting your token, you can now access the API</p>
+        <pre>
+    import requests
 
+    url = 'API URL'
+    headers = {'Authorization': 'Token Your Authentication Token'}
+    r = requests.get(url, headers=headers)
+    result = r.json()
+        </pre>
+
+    <h6>Example</h6>
+    <pre>
+    import requests
+
+    url = 'http://localhost:8000/api/products'
+    headers = {'Authorization': 'Token ff2ffd6add34b63a1989dde8323dba9752d14e66'}
+    r = requests.get(url, headers=headers)
+    result = r.json()
+    </pre>
+    <h6>The output</h6>
+    <pre>
+        [
+    {
+        "id": 2,
+        "name": "Apple AirPods with Wired Charging Case",
+        "description": "Automatically on, automatically connected,\r\nEasy setup for all your Apple devices,\r\nQuick access to Siri by saying “Hey Siri”,\r\nDouble-tap to play or skip forward,\r\nNew Apple H1 headphone chip delivers faster wireless connection to your devices,\r\nCharges quickly in the case,\r\nCase can be charged using the Lightning connector,\r\nRich, high-quality audio and voice,\r\nSeamless switching between devices,\r\nListen and talk all day with multiple charges from the Charging Case,",
+        "price": 237.0,
+        "image1": "/images/phone.jpg",
+        "image2": "/images/h3.jpg",
+        "image3": "/images/h2.jpg",
+        "image4": null,
+        "category": 1
+    },
+    {
+        "id": 3,
+        "name": "Sony MDRZX110/BLK ZX Series Stereo Headphones",
+        "description": "30 millimeter drivers for rich, full frequency response,\r\nLightweight and comfortable on ear design,\r\nSwivel design for portability,\r\n47 ¼ inch (1.2 meter) tangle free, Y type cor,",
+        "price": 169.99,
+        "image1": "/images/h.jpg",
+        "image2": "/images/h7_A1HS4Qm.jpg",
+        "image3": null,
+        "image4": null,
+        "category": 1
+    },
+    {
+        ....
+    </pre>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
