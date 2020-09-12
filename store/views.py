@@ -482,8 +482,13 @@ def api_doc(request):
     if request.method == 'POST':
         t = Token.objects.filter(user=request.user).first()
         return JsonResponse({'token': t.key}, status=200)
-        
-    return render(request, 'store/api.html')
+
+    category = Category.objects.all()
+    context = {
+        'category': category,
+    }
+
+    return render(request, 'store/api.html', context)
 
 
 class category_api(APIView):
