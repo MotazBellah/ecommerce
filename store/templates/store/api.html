@@ -33,11 +33,15 @@
         <p>In order to start access the API you should have an account to get authentication token, Please click <a href="{% url 'register' %}">here</a> for Registration</p>
         <p>If you already have an account, Please click <a href="{% url 'login' %}">here</a> to log in</p>
         <p>Logged In, great, now you can get your Token, Please click <a id="get-token"href="#">here</a></p>
+        <div id="tokenArea">
+            <p>Your token is:  <span id="userToken"></span></p>
+        </div>
 
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <script type="text/javascript">
+        $('#tokenArea').hide()
         document.getElementById('get-token').addEventListener('click', function(e){
             e.preventDefault();
 
@@ -57,7 +61,8 @@
                 success: function(response) {
 
                   console.log(response);
-
+                  document.getElementById('userToken').innerHTML = response['token']
+                  $('#tokenArea').slideDown(1000)
 
                 }
             });
