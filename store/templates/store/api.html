@@ -32,8 +32,55 @@
         <h5>Quick Start</h5>
         <p>In order to start access the API you should have an account to get authentication token, Please click <a href="{% url 'register' %}">here</a> for Registration</p>
         <p>If you already have an account, Please click <a href="{% url 'login' %}">here</a> to log in</p>
-        <p>Logged In, great, now you can get your Token</p>
+        <p>Logged In, great, now you can get your Token, Please click <a id="get-token"href="#">here</a></p>
 
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        document.getElementById('get-token').addEventListener('click', function(e){
+            e.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'api_doc' %}",
+                headers: {
+                        'Content-Type':'application/json',
+                        'HTTP_X_REQUESTED_WITH':'XMLHttpRequest',
+                        'X-Requested-With':'XMLHttpRequest',
+                        'X-CSRFToken':getCookie('csrftoken'),
+                    },
+                data: JSON.stringify({
+
+                }),
+                datatype:'json',
+                success: function(response) {
+
+                  console.log(response);
+
+
+                }
+            });
+
+        })
+
+        // From Djang doc.
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+    </script>
 
 {% endblock content %}
