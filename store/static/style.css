@@ -83,8 +83,31 @@
 
 /* Set fixed height for text area */
 .name {
-    height: auto;
+    height: 50px;;
 }
+
+@media only screen and (max-width: 990px) {
+  .name {
+    height:70px;
+  }
+}
+
+@media only screen and (max-width: 764px) {
+  .name {
+    height:110px;
+  }
+}
+
+@media only screen and (max-width: 573px) {
+  .name {
+    height:30px;
+  }
+  .card-wrap {
+      width: 75%;
+      margin: 0 auto;
+  }
+}
+
 
 /* END the product Page */
 
