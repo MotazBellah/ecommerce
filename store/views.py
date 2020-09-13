@@ -202,21 +202,24 @@ def item(request, product_id):
 
 def addItem(request):
     if request.is_ajax() and request.method == "POST":
-        data = json.loads(request.body)
-        id = data.get('id')
-        # name = data.get('name')
-        # price = data.get('price')
-        print('$$$$$$$$$$$$')
-        item = Product.objects.get(pk=id)
-        cart = Cart(product=item, user=request.user)
-        cart.save()
-        items_in_cart = Cart.objects.filter(user=request.user)
+        if request.user.is_authenticated:
+            data = json.loads(request.body)
+            id = data.get('id')
+            # name = data.get('name')
+            # price = data.get('price')
+            print('$$$$$$$$$$$$')
+            item = Product.objects.get(pk=id)
+            cart = Cart(product=item, user=request.user)
+            cart.save()
+            items_in_cart = Cart.objects.filter(user=request.user)
 
-        print('///////////////')
-        print(items_in_cart)
-        print(len(items_in_cart))
-        print('///////////////')
-        return JsonResponse({'items': len(items_in_cart)}, status=200)
+            print('///////////////')
+            print(items_in_cart)
+            print(len(items_in_cart))
+            print('///////////////')
+            return JsonResponse({'items': len(items_in_cart)}, status=200)
+        else:
+            return redirect('login_view')
 
 
 def cart_view(request):
