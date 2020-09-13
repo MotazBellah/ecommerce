@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import CategorySerializer, ProductSerializer
 from .models import Category, Product, Cart, User, ShippingInfo, Purchase, Review
-# from .extras import transact, generate_client_token
+from .extras import transact, generate_client_token, find_transaction
 from .scrap import ebay, olx, ebay_API, get_amazon, tinydeal, souq
 from .forms import ShippingForm
 from django.contrib.auth import authenticate, login, logout
@@ -24,25 +24,6 @@ from datetime import datetime
 import re
 from .geocode import getGeocodeLocation
 from django.contrib import messages
-
-
-gateway = braintree.BraintreeGateway(
-    braintree.Configuration(
-        environment=settings.BT_ENVIRONMENT,
-        merchant_id=settings.BT_MERCHANT_ID,
-        public_key=settings.BT_PUBLIC_KEY,
-        private_key=settings.BT_PRIVATE_KEY,
-    )
-)
-
-def generate_client_token():
-    return gateway.client_token.generate()
-
-def transact(options):
-    return gateway.transaction.sale(options)
-
-def find_transaction(id):
-    return gateway.transaction.find(id)
 
 
 def login_view(request):
