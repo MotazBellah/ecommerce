@@ -33,8 +33,6 @@ rowParent.addEventListener('click', function(e) {
             id: itemId,
         })
 
-        console.log(data);
-
         const xhr = new XMLHttpRequest()
         const csrftoken = getCookie('csrftoken');
         xhr.responseType = 'json'

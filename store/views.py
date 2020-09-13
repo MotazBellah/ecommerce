@@ -335,6 +335,15 @@ def shipping_info(request):
             country = request.POST['country']
             zip = request.POST.get('zip')
 
+            if not address1:
+                return JsonResponse({'error': "address1 is required"})
+
+            if not city:
+                return JsonResponse({'error': "city is required"})
+
+            if not country:
+                return JsonResponse({'error': "country is required"})
+
             phone_regex = re.findall(r'^\+\d{9,15}$', phone)
             if not phone_regex or len(phone) > 15 or len(phone) < 7:
                 return JsonResponse({'error': "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."})
@@ -436,7 +445,7 @@ def get_data(request):
     ebay_data = []
     souq_data = []
     another_websits = ['ebay', 'Tinydeal', 'Souq', 'OLX']
-    if (not(len(name) == 0 or name.isspace())) and (resource in another_websits):    
+    if (not(len(name) == 0 or name.isspace())) and (resource in another_websits):
         if resource == "ebay":
             ebay_data = ebay_API(name)
         elif resource == "Tinydeal":

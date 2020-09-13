@@ -128,10 +128,18 @@
                 div.appendChild(br)
 
                 coment_div.appendChild(div)
+                
+                try {
+                    document.getElementById('no_comments').style.display = 'none'
+                } catch (e) {
+                    // pass
+                }
+
 
             },
             error : function(xhr,errmsg,err) {
                 console.log(xhr.status + ": " + xhr.responseText);
+            }
 
         });
     });
