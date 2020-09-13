@@ -113,29 +113,29 @@
 
 /* Style the Item Page */
 /* Column conttainer */
-.roww {
+/* .roww {
     display: flex;
     flex-wrap: wrap;
-}
+} */
 
 /* Create two unequal columns that sits next to each other */
 /* info/right column */
 .item-info {
-    flex: 40%;
+    /* flex: 40%; */
     background-color: #f1f1f1;
     padding: 20px;
 }
 
 /* slidshow/left column */
-.item-slid {
+/* .item-slid {
     flex: 60%;
     padding: 20px;
-}
+} */
 
-.item-slid img {
+/* .item-slid img {
     width: 100%;
     padding: 20px;
-}
+} */
 
 /* END the Item Page */
 
