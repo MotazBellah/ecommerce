@@ -183,7 +183,10 @@ def searched_products(request):
 def item(request, product_id):
     view_item = Product.objects.get(pk=product_id)
     category = Category.objects.all()
-    items_in_cart = Cart.objects.filter(user=request.user)
+    if request.user.is_authenticated:
+        items_in_cart = Cart.objects.filter(user=request.user)
+    else:
+        items_in_cart = []
     comments = Review.objects.filter(product=view_item)
 
     context = {
