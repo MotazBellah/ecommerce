@@ -201,8 +201,8 @@ def addItem(request):
     if request.is_ajax() and request.method == "POST":
         data = json.loads(request.body)
         id = data.get('id')
-        name = data.get('name')
-        price = data.get('price')
+        # name = data.get('name')
+        # price = data.get('price')
         print('$$$$$$$$$$$$')
         item = Product.objects.get(pk=id)
         cart = Cart(product=item, user=request.user)

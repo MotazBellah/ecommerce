@@ -28,8 +28,8 @@ rowParent.addEventListener('click', function(e) {
         const parentDiv = e.target.parentElement
         const allChild = parentDiv.childNodes;
         const itemId = parentDiv.id
-        const name = allChild[1].textContent;
-        const price = allChild[9].textContent;
+        // const name = allChild[1].textContent;
+        // const price = allChild[9].textContent;
         // console.log(parentDiv);
         // console.log(name);
         // console.log(price);
@@ -39,8 +39,8 @@ rowParent.addEventListener('click', function(e) {
         const method = "POST"
         const data = JSON.stringify({
             id: itemId,
-            name: name,
-            price: price
+            // name: name,
+            // price: price
         })
 
         console.log(data);
@@ -58,7 +58,7 @@ rowParent.addEventListener('click', function(e) {
             noOfItems.innerHTML = xhr.response['items']
         }
         xhr.send(data)
-        // return
+        return
     }
     // alert(e.target)
 })
