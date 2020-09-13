@@ -105,8 +105,13 @@
                 }),
                 datatype:'json',
                 success: function(response) {
-
-                  console.log(response);
+        
+                    if (response['token'] == undefined) {
+                         document.getElementById('userToken').innerHTML = 'Please create an account and login'
+                         $('#tokenArea').slideDown(1000)
+                         return
+                    }
+                  console.log(response['token']);
                   document.getElementById('userToken').innerHTML = response['token']
                   $('#tokenArea').slideDown(1000)
 

@@ -56,11 +56,12 @@ def login_view(request):
         # Check if authentication successful
         if user is not None:
             login(request, user)
+            messages.success(request, "Logged in successfully")
             return HttpResponseRedirect(reverse("index"))
         else:
-            return render(request, "store/login.html", {
-                "message": "Invalid username and/or password."
-            })
+            messages.error(request, "Invalid username and/or password")
+            return redirect('login')
+
     else:
         if request.user.is_anonymous:
             return render(request, "store/login.html")
@@ -70,6 +71,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
+    messages.info(request, "You are logged out")
     return HttpResponseRedirect(reverse("index"))
 
 
@@ -82,20 +84,20 @@ def register(request):
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if not username:
-            return render(request, "store/register.html", {
-                "message": "*Not username."})
+            messages.error(request, "Username is required")
+            return redirect('register')
 
         if not email:
-            return render(request, "network/register.html", {
-                "message": "*Not email."})
+            messages.error(request, "Email is required")
+            return redirect('register')
 
         if not password:
-            return render(request, "store/register.html", {
-                "message": "*Not password."})
+            messages.error(request, "Password is required")
+            return redirect('register')
 
         if password != confirmation:
-            return render(request, "store/register.html", {
-                "message": "*Passwords must match."})
+            messages.error(request, "Password must match")
+            return redirect('register')
         # Attempt to create new user
         try:
             email_already = User.objects.filter(email=email)
@@ -104,14 +106,14 @@ def register(request):
                 user.save()
                 token = Token.objects.get(user=user)
             else:
-                return render(request, "store/register.html", {
-                "message": "*Email already taken."
-            })
+                messages.error(request, "Email is already exist")
+                return redirect('register')
         except IntegrityError:
-            return render(request, "store/register.html", {
-                "message": "*Username already taken."
-            })
+            messages.error(request, "The user is already exist")
+            return redirect('register')
+
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+        messages.success(request, "Logged in successfully")
         return redirect("index")
     else:
         if request.user.is_anonymous:
@@ -220,6 +222,7 @@ def addItem(request):
             print('///////////////')
             return JsonResponse({'items': len(items_in_cart)}, status=200)
         else:
+            messages.error(request, "You are not allowed to add products")
             return redirect('login')
 
 
@@ -243,9 +246,15 @@ def cart_view(request):
 
 
 def shipping_checkout(request):
-    items_in_cart = Cart.objects.filter(user=request.user)
-    shipping_info = ShippingInfo.objects.filter(user=request.user).first()
-    total = sum((i.get_total for i in items_in_cart), 0)
+    if request.user.is_authenticated:
+        items_in_cart = Cart.objects.filter(user=request.user)
+        total = sum((i.get_total for i in items_in_cart), 0)
+        shipping_info = ShippingInfo.objects.filter(user=request.user).first()
+    else:
+        items_in_cart = []
+        total = 0
+        shipping_info = False
+
     category = Category.objects.all()
     client_token = generate_client_token()
     user_address = 0
@@ -273,150 +282,170 @@ def shipping_checkout(request):
 
 def quantity(request):
     if request.is_ajax() and request.method == "POST":
-        data = json.loads(request.body)
-        id = data.get('id')
-        value = data.get('value')
+        if request.user.is_authenticated:
+            data = json.loads(request.body)
+            id = data.get('id')
+            value = data.get('value')
 
-        item = Cart.objects.get(user=request.user, pk=id)
-        if int(value) != item.quantity:
-            item.quantity = int(value)
-            item.save()
+            item = Cart.objects.get(user=request.user, pk=id)
+            if int(value) != item.quantity:
+                item.quantity = int(value)
+                item.save()
 
-        total_item = Cart.objects.filter(user=request.user)
-        total_price = sum((i.get_total for i in total_item), 0)
+            total_item = Cart.objects.filter(user=request.user)
+            total_price = sum((i.get_total for i in total_item), 0)
 
-        return JsonResponse({'items': "done", 'total': item.get_total, "total_price": total_price}, status=200)
+            return JsonResponse({'items': "done", 'total': item.get_total, "total_price": total_price}, status=200)
+        else:
+            messages.error(request, "You are not allowed to do this action, please create an account or log in")
+            return redirect('login')
+
 
 
 def delete(request):
     if request.is_ajax() and request.method == "POST":
-        data = json.loads(request.body)
-        id = data.get('id')
-        item = Cart.objects.get(user=request.user, pk=id)
-        item.delete()
+            if request.user.is_authenticated:
+                data = json.loads(request.body)
+                id = data.get('id')
+                item = Cart.objects.get(user=request.user, pk=id)
+                item.delete()
 
-        items_in_cart = Cart.objects.filter(user=request.user)
-        total_price = sum((i.get_total for i in items_in_cart), 0)
-        print('///////////////')
-        print(data)
-        print('///////////////')
+                items_in_cart = Cart.objects.filter(user=request.user)
+                total_price = sum((i.get_total for i in items_in_cart), 0)
 
-        return JsonResponse({'items': len(items_in_cart), "total_price": total_price}, status=200)
+                return JsonResponse({'items': len(items_in_cart), "total_price": total_price}, status=200)
+            else:
+                messages.error(request, "You are not allowed to do this action, please create an account or log in")
+                return redirect('login')
 
 
 def checkout(request):
     if request.method == 'POST':
-        total_item = Cart.objects.filter(user=request.user)
-        total_price = sum((i.get_total for i in total_item), 0)
-        try:
-            result = transact({
-                'amount': str(round(total_price,2)),
-                'payment_method_nonce': request.POST['payment_method_nonce'],
-                'options': {
-                    "submit_for_settlement": True
-                }
-            })
-        except Exception as e:
-            print(e)
-            return JsonResponse({'error': "Something went wrong"})
+        if request.user.is_authenticated:
+            total_item = Cart.objects.filter(user=request.user)
+            total_price = sum((i.get_total for i in total_item), 0)
+            try:
+                result = transact({
+                    'amount': str(round(total_price,2)),
+                    'payment_method_nonce': request.POST['payment_method_nonce'],
+                    'options': {
+                        "submit_for_settlement": True
+                    }
+                })
+            except Exception as e:
+                print(e)
+                return JsonResponse({'error': "Something went wrong"})
 
-        if result.is_success or result.transaction:
-            for i in total_item:
-                Purchase(product=i.product, quantity=i.quantity, Total_price=i.get_total, user=request.user).save()
+            if result.is_success or result.transaction:
+                for i in total_item:
+                    Purchase(product=i.product, quantity=i.quantity, Total_price=i.get_total, user=request.user).save()
 
-            total_item.delete()
+                total_item.delete()
 
-            return JsonResponse({'items': "Done"}, status=200)
+                return JsonResponse({'items': "Done"}, status=200)
 
+            else:
+                return JsonResponse({'error': "Something went wrong"})
         else:
-            return JsonResponse({'error': "Something went wrong"})
+            messages.error(request, "You are not allowed to do this action, please create an account or log in")
+            return redirect('login')
 
 
 def shipping_info(request):
     if request.method == 'POST':
-        info = ShippingInfo.objects.filter(user=request.user).first()
-        if info:
-            return JsonResponse({'message': "User already have shipping info"}, status=200)
+        if request.user.is_authenticated:
+            info = ShippingInfo.objects.filter(user=request.user).first()
+            if info:
+                return JsonResponse({'message': "User already have shipping info"}, status=200)
 
-        address1 = request.POST['address1']
-        address2 = request.POST.get('address2')
-        phone = request.POST['phone']
-        city = request.POST['city']
-        country = request.POST['country']
-        zip = request.POST.get('zip')
+            address1 = request.POST['address1']
+            address2 = request.POST.get('address2')
+            phone = request.POST['phone']
+            city = request.POST['city']
+            country = request.POST['country']
+            zip = request.POST.get('zip')
 
-        phone_regex = re.findall(r'^\+\d{9,15}$', phone)
-        if not phone_regex or len(phone) > 15 or len(phone) < 7:
-            return JsonResponse({'error': "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."})
+            phone_regex = re.findall(r'^\+\d{9,15}$', phone)
+            if not phone_regex or len(phone) > 15 or len(phone) < 7:
+                return JsonResponse({'error': "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."})
 
-        if len(str(zip)) != 5:
-            return JsonResponse({'error': "The zip code must contain 5 digits."})
+            if len(str(zip)) != 5:
+                return JsonResponse({'error': "The zip code must contain 5 digits."})
 
 
-        shipping_info = ShippingInfo(address1=address1, address2=address2, user=request.user,
-                                    phone=phone, city=city, zip=zip, country=country)
-        shipping_info.save()
-        info = ShippingInfo.objects.filter(user=request.user).first()
-        total_address = country.strip() + '+' + city.strip() + '+' + address1.strip()
-        location = getGeocodeLocation(total_address)
+            shipping_info = ShippingInfo(address1=address1, address2=address2, user=request.user,
+                                        phone=phone, city=city, zip=zip, country=country)
+            shipping_info.save()
+            info = ShippingInfo.objects.filter(user=request.user).first()
+            total_address = country.strip() + '+' + city.strip() + '+' + address1.strip()
+            location = getGeocodeLocation(total_address)
 
-        return JsonResponse({'items': "done",
-                             "info": info.serialize(),
-                             "location": location,
-                             'mapTitle': total_address.replace('+', ", ")
-                             }, status=200)
+            return JsonResponse({'items': "done",
+                                 "info": info.serialize(),
+                                 "location": location,
+                                 'mapTitle': total_address.replace('+', ", ")
+                                 }, status=200)
+        else:
+            messages.error(request, "You are not allowed to do this action, please create an account or log in")
+            return redirect('login')
+
 
 
 def update_shipping_info(request):
     if request.method == 'POST':
-        info = ShippingInfo.objects.filter(user=request.user).first()
-        if not info:
-            return JsonResponse({'error': "You don not have a shipping information yet"})
-        address1 = request.POST.get('address1') or None
-        address2 = request.POST.get('address2') or None
-        phone = request.POST.get('phone') or None
-        country = request.POST.get('country') or None
-        city = request.POST.get('city') or None
-        zip = request.POST.get('zip') or None
+        if request.user.is_authenticated:
+            info = ShippingInfo.objects.filter(user=request.user).first()
+            if not info:
+                return JsonResponse({'error': "You don not have a shipping information yet"})
+            address1 = request.POST.get('address1') or None
+            address2 = request.POST.get('address2') or None
+            phone = request.POST.get('phone') or None
+            country = request.POST.get('country') or None
+            city = request.POST.get('city') or None
+            zip = request.POST.get('zip') or None
 
-        changed_info = False
+            changed_info = False
 
-        if address1 and address1 != info.address1:
-            info.address1 = address1
-            changed_info = True
-        if address2 and address2 != info.address2:
-            info.address2 = address2
-            changed_info = True
-        if phone and phone != info.phone:
-            phone_regex = re.findall(r'^\+\d{9,15}$', phone)
-            if not phone_regex or len(phone) > 15 or len(phone) < 7:
-                return JsonResponse({'error': "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."})
-            info.phone = phone
-            changed_info = True
-        if zip and zip != info.zip:
-            if len(str(zip)) != 5:
-                return JsonResponse({'error': "The zip code must contain 5 digits."})
-            info.zip = zip
-            changed_info = True
-        if city and city != info.city:
-            info.city = city
-            changed_info = True
-        if country and country != info.country:
-            info.country = country
-            changed_info = True
-        print('****************')
-        print(country)
-        if changed_info:
-            info.save()
+            if address1 and address1 != info.address1:
+                info.address1 = address1
+                changed_info = True
+            if address2 and address2 != info.address2:
+                info.address2 = address2
+                changed_info = True
+            if phone and phone != info.phone:
+                phone_regex = re.findall(r'^\+\d{9,15}$', phone)
+                if not phone_regex or len(phone) > 15 or len(phone) < 7:
+                    return JsonResponse({'error': "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."})
+                info.phone = phone
+                changed_info = True
+            if zip and zip != info.zip:
+                if len(str(zip)) != 5:
+                    return JsonResponse({'error': "The zip code must contain 5 digits."})
+                info.zip = zip
+                changed_info = True
+            if city and city != info.city:
+                info.city = city
+                changed_info = True
+            if country and country != info.country:
+                info.country = country
+                changed_info = True
+            print('****************')
+            print(country)
+            if changed_info:
+                info.save()
 
-        total_address = country.strip() + '+' + city.strip() + '+' + address1.strip()
-        location = getGeocodeLocation(total_address)
+            total_address = country.strip() + '+' + city.strip() + '+' + address1.strip()
+            location = getGeocodeLocation(total_address)
 
-        return JsonResponse({'items': "doneeeee",
-                             "info": info.serialize(),
-                             "location": location,
-                             'mapTitle': total_address.replace('+', ", ")
-                             }, status=200)
+            return JsonResponse({'items': "doneeeee",
+                                 "info": info.serialize(),
+                                 "location": location,
+                                 'mapTitle': total_address.replace('+', ", ")
+                                 }, status=200)
+        else:
+            messages.error(request, "You are not allowed to do this action, please create an account or log in")
+            return redirect('login')
+
 
 
 def get_data(request):
@@ -458,48 +487,60 @@ def get_data(request):
 
 def comment_book(request):
     if request.method == 'POST':
-        # get the value from the form
-        comment = request.POST['value']
-        product_id = request.POST['product_id']
-        print('/////////')
+        if request.user.is_authenticated:
+            # get the value from the form
+            comment = request.POST['value']
+            product_id = request.POST['product_id']
+            print('/////////')
 
-        # Check if the input is valid
-        if len(comment) == 0 or comment.isspace():
-            return JsonResponse({'error': "something went wrong!"})
+            # Check if the input is valid
+            if len(comment) == 0 or comment.isspace():
+                return JsonResponse({'error': "something went wrong!"})
 
-        product_obj = Product.objects.get(pk=product_id)
-        user_comment = Review(product=product_obj, comment=comment, user=request.user)
-        user_comment.save()
+            product_obj = Product.objects.get(pk=product_id)
+            user_comment = Review(product=product_obj, comment=comment, user=request.user)
+            user_comment.save()
 
-        today = datetime.now()
+            today = datetime.now()
 
-        return JsonResponse({'user': request.user.username,
-                             'comment': comment,
-                             'date': today.strftime("%b %d %Y %H:%M %p"),
-                             'id': user_comment.id})
+            return JsonResponse({'user': request.user.username,
+                                 'comment': comment,
+                                 'date': today.strftime("%b %d %Y %H:%M %p"),
+                                 'id': user_comment.id})
+        else:
+            messages.error(request, "You are not allowed to do this action, please create an account or log in")
+            return redirect('login')
 
 
 def deleteComments(request):
     if request.is_ajax() and request.method == "POST":
-        data = json.loads(request.body)
-        id = data.get('id')
-        comment = Review.objects.get(user=request.user, pk=id)
-        comment.delete()
+        if request.user.is_authenticated:
+            data = json.loads(request.body)
+            id = data.get('id')
+            comment = Review.objects.get(user=request.user, pk=id)
+            comment.delete()
 
-        return JsonResponse({'items': "done"}, status=200)
+            return JsonResponse({'items': "done"}, status=200)
+        else:
+            messages.error(request, "You are not allowed to do this action, please create an account or log in")
+            return redirect('login')
 
 
 def api_doc(request):
     if request.method == 'POST':
-        t = Token.objects.filter(user=request.user).first()
-        return JsonResponse({'token': t.key}, status=200)
+        if request.user.is_authenticated:
+            t = Token.objects.filter(user=request.user).first()
+            return JsonResponse({'token': t.key}, status=200)
+        else:
+            messages.error(request, "You are not allowed to do this action, please create an account or log in")
+            return redirect('login')
+    else:
+        category = Category.objects.all()
+        context = {
+            'category': category,
+        }
 
-    category = Category.objects.all()
-    context = {
-        'category': category,
-    }
-
-    return render(request, 'store/api.html', context)
+        return render(request, 'store/api.html', context)
 
 
 class category_api(APIView):
