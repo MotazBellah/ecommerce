@@ -3,32 +3,37 @@
 
 {% block content %}
     <div class="container cart-checkout">
-    <table class="table">
-        <thead>
-        <tr>
-          <th>Name</th>
-          <th>Quantity</th>
-          <th>Price</th>
-          <th>Delete</th>
-        </tr>
-        </thead>
-        <tbody id="table-content">
-          {% for i in products %}
-              <tr id={{i.id}}>
-                <td>{{ i.product.name }}</td>
-                <td id={{i.id}}>
-                    <span>{{ i.quantity }}</span>
+    {% if no_of_items %}
+        <table class="table">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody id="table-content">
+              {% for i in products %}
+                  <tr id={{i.id}}>
+                    <td>{{ i.product.name }}</td>
+                    <td id={{i.id}}>
+                        <span>{{ i.quantity }}</span>
 
-                    <a href="#"><i id="up" class="arrow up"></i></a>
-                    <a href="#"><i id="down" class="arrow down"></i></a>
-                </td>
-                <td>${{ i.get_total|floatformat:"2" }}</td>
-                <td><a id="del" class="fa fa-trash fa-lg"></a></td>
-              </tr>
-          {% endfor %}
-        </tbody>
-        </table>
-        <hr>
+                        <a href="#"><i id="up" class="arrow up"></i></a>
+                        <a href="#"><i id="down" class="arrow down"></i></a>
+                    </td>
+                    <td>${{ i.get_total|floatformat:"2" }}</td>
+                    <td><a id="del" class="fa fa-trash fa-lg"></a></td>
+                  </tr>
+              {% endfor %}
+            </tbody>
+            </table>
+            <hr>
+        {% else %}
+            <h4 class="my-4">Your cart is empty</h4>
+        {% endif %}
+
         <div>
             <h4 class="float-left">Total Price: $<span id="total-price">{{total|floatformat:"2"}}</span></h4>
             <a  type="button" class="btn btn-info float-right" href="{% url 'shipping_checkout' %}">Checkout</a>
