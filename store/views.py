@@ -142,18 +142,15 @@ def products(request, category_id):
 
 def searched_products(request):
     category = Category.objects.all()
+    items = []
     if request.user.is_authenticated:
         items_in_cart = Cart.objects.filter(user=request.user)
     else:
         items_in_cart = []
 
     if request.method == "POST":
-
         name = request.POST['name']
-        print('////////////')
-        print(name)
         items = Product.objects.filter(name__contains=name)
-        print(items)
 
     context = {
         'items': items,
@@ -189,18 +186,10 @@ def addItem(request):
         if request.user.is_authenticated:
             data = json.loads(request.body)
             id = data.get('id')
-            # name = data.get('name')
-            # price = data.get('price')
-            print('$$$$$$$$$$$$')
             item = Product.objects.get(pk=id)
             cart = Cart(product=item, user=request.user)
             cart.save()
             items_in_cart = Cart.objects.filter(user=request.user)
-
-            print('///////////////')
-            print(items_in_cart)
-            print(len(items_in_cart))
-            print('///////////////')
             return JsonResponse({'items': len(items_in_cart)}, status=200)
         else:
             messages.error(request, "You are not allowed to add products")
@@ -410,8 +399,7 @@ def update_shipping_info(request):
             if country and country != info.country:
                 info.country = country
                 changed_info = True
-            print('****************')
-            print(country)
+
             if changed_info:
                 info.save()
 
@@ -430,7 +418,6 @@ def update_shipping_info(request):
 
 
 def get_data(request):
-    # print(souq('iphon x'))
     if request.method == 'POST':
         name = request.POST.get('product') or None
         resource = request.POST.getlist('resources')
@@ -453,9 +440,6 @@ def get_data(request):
                 else:
                     olx_list = olx(name)
 
-        print("*****************")
-        print(name)
-        print(resource)
     context = {
         "info": tinydeal_list,
         "olx": olx_list,
