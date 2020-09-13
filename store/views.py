@@ -532,8 +532,7 @@ def api_doc(request):
             t = Token.objects.filter(user=request.user).first()
             return JsonResponse({'token': t.key}, status=200)
         else:
-            messages.error(request, "You are not allowed to do this action, please create an account or log in")
-            return redirect('login')
+            return JsonResponse({'error': 'Please create an account and login'})
     else:
         category = Category.objects.all()
         context = {
