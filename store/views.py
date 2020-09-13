@@ -426,6 +426,7 @@ def update_shipping_info(request):
 
 
 def get_data(request):
+    name, resources = None, None
     if request.method == 'POST':
         name = request.POST.get('product') or None
         resource = request.POST.getlist('resources')
