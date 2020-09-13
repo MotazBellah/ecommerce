@@ -3,9 +3,6 @@
 
 {% block content %}
 <div class="container">
-        {% if message %}
-            <div class="data-info">{{ message }}</div>
-        {% endif %}
         <div class="login mt-5">
             <h3 class="mb-5">Create new account and start shopping</h3>
             <form action="{% url 'register' %}" method="post">
@@ -31,6 +28,5 @@
             {% include "components/facebook.html" %}
             {% include "components/github.html" %}
         </div>
-
 </div>
 {% endblock %}

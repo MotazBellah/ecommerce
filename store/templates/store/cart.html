@@ -63,23 +63,17 @@
                 return cookieValue;
             }
 
-            console.log(cartTable);
             let totalPrice = document.getElementById("total-price")
             cartTable.addEventListener('click', function(e) {
-                console.log(e.target.tagName);
-                console.log(e.target.id);
-
                 if (e.target.tagName === 'I') {
                         const parentDiv = e.target.parentElement.parentElement
                         const allChild = parentDiv.childNodes;
                         const parentDiv2 = e.target.parentElement.parentElement.parentElement
-
-                        console.log(parentDiv2);
                         let price = parentDiv2.childNodes[5]
                         const id = parentDiv.id
                         let quantity = allChild[1];
                         let quantity_value = allChild[1].textContent
-                        // console.log(quantity);
+
                         if (e.target.id === 'up') {
                             action = 'up'
                             quantity.innerHTML = 1 + parseInt(quantity_value)
@@ -92,7 +86,6 @@
                         }
 
                         let total = quantity.innerHTML
-                        console.log(total);
                         $.ajax({
                             type: "POST",
                             url: "/quantity",
@@ -108,19 +101,14 @@
                             }),
                             datatype:'json',
                             success: function(data) {
-                              // if (data['success'])
-                              console.log(data);
                               price.innerHTML = "$" + data['total']
                               totalPrice.innerHTML = data['total_price']
 
                             }
                         });
-                        // const name = allChild[1].textContent;
-                        // const price = allChild[9].textContent;
 
                 }
                 if (e.target.tagName === 'A' && e.target.id === 'del') {
-                    // action = 'delete'
                     const row = e.target.parentElement.parentElement
                     const id = row.id
 
@@ -138,9 +126,6 @@
                         }),
                         datatype:'json',
                         success: function(response) {
-                          // if (data['success'])
-                          // price.innerHTML = "$" + data['total']
-                          // row.style.display = "none"
 
                           var fadeEffect = setInterval(function () {
                             if (!row.style.opacity) {

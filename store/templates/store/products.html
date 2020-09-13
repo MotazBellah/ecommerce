@@ -1,39 +1,37 @@
 {% extends "store/layout.html" %}
 {% load static %}
 
-
-
 {% block content %}
-<div class="container">
-	{% include "components/searchModal.html" %}
-	<div class="row justify-content-md-center">
-        {% for i in items %}
-		<div class="col-sm-3 card-wr p-1">
-			<div class="card-wrap p-2">
-			<img class="thumbnail" src="{{i.image1.url}}">
-			<div id="{{i.id}}" class="box-eleme">
-				<p class="name mt-1" title={{i.name}}>{{ i.name }}</p>
+	<div class="container">
+		{% include "components/searchModal.html" %}
+		<div class="row justify-content-md-center">
+	        {% for i in items %}
+			<div class="col-sm-3 card-wr p-1">
+				<div class="card-wrap p-2">
+				<img class="thumbnail" src="{{i.image1.url}}">
+				<div id="{{i.id}}" class="box-eleme">
+					<p class="name mt-1" title={{i.name}}>{{ i.name }}</p>
 
-				<h4><strong>${{ i.price }}</strong></h4>
-				<a  id="add-btn" class="btn btn-outline-secondary add-btn m-1">Add to Cart</a>
-				<a class="btn btn-outline-success m-1" href="{% url 'item' i.id %}">View</a>
+					<h4><strong>${{ i.price }}</strong></h4>
+					<a  id="add-btn" class="btn btn-outline-secondary add-btn m-1">Add to Cart</a>
+					<a class="btn btn-outline-success m-1" href="{% url 'item' i.id %}">View</a>
+				</div>
+				</div>
 			</div>
+	        {% endfor%}
+		</div><br>
+		{% if items %}
+			<div class="text-center">
+				<ul class="pagination justify-content-center">
+					{% for i in paginator.page_range %}
+						<li class="page-item {% if i == page_number %} active {% endif %}">
+							<a class="page-link" href="?page={{i}}">{{i}}</a>
+						</li>
+					{% endfor %}
+				</ul>
 			</div>
-		</div>
-        {% endfor%}
-	</div><br>
-	{% if items %}
-		<div class="text-center">
-			<ul class="pagination justify-content-center">
-				{% for i in paginator.page_range %}
-					<li class="page-item {% if i == page_number %} active {% endif %}">
-						<a class="page-link" href="?page={{i}}">{{i}}</a>
-					</li>
-				{% endfor %}
-			</ul>
-		</div>
-	{% endif %}
+		{% endif %}
 
-</div>
+	</div>
 
 {% endblock content %}

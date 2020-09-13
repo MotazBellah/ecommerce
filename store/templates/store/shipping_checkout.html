@@ -153,10 +153,6 @@
             var mapTitle = '{{address}}'
             init()
 
-            console.log("TTTTTTTTTTTT");
-            console.log(latitude);
-            console.log(longitude);
-
              if (user_shipping_adress === '1') {
                  $('#updating-info').show()
                  $('#address').hide()
@@ -186,8 +182,6 @@
                      console.log('Error', err);
                      return;
                    }
-                   // else
-                   // Added ajax
 
                    // Add the nonce to the form and submit
                    document.querySelector('#nonce').value = payload.nonce;
@@ -201,7 +195,6 @@
                            action: 'post'
                        },
                        success:function(response){
-                            console.log(response);
 
                             if ('error' in response) {
                                 createFlashMessages('flashMessage', 'flashConetent', "Something went wrong, please try again later!", "error")
@@ -210,11 +203,8 @@
                                 createFlashMessages('flashMessage', 'flashConetent', "Your payment has been processed successfully", "success")
                                 document.getElementById("total_amount").innerHTML = '0.00'
                                 document.getElementById("submit-button").disabled = true;
-                                // setTimeout(function(){location.reload()}, 4000);
                             }
 
-                            // window.location.reload(true)
-                           // alert('HHHHH')
                        },
                        error : function(xhr,errmsg,err) {
 
@@ -289,7 +279,6 @@
                             return
                         }
                         document.getElementById("post-form").reset();
-                        console.log(response);
                         createFlashMessages('shippingFlashMessage', 'shippingflashConetent', "Your shipping info has been added", "success")
 
                         setTimeout(function(){
@@ -355,7 +344,7 @@
 
 
                         createFlashMessages('shippingFlashMessage', 'shippingflashConetent', "Your shipping info has been updated", "success")
-                        console.log(response);
+
                         document.getElementById("shippingAdress1").innerHTML = response['info']['address1']
                         document.getElementById("shippingAdress2").innerHTML = response['info']['address2']
                         document.getElementById("shippingPhone").innerHTML = response['info']['phone']
@@ -447,9 +436,6 @@
                     zoom: 15,
                     styles: styles,
                   });
-
-                console.log("MAP");
-                console.log(initialPosition);
 
                 var largeInfowindow = new google.maps.InfoWindow();
 

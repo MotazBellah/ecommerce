@@ -1,7 +1,6 @@
 const addBtn = document.getElementById("add-btn")
 const noOfItems = document.getElementById("no-items")
 const rowParent = document.getElementsByClassName("row")[0]
-// const body = document.getElementsByTagName(body)
 
 // From Djang doc.
 function getCookie(name) {
@@ -21,26 +20,17 @@ function getCookie(name) {
 }
 
 rowParent.addEventListener('click', function(e) {
-    // console.log(e.target.tagName);
-    // console.log(e.target.id);
+
     if (e.target.tagName === 'A' &&  e.target.id === 'add-btn') {
-        // alert('k');
+
         const parentDiv = e.target.parentElement
         const allChild = parentDiv.childNodes;
         const itemId = parentDiv.id
-        // const name = allChild[1].textContent;
-        // const price = allChild[9].textContent;
-        // console.log(parentDiv);
-        // console.log(name);
-        // console.log(price);
-        // console.log(itemId);
 
         const url = '/addItem'
         const method = "POST"
         const data = JSON.stringify({
             id: itemId,
-            // name: name,
-            // price: price
         })
 
         console.log(data);
@@ -60,5 +50,5 @@ rowParent.addEventListener('click', function(e) {
         xhr.send(data)
         return
     }
-    // alert(e.target)
+
 })

@@ -95,9 +95,6 @@
             success:function(response){
                 document.getElementById("submit_comment").reset();
                 document.getElementById("input_text").innerHTML = ''
-                console.log(response);
-
-
                 //  Create a strong element that contain the user name
                 var strong = document.createElement("strong");
                 strong.innerHTML = response['user']
@@ -135,8 +132,7 @@
             },
             error : function(xhr,errmsg,err) {
                 console.log(xhr.status + ": " + xhr.responseText);
-                // createFlashMessages('shippingFlashMessage', 'shippingflashConetent', "Something went wrong :(", "error")
-        }
+
         });
     });
 
@@ -144,7 +140,6 @@
         if (e.target.tagName === 'A' && e.target.id === 'delete_comment') {
             const parentDiv = e.target.parentElement.parentElement
             const id = parentDiv.id
-            console.log(parentDiv);
 
             $.ajax({
                 type: "POST",
@@ -201,8 +196,6 @@
             }),
             datatype:'json',
             success: function(response) {
-                // $('#'+id).fadeOut(1000);
-                console.log(response);
                 document.getElementById('no-items').innerHTML = response['items']
 
             }
