@@ -16,6 +16,7 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-body">
+          <h6 id='search-text'>Searching for products, pleas wait...</h6>
             <form method="post" id='search-form' action="{% url 'get_data' %}">
                 {% csrf_token %}
               <div class="form-group">
@@ -30,7 +31,7 @@
                     <option value="Souq">Souq</option>
               </select>
               <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Search</button>
+                <button type="submit" id="search" class="btn btn-primary">Search</button>
                 <button type="button" id="close" class="btn btn-default" data-dismiss="modal">Close</button>
               </div>
           </form>
@@ -39,3 +40,12 @@
 
   </div>
 </div>
+
+<script type="text/javascript">
+    document.getElementById('search-text').style.display = 'none'
+
+    document.getElementById('search').addEventListener('click', function(){
+        document.getElementById('search-text').style.display = 'block'
+        document.getElementById('search-text').style.color = 'green'
+    })
+</script>

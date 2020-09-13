@@ -429,25 +429,22 @@ def get_data(request):
     name, resources = '', ''
     if request.method == 'POST':
         name = request.POST.get('product') or None
-        resource = request.POST.getlist('resources')
+        resource = request.POST.get('resources') or None
     ebay_list = []
     tinydeal_list = []
     olx_list = []
     ebay_data = []
     souq_data = []
     another_websits = ['ebay', 'Tinydeal', 'Souq', 'OLX']
-    if (len(name) == 0 or name.isspace()) and (resource in another_websits):
-        for i in resource:
-            print(i)
-            if i == "ebay":
-                ebay_data = ebay_API(name)
-            elif i == "Tinydeal":
-                tinydeal_list = tinydeal(name)
-            elif i == "Souq":
-                souq_data = souq(name)
-
-            else:
-                olx_list = olx(name)
+    if (not(len(name) == 0 or name.isspace())) and (resource in another_websits):    
+        if resource == "ebay":
+            ebay_data = ebay_API(name)
+        elif resource == "Tinydeal":
+            tinydeal_list = tinydeal(name)
+        elif resource == "Souq":
+            souq_data = souq(name)
+        else:
+            olx_list = olx(name)
 
     context = {
         "info": tinydeal_list,
