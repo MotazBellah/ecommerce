@@ -342,11 +342,17 @@
                             return
                         }
 
-                        latitude = response['location'][0]
-                        longitude = response['location'][1]
-                        mapTitle = response['mapTitle']
+                        if (response['mapTitle'] == '' && response['location'] == '') {
+                            // pass
 
-                        init()
+                        } else {
+                            latitude = response['location'][0]
+                            longitude = response['location'][1]
+                            mapTitle = response['mapTitle']
+
+                            init()
+                        }
+
 
                         createFlashMessages('shippingFlashMessage', 'shippingflashConetent', "Your shipping info has been updated", "success")
                         console.log(response);

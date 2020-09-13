@@ -375,10 +375,12 @@ def update_shipping_info(request):
             zip = request.POST.get('zip') or None
 
             changed_info = False
+            changed_location = False
 
             if address1 and address1 != info.address1:
                 info.address1 = address1
                 changed_info = True
+                changed_location = True
             if address2 and address2 != info.address2:
                 info.address2 = address2
                 changed_info = True
@@ -396,15 +398,21 @@ def update_shipping_info(request):
             if city and city != info.city:
                 info.city = city
                 changed_info = True
+                changed_location = True
             if country and country != info.country:
                 info.country = country
                 changed_info = True
+                changed_location = True
 
             if changed_info:
                 info.save()
 
-            total_address = country.strip() + '+' + city.strip() + '+' + address1.strip()
-            location = getGeocodeLocation(total_address)
+            if changed_location:
+                total_address = country.strip() + '+' + city.strip() + '+' + address1.strip()
+                location = getGeocodeLocation(total_address)
+            else:
+                total_address = ''
+                location = ''
 
             return JsonResponse({'items': "doneeeee",
                                  "info": info.serialize(),
