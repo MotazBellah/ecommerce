@@ -132,10 +132,11 @@
                               id: id,
                         }),
                         datatype:'json',
-                        success: function(data) {
+                        success: function(response) {
                           // if (data['success'])
                           // price.innerHTML = "$" + data['total']
                           // row.style.display = "none"
+
                           var fadeEffect = setInterval(function () {
                             if (!row.style.opacity) {
                                 row.style.opacity = 1;
@@ -146,9 +147,10 @@
                                 clearInterval(fadeEffect);
                                 row.style.display = "none"
                             }
-                        }, 100);
+                        }, 80);
 
-                        totalPrice.innerHTML = data['total_price']
+                        totalPrice.innerHTML = response['total_price']
+                        document.getElementById('no-items').innerHTML = response['items']
                         }
                     });
                 }
