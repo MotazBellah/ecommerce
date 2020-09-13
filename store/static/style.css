@@ -223,7 +223,7 @@
     text-align: center;
     padding-top: 50px;
     color: #999;
-    border-bottom: 17px solid #696969;
+    border-bottom: 12px solid #696969;
     width: 100%;
 }
 
@@ -258,10 +258,12 @@
 
 
 .contact-info li.phone a {
+    color: gray;
     background-image: url('../static/telephone.png');
 }
 
 .contact-info li.mail a {
+    color: gray;
     background-image: url('../static/envelope.png');
 }
 
