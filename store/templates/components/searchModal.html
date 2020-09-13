@@ -16,12 +16,12 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-body">
-          <h6 id='search-text'>Searching for products, pleas wait...</h6>
+          <h6 id='search-text'>Searching for products, please wait... </h6>
             <form method="post" id='search-form' action="{% url 'get_data' %}">
                 {% csrf_token %}
               <div class="form-group">
                 <label for="inputAddress">Product Name</label>
-                <input type="text" name="product" class="form-control" id="updateInputAddress" placeholder="iphone x" required>
+                <input type="text" name="product" class="form-control" id="updateInputAddress" placeholder="What are you looking for?" required>
               </div>
               <p>Please select one or more of the following resources: </p>
               <select class="form-control my-2"  name="resources" required>

@@ -73,15 +73,16 @@ def ebay_API(name):
     response = api.execute("findItemsByKeywords", api_request)
     x = api.response.dict()
     info = []
-    for i in x['searchResult']['item']:
-        try:
-            title = i["title"]
-            img = i['galleryURL']
-            a = i['viewItemURL']
-            p = i['sellingStatus']['currentPrice']['value']
-            info.append((img, title, a, p))
-        except Exception as e:
-            print(e)
+    if 'item' in x['searchResult']:
+        for i in x['searchResult']['item']:
+            try:
+                title = i["title"]
+                img = i['galleryURL']
+                a = i['viewItemURL']
+                p = i['sellingStatus']['currentPrice']['value']
+                info.append((img, title, a, p))
+            except Exception as e:
+                print(e)
 
     return info
 
