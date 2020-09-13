@@ -223,18 +223,21 @@ def addItem(request):
 
 
 def cart_view(request):
-    items_in_cart = Cart.objects.filter(user=request.user)
-    total = sum((i.get_total for i in items_in_cart), 0)
-    category = Category.objects.all()
+    if request.user.is_authenticated:
+        items_in_cart = Cart.objects.filter(user=request.user)
+        total = sum((i.get_total for i in items_in_cart), 0)
+        category = Category.objects.all()
 
-    context = {
-        "no_of_items": len(items_in_cart),
-        'products': items_in_cart,
-        "category": category,
-        "total": total,
-    }
+        context = {
+            "no_of_items": len(items_in_cart),
+            'products': items_in_cart,
+            "category": category,
+            "total": total,
+        }
 
-    return render(request, 'store/cart.html', context)
+        return render(request, 'store/cart.html', context)
+    else:
+        return redirect('login_view')
 
 
 def shipping_checkout(request):
