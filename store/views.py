@@ -426,7 +426,7 @@ def update_shipping_info(request):
 
 
 def get_data(request):
-    name, resources = None, None
+    name, resources = '', ''
     if request.method == 'POST':
         name = request.POST.get('product') or None
         resource = request.POST.getlist('resources')
@@ -435,7 +435,8 @@ def get_data(request):
     olx_list = []
     ebay_data = []
     souq_data = []
-    if name and resource:
+    another_websits = ['ebay', 'Tinydeal', 'Souq', 'OLX']
+    if (len(name) == 0 or name.isspace()) and (resource in another_websits):
         for i in resource:
             print(i)
             if i == "ebay":
