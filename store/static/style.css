@@ -291,7 +291,7 @@
 }
 
 .error {
-    background-color: red;
+    background-color: #ff726f;
     padding: 15px;
     border-radius: 5px;
     display: block;
