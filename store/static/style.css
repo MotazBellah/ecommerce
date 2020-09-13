@@ -96,6 +96,13 @@
   .name {
     height:110px;
   }
+
+  .item-slid img {
+      /* width: 100%; */
+      padding: 10px;
+      height: 500px;
+  }
+
 }
 
 @media only screen and (max-width: 573px) {
@@ -105,6 +112,11 @@
   .card-wrap {
       width: 75%;
       margin: 0 auto;
+  }
+  .item-slid img {
+      /* width: 100%; */
+      padding: 10px;
+      height: 400px;
   }
 }
 
@@ -123,7 +135,7 @@
 .item-info {
     /* flex: 40%; */
     background-color: #f1f1f1;
-    padding: 20px;
+    padding: 5px;
 }
 
 /* slidshow/left column */
@@ -132,10 +144,11 @@
     padding: 20px;
 } */
 
-/* .item-slid img {
-    width: 100%;
+.item-slid img {
+    /* width: 100%; */
     padding: 20px;
-} */
+    height: 600px;
+}
 
 /* END the Item Page */
 
