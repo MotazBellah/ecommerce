@@ -23,6 +23,7 @@ from rest_framework import filters, generics
 from datetime import datetime
 import re
 from .geocode import getGeocodeLocation
+from django.contrib import messages
 
 
 gateway = braintree.BraintreeGateway(
@@ -219,7 +220,7 @@ def addItem(request):
             print('///////////////')
             return JsonResponse({'items': len(items_in_cart)}, status=200)
         else:
-            return redirect('login_view')
+            return redirect('login')
 
 
 def cart_view(request):
@@ -237,7 +238,8 @@ def cart_view(request):
 
         return render(request, 'store/cart.html', context)
     else:
-        return redirect('login_view')
+        messages.info(request, "Please log in to view the cart")
+        return redirect('login')
 
 
 def shipping_checkout(request):
