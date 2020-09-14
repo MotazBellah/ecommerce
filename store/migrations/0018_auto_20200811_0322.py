@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='shippinginfo',
             name='country',
-            field=models.CharField(default=django.utils.timezone.now, max_length=20),
+            field=models.CharField(default=django.utils.timezone.now, max_length=64),
             preserve_default=False,
         ),
         migrations.AlterField(
