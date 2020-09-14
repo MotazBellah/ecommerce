@@ -84,7 +84,7 @@ class ShippingInfo(models.Model):
     address1 = models.TextField()
     address2 = models.TextField(blank=True, null=True)
     phone = models.CharField(max_length=17)
-    country = models.CharField(max_length=20)
+    country = models.CharField(max_length=64)
     city = models.CharField(max_length=64)
     zip = models.IntegerField()
 
