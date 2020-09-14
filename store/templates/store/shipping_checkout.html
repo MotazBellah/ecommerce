@@ -118,7 +118,7 @@
             </div>
             </div><br><hr>
 
-        <div id="bottom"></div>
+
         <h5>Total Price: $<span id="total_amount">{{total|floatformat:"2"}}</span></h5>
         <div id="flashMessage">
             <p id="flashConetent"></p>
@@ -202,10 +202,10 @@
                                 createFlashMessages('flashMessage', 'flashConetent', "Something went wrong, please try again later!", "error")
                                 setTimeout(function(){location.reload()}, 4000);
                             } else {
-                                document.getElementById('bottom').scrollIntoView({behavior: "smooth", block: "end", inline: "start"});
                                 createFlashMessages('flashMessage', 'flashConetent', "Your payment has been processed successfully", "success")
                                 document.getElementById("total_amount").innerHTML = '0.00'
                                 document.getElementById("submit-button").disabled = true;
+                                document.getElementById("no-items").innerHTML = '0'
                             }
 
                        },
@@ -327,9 +327,10 @@
                         action: 'post'
                     },
                     success:function(response){
+
                         var closeModal = document.getElementById('close');
                         closeModal.click()
-                        document.getElementById('top').scrollIntoView({behavior: "smooth", block: "end", inline: "start"});
+                        // document.getElementById('top').scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
                         if ('error' in response) {
 
                             createFlashMessages('shippingFlashMessage', 'shippingflashConetent', response['error'], "error")

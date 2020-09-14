@@ -376,21 +376,26 @@ def update_shipping_info(request):
             info = ShippingInfo.objects.filter(user=request.user).first()
             if not info:
                 return JsonResponse({'error': "You don not have a shipping information yet"})
-            address1 = request.POST.get('address1') or None
+            address1 = request.POST.get('address1') or info.address1
             address2 = request.POST.get('address2') or None
             phone = request.POST.get('phone') or None
-            country = request.POST.get('country') or None
-            city = request.POST.get('city') or None
+            country = request.POST.get('country') or info.country
+            city = request.POST.get('city') or info.city
             zip = request.POST.get('zip') or None
 
+            print('///////////////')
+            print(address1)
+            print(country)
+            print(city)
+            print('//////////////')
             changed_info = False
             changed_location = False
 
-            if address1 and address1 != info.address1:
-                info.address1 = address1
+            if address1 and address1 != info.address1 and not address1.isspace():
+                info.address1 = address1.strip()
                 changed_info = True
                 changed_location = True
-            if address2 and address2 != info.address2:
+            if address2 and address2 != info.address2 and not address2.isspace():
                 info.address2 = address2
                 changed_info = True
             if phone and phone != info.phone:
@@ -399,17 +404,17 @@ def update_shipping_info(request):
                     return JsonResponse({'error': "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."})
                 info.phone = phone
                 changed_info = True
-            if zip and zip != info.zip:
+            if zip and zip != info.zip and not zip.isspace():
                 if len(str(zip)) != 5:
                     return JsonResponse({'error': "The zip code must contain 5 digits."})
                 info.zip = zip
                 changed_info = True
-            if city and city != info.city:
-                info.city = city
+            if city and city != info.city and not city.isspace():
+                info.city = city.strip()
                 changed_info = True
                 changed_location = True
-            if country and country != info.country:
-                info.country = country
+            if country and country != info.country and not country.isspace():
+                info.country = country.strip()
                 changed_info = True
                 changed_location = True
 
@@ -417,7 +422,8 @@ def update_shipping_info(request):
                 info.save()
 
             if changed_location:
-                total_address = country + '+' + city + '+' + address1
+                location_list = [country, city, address1]
+                total_address = "+".join(location_list)
                 location = getGeocodeLocation(total_address)
             else:
                 total_address = ''

@@ -3,7 +3,7 @@
 
 {% block content %}
     <div class="container cart-checkout">
-    {% if no_of_items %}
+
         <table class="table">
             <thead>
             <tr>
@@ -30,10 +30,6 @@
             </tbody>
             </table>
             <hr>
-        {% else %}
-            <h4 class="my-4">Your cart is empty</h4>
-        {% endif %}
-
         <div>
             <h4 class="float-left">Total Price: $<span id="total-price">{{total|floatformat:"2"}}</span></h4>
             <a  type="button" class="btn btn-info float-right" href="{% url 'shipping_checkout' %}">Checkout</a>
