@@ -471,7 +471,6 @@ def comment_book(request):
             # get the value from the form
             comment = request.POST['value']
             product_id = request.POST['product_id']
-            print('/////////')
 
             # Check if the input is valid
             if len(comment) == 0 or comment.isspace():
