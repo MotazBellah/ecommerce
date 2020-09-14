@@ -41,7 +41,6 @@ jsonschema==2.6.0
 keyring==10.6.0
 keyrings.alt==3.0
 kombu==4.6.8
-language-selector==0.1
 lib50==2.0.8
 lxml==4.5.2
 markdown2==2.3.9
