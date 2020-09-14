@@ -57,7 +57,11 @@
                         <p><strong>{{ comment.user.username }}</strong>
                            <small>{{comment.date_added}}</small></p>
 
-                        <p>{{ comment.comment }}<a id="delete_comment" class="float-right">Delete</a></p>
+                            <p>{{ comment.comment }}
+                                {% if request.user.is_authenticated and comment.user.username == request.user.username %}
+                                    <a id="delete_comment" class="float-right">Delete</a>
+                                {% endif %}
+                            </p>
 
                         <br>
                     </div>
@@ -128,7 +132,7 @@
                 div.appendChild(br)
 
                 coment_div.appendChild(div)
-                
+
                 try {
                     document.getElementById('no_comments').style.display = 'none'
                 } catch (e) {
