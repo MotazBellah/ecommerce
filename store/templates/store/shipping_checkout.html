@@ -4,6 +4,7 @@
 {% block content %}
     <div class="container cart-checkout">
         <br>
+        <div id="top"></div>
         <div id="shippingFlashMessage">
             <p id="shippingflashConetent"></p>
         </div>
@@ -275,6 +276,7 @@
                     success:function(response){
 
                         if ('error' in response) {
+                            document.getElementById('top').scrollIntoView();
                             createFlashMessages('shippingFlashMessage', 'shippingflashConetent', response['error'], "error")
                             return
                         }

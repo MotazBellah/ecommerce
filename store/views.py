@@ -417,7 +417,7 @@ def update_shipping_info(request):
                 info.save()
 
             if changed_location:
-                total_address = country.strip() + '+' + city.strip() + '+' + address1.strip()
+                total_address = country + '+' + city + '+' + address1
                 location = getGeocodeLocation(total_address)
             else:
                 total_address = ''
