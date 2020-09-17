@@ -13,7 +13,7 @@ def getGeocodeLocation(inputString):
     URL = 'https://maps.googleapis.com/maps/api/geocode/json'
     PARAMS = {'address':locationString, 'key': 'AIzaSyDexCJ9aMiGdT3y_HtPEYfR9JsVcj8RbQA'}
     verify = '/etc/ssl/certs/cacert.org.pem'
-    r = requests.get(url=URL, params=PARAMS, verify=False)
+    r = requests.get(url=URL, params=PARAMS)
     result = r.json()
     latitude = result['results'][0]['geometry']['location']['lat']
     longitude = result['results'][0]['geometry']['location']['lng']
