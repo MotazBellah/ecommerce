@@ -150,7 +150,7 @@ def searched_products(request):
 
     if request.method == "POST":
         name = request.POST['name']
-        items = Product.objects.filter(name__contains=name)
+        items = Product.objects.filter(name__icontains=name)
 
     context = {
         'items': items,
