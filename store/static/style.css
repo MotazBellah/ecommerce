@@ -83,12 +83,12 @@
 
 /* Set fixed height for text area */
 .name {
-    height: 40px;;
+    height: 30px;;
 }
 
 @media only screen and (max-width: 990px) {
   .name {
-    height:70px;
+    height:50px;
   }
 }
 
