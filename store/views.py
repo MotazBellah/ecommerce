@@ -126,7 +126,7 @@ def products(request, category_id):
     else:
         items_in_cart = []
 
-    paginator = Paginator(items, per_page=5)
+    paginator = Paginator(items, per_page=12)
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
     context = {
