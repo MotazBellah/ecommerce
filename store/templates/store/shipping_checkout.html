@@ -200,13 +200,14 @@
 
                             if ('error' in response) {
                                 createFlashMessages('flashMessage', 'flashConetent', "Something went wrong, please try again later!", "error")
-                                setTimeout(function(){location.reload()}, 4000);
+                                // setTimeout(function(){location.reload()}, 4000);
                             } else {
                                 createFlashMessages('flashMessage', 'flashConetent', "Your payment has been processed successfully", "success")
                                 document.getElementById("total_amount").innerHTML = '0.00'
                                 document.getElementById("submit-button").disabled = true;
                                 document.getElementById("no-items").innerHTML = '0'
                             }
+                            setTimeout(function(){location.reload()}, 4100);
 
                        },
                        error : function(xhr,errmsg,err) {
