@@ -1,5 +1,5 @@
 # Ecommerce Store
-A web application for buying products online and handle online orders. Users will be able to browse the store’s categories and products, add items to their cart, and submit their orders as well as their shipping location and display it on google maps. Meanwhile, the store owners will be able to add and update menu items, and view orders that have been placed.
+A web application for buying products online and handle online orders. Users will be able to browse the store’s categories and products, add items to their cart, and submit their orders as well as their shipping location and display it on google maps. Meanwhile, the store owners will be able to add and update items, and view orders that have been placed.
 
 
 - https://e-storecom.herokuapp.com
