@@ -3,8 +3,10 @@ from bs4 import BeautifulSoup, SoupStrainer
 from ebaysdk.finding import Connection
 
 from ebaysdk import finding
+import os
 
-ebayapi = "MoatazGh-test-PRD-16e4c7d7e-e927c4f5"
+
+ebayapi = os.environ.get('EBAY_API')
 
 
 def ebay(name):

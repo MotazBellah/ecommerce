@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 't&ea=mv%2tsbcdjxu%(3w-9v*a&1ys5f^c1m1fu)_d$42t--@='
+SECRET_KEY = os.environ.get('STORE_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -187,9 +187,9 @@ DEFAULT_FILE_STORAGE = 'ecommerce.storage_backends.MediaStorage'
 
 # Braintree stettings
 BT_ENVIRONMENT = 'sandbox'
-BT_MERCHANT_ID = '737btdq3sw7ysw2s'
-BT_PUBLIC_KEY = '6w543sw56mby44yq'
-BT_PRIVATE_KEY = '4e168b23e1d089145698cc664bde1ad1'
+BT_MERCHANT_ID = os.environ.get('BT_MERCHANT_ID')
+BT_PUBLIC_KEY = os.environ.get('BT_PUBLIC_KEY')
+BT_PRIVATE_KEY = os.environ.get('BT_PRIVATE_KEY')
 
 SOCIALACCOUNT_PROVIDERS = {
     'facebook':
