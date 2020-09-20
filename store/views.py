@@ -45,7 +45,11 @@ def login_view(request):
 
     else:
         if request.user.is_anonymous:
-            return render(request, "store/login.html")
+            category = Category.objects.all()
+            context = {
+                'category':  category
+            }
+            return render(request, "store/login.html", context)
         else:
             return redirect('index')
 
@@ -98,7 +102,11 @@ def register(request):
         return redirect("index")
     else:
         if request.user.is_anonymous:
-            return render(request, "store/register.html")
+            category = Category.objects.all()
+            context = {
+                'category':  category
+            }
+            return render(request, "store/register.html", context)
         else:
             return redirect('index')
 
