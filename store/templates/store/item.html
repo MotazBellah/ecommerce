@@ -71,11 +71,13 @@
                 {% endif %}
             </div>
             <div class="user_commenting">
+                {% if request.user.is_authenticated %}
                     <form  id="submit_comment" method="post">
                         {% csrf_token %}
                         <input id='input_text' type="text" class="form-control" name="name" placeholder="Write a comment">
                         <input type="submit" class="btn btn-primary mt-2 mb-4" value="post">
                     </form>
+                {% endif %}
             </div>
         </div>
     </div>
