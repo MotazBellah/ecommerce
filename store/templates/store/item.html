@@ -47,7 +47,9 @@
         <h4>Description</h4>
         <p>{{item.description}}</p>
 
-        <a  id='add-item' class="btn btn-info">Add to Cart</a><br><br>
+        {% if request.user.is_authenticated %}
+            <a  id='add-item' class="btn btn-info">Add to Cart</a><br><br>
+        {% endif %}
         <div class="comments">
             <h4>Comments</h4><br>
             <div class="comment_area">
