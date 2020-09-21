@@ -2,7 +2,7 @@ import os
 import braintree
 from django.conf import settings
 
-
+# Braintree config
 gateway = braintree.BraintreeGateway(
     braintree.Configuration(
         environment=settings.BT_ENVIRONMENT,

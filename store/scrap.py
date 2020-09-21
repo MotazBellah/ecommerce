@@ -5,15 +5,17 @@ from ebaysdk.finding import Connection
 from ebaysdk import finding
 import os
 
-
+# ebay API key
 ebayapi = os.environ.get('EBAY_API')
 
 
 def ebay(name):
+    '''Scrap the ebay page and get the img, description text and price.'''
     name = name.replace(' ', '+')
     req = Request(f"https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313&_nkw={name}&_sacat=0", headers={'User-Agent': 'Mozilla/5.0'})
     response = urlopen(req).read()
     soup = BeautifulSoup(response, 'html.parser')
+    # Find all li the contain the product items
     lis = soup.find_all('li', {'class': 's-item'})
     info = []
     for i in lis:
@@ -30,6 +32,7 @@ def ebay(name):
 
 
 def olx(name):
+    '''Scrap the OLX page and get the img, description text, price and location.'''
     name = name.replace(' ', '-')
     req = Request(f"https://www.olx.com.eg/en/ads/q-{name}/", headers={'User-Agent': 'Mozilla/5.0'})
     response = urlopen(req).read()
@@ -48,28 +51,9 @@ def olx(name):
 
     return info
 
-def get_amazon(name):
-    req = Request("https://www.alibaba.com/products/iphone_x.html?IndexArea=product_en", headers={'User-Agent': 'Mozilla/5.0'})
-    response = urlopen(req).read()
-    soup = BeautifulSoup(response, 'html.parser')
-    lis = soup.find_all('div', {'class': 'organic-offer-wrapper'})
-    print(soup)
-    info = []
-    for i in lis[:3]:
-        try:
-            img = i.find('img', {'class': 'J-img-switcher-item'})
-            p1 = i.find('p', {'class': 'elements-title-normal__content'})
-            p2 = i.find('p', {'class': 'elements-offer-price-normal'})
-            p3 = i.find('span', {'class': 'element-offer-minorder-normal__value'})
-            anchr = i.find('a', {'class': 'elements-title-normal one-line'})
-            info.append((img.attrs['src'], anchr.attrs['title'], anchr.attrs['href'], p1.get_text(), p2.get_text(), p3.get_text()))
-        except Exception as e:
-            pass
-
-    return info
-
 
 def ebay_API(name):
+    '''Search for products on ebap using API and get the title, image, link and price.'''
     api = Connection(appid=ebayapi, siteid="EBAY-US", config_file=None)
     api_request = {'keywords' : f'{name}', 'outputSelector': "SellserInfo", 'sortOrder': 'CurrentPriceHighest'}
     response = api.execute("findItemsByKeywords", api_request)
@@ -112,16 +96,19 @@ def tinydeal(name):
 
 
 def souq(name):
+    '''Scrap the souq page and get the img, description text, price and location.'''
     name = name.replace(' ', "-")
     req = Request(f"https://egypt.souq.com/eg-en/{name}/s/?as=1", headers={'User-Agent': 'Mozilla/5.0'})
     response = urlopen(req).read()
     soup = BeautifulSoup(response, 'html.parser')
     lis2 = []
+    info = []
+    # Some products represented as large list and some as a grid
+    # So, if the product not represented as a list, then search for them as a grid
     lis = soup.find_all('div', {'class': 'column column-block block-list-large single-item'})
     if not lis:
         lis2 = soup.find_all('div', {'class': 'column column-block block-grid-large single-item'})
 
-    info = []
     for i in lis:
         try:
             img_wrap = i.find('a', {'class': 'img-bucket img-link itemLink sPrimaryLink'})

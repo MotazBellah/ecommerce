@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from .serializers import CategorySerializer, ProductSerializer
 from .models import Category, Product, Cart, User, ShippingInfo, Purchase, Review
 from .extras import transact, generate_client_token, find_transaction
-from .scrap import ebay, olx, ebay_API, get_amazon, tinydeal, souq
+from .scrap import ebay, olx, ebay_API, tinydeal, souq
 from .forms import ShippingForm
 from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator
@@ -44,6 +44,8 @@ def login_view(request):
             return redirect('login')
 
     else:
+        # If the request is get, check the user
+        # If not auth, then render the login page, else redirect to the main page
         if request.user.is_anonymous:
             category = Category.objects.all()
             context = {
@@ -56,6 +58,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
+    # Inform the user
     messages.info(request, "You are logged out")
     return HttpResponseRedirect(reverse("index"))
 
@@ -96,11 +99,13 @@ def register(request):
         except IntegrityError:
             messages.error(request, "The user is already exist")
             return redirect('register')
-
+        # Login with defautl the backend to be ModelBackend
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         messages.success(request, "Logged in successfully")
         return redirect("index")
     else:
+        # If the request is get, check the user
+        # If not auth, then render the register page, else redirect to the main page
         if request.user.is_anonymous:
             category = Category.objects.all()
             context = {
@@ -110,9 +115,11 @@ def register(request):
         else:
             return redirect('index')
 
-# Get all the category
+
 def index(request):
+    # Get all the category
     category = Category.objects.all()
+    # If the user is not auth, make the no. of items to be 0
     if request.user.is_authenticated:
         items_in_cart = Cart.objects.filter(user=request.user)
     else:
@@ -125,15 +132,17 @@ def index(request):
 
     return render(request, 'store/index.html', context)
 
-# Get all the products per category
+
 def products(request, category_id):
+    # Get all the products per category and all category
     items = Product.objects.filter(category=category_id)
     category = Category.objects.all()
+    # If the user is not auth, make the no. of items to be 0
     if request.user.is_authenticated:
         items_in_cart = Cart.objects.filter(user=request.user)
     else:
         items_in_cart = []
-
+    # Use pagination for better UX experience and make every page show 12 items maximum
     paginator = Paginator(items, per_page=12)
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
@@ -155,7 +164,9 @@ def searched_products(request):
         items_in_cart = Cart.objects.filter(user=request.user)
     else:
         items_in_cart = []
-
+    # If the method is post, get the product's name
+    # filter the product tabel for that name
+    # use name__icontains for ignore case sensitive
     if request.method == "POST":
         name = request.POST['name']
         items = Product.objects.filter(name__icontains=name)
@@ -170,12 +181,14 @@ def searched_products(request):
 
 
 def item(request, product_id):
+    # Get the item from the table by id
     view_item = Product.objects.get(pk=product_id)
     category = Category.objects.all()
     if request.user.is_authenticated:
         items_in_cart = Cart.objects.filter(user=request.user)
     else:
         items_in_cart = []
+    # Get all the comment
     comments = Review.objects.filter(product=view_item)
 
     context = {
@@ -190,13 +203,18 @@ def item(request, product_id):
 
 
 def addItem(request):
+    # Use ajax request to add product to the user cart
+    # If the user is authenticated
     if request.is_ajax() and request.method == "POST":
         if request.user.is_authenticated:
+            # Get the id from the request
             data = json.loads(request.body)
             id = data.get('id')
+            # Get the item and add that item to the user's cart
             item = Product.objects.get(pk=id)
             cart = Cart(product=item, user=request.user)
             cart.save()
+            # Update the no. of products in the user's cart
             items_in_cart = Cart.objects.filter(user=request.user)
             return JsonResponse({'items': len(items_in_cart)}, status=200)
         else:
@@ -206,7 +224,9 @@ def addItem(request):
 
 def cart_view(request):
     if request.user.is_authenticated:
+        # Display all the product in user's cart
         items_in_cart = Cart.objects.filter(user=request.user)
+        # Calculate the total price
         total = sum((i.get_total for i in items_in_cart), 0)
         category = Category.objects.all()
 
@@ -224,6 +244,8 @@ def cart_view(request):
 
 
 def shipping_checkout(request):
+    # If the user is auth, get all the product in his cart
+    # and Calculate the total price and shipping info
     if request.user.is_authenticated:
         items_in_cart = Cart.objects.filter(user=request.user)
         total = sum((i.get_total for i in items_in_cart), 0)
@@ -234,10 +256,14 @@ def shipping_checkout(request):
         shipping_info = False
 
     category = Category.objects.all()
+    # Get the client_token for braintree integration
     client_token = generate_client_token()
+    # Set some Initial value related to the user's shipping info
     user_address = 0
     address = 'Initial Title'
     location = 38.685516, -101.073324
+    # if the user has a shipping info, get the address(country + city + address1)
+    # Get the latitude and longitude using the getGeocodeLocation function
     if shipping_info:
         user_address = 1
         address = shipping_info.get_address
@@ -261,15 +287,17 @@ def shipping_checkout(request):
 def quantity(request):
     if request.is_ajax() and request.method == "POST":
         if request.user.is_authenticated:
+            # Get the id of the product and the quantity in the user's cart
             data = json.loads(request.body)
             id = data.get('id')
             value = data.get('value')
-
+            # Get the item form the user's cart, check if the value (update quantity) not equal to the item's quantity
+            # then update the item
             item = Cart.objects.get(user=request.user, pk=id)
             if int(value) != item.quantity:
                 item.quantity = int(value)
                 item.save()
-
+            # Get the new total price
             total_item = Cart.objects.filter(user=request.user)
             total_price = sum((i.get_total for i in total_item), 0)
 
@@ -283,11 +311,12 @@ def quantity(request):
 def delete(request):
     if request.is_ajax() and request.method == "POST":
             if request.user.is_authenticated:
+                # Get the id of the product and delete it
                 data = json.loads(request.body)
                 id = data.get('id')
                 item = Cart.objects.get(user=request.user, pk=id)
                 item.delete()
-
+                # Calculate the new total price
                 items_in_cart = Cart.objects.filter(user=request.user)
                 total_price = sum((i.get_total for i in items_in_cart), 0)
 
@@ -300,8 +329,10 @@ def delete(request):
 def checkout(request):
     if request.method == 'POST':
         if request.user.is_authenticated:
+            # Get the total products and total price
             total_item = Cart.objects.filter(user=request.user)
             total_price = sum((i.get_total for i in total_item), 0)
+            # Accept the payment using braintree
             try:
                 result = transact({
                     'amount': str(round(total_price,2)),
@@ -313,7 +344,7 @@ def checkout(request):
             except Exception as e:
                 print(e)
                 return JsonResponse({'error': "Something went wrong"})
-
+            # If success update the Purchase table and delete the cart
             if result.is_success or result.transaction:
                 for i in total_item:
                     Purchase(product=i.product, quantity=i.quantity, Total_price=i.get_total, user=request.user).save()
@@ -332,26 +363,27 @@ def checkout(request):
 def shipping_info(request):
     if request.method == 'POST':
         if request.user.is_authenticated:
+            # Check if the user already has a shipping info
             info = ShippingInfo.objects.filter(user=request.user).first()
             if info:
                 return JsonResponse({'message': "User already have shipping info"}, status=200)
-
+            # Get the info from the user
             address1 = request.POST['address1']
             address2 = request.POST.get('address2')
             phone = request.POST['phone']
             city = request.POST['city']
             country = request.POST['country']
             zip = request.POST.get('zip')
-
+            # Make sure the address1 not empty
             if not address1:
                 return JsonResponse({'error': "address1 is required"})
-
+            # Make sure the city not empty
             if not city:
                 return JsonResponse({'error': "city is required"})
-
+            # Make sure the country not empty
             if not country:
                 return JsonResponse({'error': "country is required"})
-
+            # Use regex to validate the phone number
             phone_regex = re.findall(r'^\+\d{9,15}$', phone)
             if not phone_regex or len(phone) > 15 or len(phone) < 7:
                 return JsonResponse({'error': "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."})
@@ -359,7 +391,7 @@ def shipping_info(request):
             if len(str(zip)) != 5:
                 return JsonResponse({'error': "The zip code must contain 5 digits."})
 
-
+            # Update the shipping info, and get the latitude and longitude
             shipping_info = ShippingInfo(address1=address1, address2=address2, user=request.user,
                                         phone=phone, city=city, zip=zip, country=country)
             shipping_info.save()
@@ -381,24 +413,22 @@ def shipping_info(request):
 def update_shipping_info(request):
     if request.method == 'POST':
         if request.user.is_authenticated:
+            # Check if the user has a shipping_info
             info = ShippingInfo.objects.filter(user=request.user).first()
             if not info:
                 return JsonResponse({'error': "You don not have a shipping information yet"})
+            # Get the info from the user and set the other field to be the old value
+            # in case the user did not change them
             address1 = request.POST.get('address1') or info.address1
-            address2 = request.POST.get('address2') or None
-            phone = request.POST.get('phone') or None
+            address2 = request.POST.get('address2') or info.address2
+            phone = request.POST.get('phone') or info.phone
             country = request.POST.get('country') or info.country
             city = request.POST.get('city') or info.city
-            zip = request.POST.get('zip') or None
+            zip = request.POST.get('zip') or info.zip
 
-            print('///////////////')
-            print(address1)
-            print(country)
-            print(city)
-            print('//////////////')
             changed_info = False
             changed_location = False
-
+            # Check if any of the shipping_info attribute changed
             if address1 and address1 != info.address1 and not address1.isspace():
                 info.address1 = address1.strip()
                 changed_info = True
@@ -407,6 +437,7 @@ def update_shipping_info(request):
                 info.address2 = address2
                 changed_info = True
             if phone and phone != info.phone:
+                # validate the phone number
                 phone_regex = re.findall(r'^\+\d{9,15}$', phone)
                 if not phone_regex or len(phone) > 15 or len(phone) < 7:
                     return JsonResponse({'error': "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."})
@@ -425,10 +456,11 @@ def update_shipping_info(request):
                 info.country = country.strip()
                 changed_info = True
                 changed_location = True
-
+            # If any shipping_info attribute changed, then save it with the new values
             if changed_info:
                 info.save()
-
+            # If any of location changed (address1, city, country)
+            # update the location
             if changed_location:
                 location_list = [country, city, address1]
                 total_address = "+".join(location_list)
@@ -451,6 +483,7 @@ def update_shipping_info(request):
 def get_data(request):
     name, resources = '', ''
     if request.method == 'POST':
+        # Get the product name and the resource
         name = request.POST.get('product') or None
         resource = request.POST.get('resources') or None
     ebay_list = []
@@ -459,6 +492,7 @@ def get_data(request):
     ebay_data = []
     souq_data = []
     another_websits = ['ebay', 'Tinydeal', 'Souq', 'OLX']
+    
     if (not(len(name) == 0 or name.isspace())) and (resource in another_websits):
         if resource == "ebay":
             ebay_data = ebay_API(name)

@@ -13,9 +13,10 @@ def getGeocodeLocation(inputString):
     locationString = inputString.replace(" ", "+") # replace spaces with `+` sor the server can read it correctly
     URL = 'https://maps.googleapis.com/maps/api/geocode/json'
     PARAMS = {'address': locationString, 'key': google_api_key}
-    verify = '/etc/ssl/certs/cacert.org.pem'
+
     r = requests.get(url=URL, params=PARAMS)
     result = r.json()
+    # Parase the JSON response and get the lat and long
     latitude = result['results'][0]['geometry']['location']['lat']
     longitude = result['results'][0]['geometry']['location']['lng']
 

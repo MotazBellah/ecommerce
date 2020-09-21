@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Category, Product
 
-
+# Creater a serializer(JSON-format) for category table
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -10,7 +10,7 @@ class CategorySerializer(serializers.ModelSerializer):
             'name',
         )
 
-
+# Creater a serializer(JSON-format) for products table
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
