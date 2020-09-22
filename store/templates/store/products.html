@@ -11,7 +11,6 @@
 				<img class="thumbnail" src="{{i.image1.url}}">
 				<div id="{{i.id}}" class="box-eleme">
 					<p class="name mt-1" title={{i.name}}>{{ i.name }}</p>
-
 					<h4><strong>${{ i.price }}</strong></h4>
 					{% if request.user.is_authenticated %}
 						<a  id="add-btn" class="btn btn-outline-secondary add-btn m-1">Add to Cart</a>

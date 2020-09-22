@@ -87,9 +87,12 @@
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
+    // Update the no of items
     document.getElementById('no-items').innerHTML = {{ no_of_items }}
+    // Div that contain the comment area
     var coment_div = document.getElementsByClassName('comment_area')[0];
-
+    // submit comment form using AJAX, send the text and id to the server
+    // After success request, update the DOM and render that comment, username and the date in the page
     $(document).on('submit', '#submit_comment',function(e){
         e.preventDefault();
         $.ajax({
@@ -136,7 +139,7 @@
                 div.appendChild(br)
 
                 coment_div.appendChild(div)
-
+                // Use try, cuz this block wont be useful if there are some comments already
                 try {
                     document.getElementById('no_comments').style.display = 'none'
                 } catch (e) {
@@ -151,8 +154,10 @@
 
         });
     });
-
+    // Use event bubbling to delete a comment
     coment_div.addEventListener('click', function (e) {
+        // Use AJAX request, to send the comment's id to the server
+        // After successful requst, user fadeOut animation to remove that comment from the page
         if (e.target.tagName === 'A' && e.target.id === 'delete_comment') {
             const parentDiv = e.target.parentElement.parentElement
             const id = parentDiv.id

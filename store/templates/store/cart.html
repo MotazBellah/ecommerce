@@ -40,6 +40,7 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script type="text/javascript">
+            // Get the div the hold the table
             const cartTable = document.getElementsByClassName("table")[0]
 
             // From Djang doc.
@@ -58,8 +59,9 @@
                 }
                 return cookieValue;
             }
-
+            // Get the total price
             let totalPrice = document.getElementById("total-price")
+            // Use event bubbling to change the product's quantity and delete product
             cartTable.addEventListener('click', function(e) {
                 if (e.target.tagName === 'I') {
                         const parentDiv = e.target.parentElement.parentElement

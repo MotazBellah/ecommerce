@@ -1,4 +1,6 @@
+// Get the add to cart button
 const addBtn = document.getElementById("add-btn")
+// Get the number that represent the total cart items
 const noOfItems = document.getElementById("no-items")
 const rowParent = document.getElementsByClassName("row")[0]
 
@@ -19,6 +21,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
+// Use event bubbling to add items to cart
 rowParent.addEventListener('click', function(e) {
 
     if (e.target.tagName === 'A' &&  e.target.id === 'add-btn') {
@@ -26,7 +29,9 @@ rowParent.addEventListener('click', function(e) {
         const parentDiv = e.target.parentElement
         const allChild = parentDiv.childNodes;
         const itemId = parentDiv.id
-
+        // Use XMLHttpRequest to send the data to the server in the background
+        // Recive a response from the server without reload the page
+        // Send the id of the product to the server and in response update the total no of product in the cart
         const url = '/addItem'
         const method = "POST"
         const data = JSON.stringify({

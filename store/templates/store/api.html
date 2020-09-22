@@ -87,7 +87,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <script type="text/javascript">
+         // Hide the area that contain the token
         $('#tokenArea').hide()
+         // If the user click on the link to get the token, use AJAX request to hand post request to the server
+        // parase the server response to get the token and display it to the user
         document.getElementById('get-token').addEventListener('click', function(e){
             e.preventDefault();
 

@@ -46,8 +46,6 @@
             <div id="updating-info">
                 <div id="map"></div>
 
-
-
             <p>If you want to check your shipping info, please click <a href="#" data-toggle="modal" data-target="#readShipping">here</a></p>
             <p>If you want to change/update your shipping info, please click <a href="#" data-toggle="modal" data-target="#updateShipping">here</a></p>
 
@@ -143,18 +141,26 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
         <script type="text/javascript">
+            // Make sure the flash area messages are hidden
             $('#flashMessage').hide()
             $('#shippingFlashMessage').hide()
-
+            // Get the form that Accept the payment
             var form = document.querySelector('#payment-form');
+            // Get the client token of braintreegateway
             var client_token = '{{ client_token }}';
+            // total price
             var total_value = '{{ total }}'
+            // get user address => 1 means the user has a shipping info
+            // 0 => means the user did not has a shipping info yet
             var user_shipping_adress = '{{ user_address }}'
+            // Get the latitude and longitude
             var latitude = {{ location.0 }}
             var longitude = {{ location.1 }}
             var mapTitle = '{{address}}'
+            // Call the init function that render the map
             init()
-
+            // if the use has already a shipping info, display the map and form for update the address
+            // hide the shipping address form
              if (user_shipping_adress === '1') {
                  $('#updating-info').show()
                  $('#address').hide()
@@ -162,13 +168,13 @@
                  $('#address').show()
                  $('#updating-info').hide()
              }
-
+            // Disable the submit payment button id the totla price is 0
             if (total_value == '0') {
                 document.getElementById("submit-button").disabled = true;
             } else {
                 document.getElementById("submit-button").disabled = false;
             }
-
+            // Create a form that Accept the payment
              braintree.dropin.create({
                authorization: client_token,
                container: '#bt-dropin',
@@ -188,6 +194,7 @@
                    // Add the nonce to the form and submit
                    document.querySelector('#nonce').value = payload.nonce;
                    // form.submit();
+                   // submit the form using ajax request
                    $.ajax({
                        type:'POST',
                        url:'{% url "checkout" %}',
@@ -222,7 +229,7 @@
                });
              });
 
-
+            // Function that create a flash message
             function createFlashMessages(flash_div, flash_content, message, class_name) {
                 document.getElementById(flash_content).innerHTML = message
                  try {
@@ -260,7 +267,10 @@
             }
 
 
-
+            // submit the shipping form using ajax request, send the form data to the server
+            // after successful request, if there any input not valid inform the user
+            // parase the response to get the latitude and longitude and render the map
+            // Update the modal with the shipping info, to make the user sure about this info
             $(document).on('submit', '#post-form',function(e){
                 e.preventDefault();
                 $.ajax({
@@ -311,7 +321,10 @@
                 }
                 });
             });
-
+            // submit the update shipping form using ajax request, send the form data to the server
+            // after successful request, if there any input not valid inform the user
+            // parase the response to get the latitude and longitude and render the map
+            // Update the modal with the shipping info, to make the user sure about this info
             $(document).on('submit', '#update-form',function(e){
                 e.preventDefault();
                 $.ajax({
@@ -337,7 +350,7 @@
                             createFlashMessages('shippingFlashMessage', 'shippingflashConetent', response['error'], "error")
                             return
                         }
-
+                        // If the user did not change the address, so no need to get the location and update the map
                         if (response['mapTitle'] == '' && response['location'] == '') {
                             // pass
 
@@ -345,7 +358,7 @@
                             latitude = response['location'][0]
                             longitude = response['location'][1]
                             mapTitle = response['mapTitle']
-
+                            // Render the map
                             init()
                         }
 
@@ -368,9 +381,9 @@
                 });
             });
 
-
+            // Function that render the map with latitude and longitude
             function init() {
-
+                // Map style
                 var styles = [
                       {
                         featureType: 'water',
@@ -437,6 +450,7 @@
                         ]
                       }
                     ];
+                // Get the latitude and longitude
                 var initialPosition = { lat: latitude, lng: longitude };
 
                 var map = new google.maps.Map(document.getElementById('map'), {
@@ -514,7 +528,5 @@
 
 
         </script>
-
-
 
 {% endblock content %}

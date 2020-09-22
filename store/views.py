@@ -481,6 +481,7 @@ def update_shipping_info(request):
                 info.save()
             # If any of location changed (address1, city, country)
             # update the location
+            # else set them to empty string
             if changed_location:
                 location_list = [country, city, address1]
                 total_address = "+".join(location_list)
