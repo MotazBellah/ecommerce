@@ -27,6 +27,7 @@ from django.contrib import messages
 
 
 def login_view(request):
+    '''Login view'''
     if request.method == "POST":
 
         # Attempt to sign user in
@@ -57,6 +58,7 @@ def login_view(request):
 
 
 def logout_view(request):
+    '''Logout view'''
     logout(request)
     # Inform the user
     messages.info(request, "You are logged out")
@@ -64,6 +66,7 @@ def logout_view(request):
 
 
 def register(request):
+    '''Register view'''
     if request.method == "POST":
         username = request.POST["username"]
         email = request.POST["email"]
@@ -117,6 +120,7 @@ def register(request):
 
 
 def index(request):
+    '''Index view, render all the categoy objects'''
     # Get all the category
     category = Category.objects.all()
     # If the user is not auth, make the no. of items to be 0
@@ -134,6 +138,7 @@ def index(request):
 
 
 def products(request, category_id):
+    '''products view, render all the products objects'''
     # Get all the products per category and all category
     items = Product.objects.filter(category=category_id)
     category = Category.objects.all()
@@ -158,6 +163,9 @@ def products(request, category_id):
 
 
 def searched_products(request):
+    '''In post request, filter the product table for searched value
+    and in GET request render the searched values for the user
+    '''
     category = Category.objects.all()
     items = []
     if request.user.is_authenticated:
@@ -181,6 +189,7 @@ def searched_products(request):
 
 
 def item(request, product_id):
+    '''Display all the info that belongs to the individual product'''
     # Get the item from the table by id
     view_item = Product.objects.get(pk=product_id)
     category = Category.objects.all()
@@ -203,6 +212,7 @@ def item(request, product_id):
 
 
 def addItem(request):
+    '''Alow to add product to user's cart, if the user is authenticated'''
     # Use ajax request to add product to the user cart
     # If the user is authenticated
     if request.is_ajax() and request.method == "POST":
@@ -223,6 +233,7 @@ def addItem(request):
 
 
 def cart_view(request):
+    '''Display the user's cart and the total price'''
     if request.user.is_authenticated:
         # Display all the product in user's cart
         items_in_cart = Cart.objects.filter(user=request.user)
@@ -244,6 +255,8 @@ def cart_view(request):
 
 
 def shipping_checkout(request):
+    '''Display the shipping form for the user, if the user has not a shipping info yet,
+    otherweis display the google map with marker that poin to the user's address using latitude and longitude'''
     # If the user is auth, get all the product in his cart
     # and Calculate the total price and shipping info
     if request.user.is_authenticated:
@@ -285,6 +298,8 @@ def shipping_checkout(request):
 
 
 def quantity(request):
+    '''Handle increase/decrease the no of quantity of each product in the user's cart
+    and update the total price'''
     if request.is_ajax() and request.method == "POST":
         if request.user.is_authenticated:
             # Get the id of the product and the quantity in the user's cart
@@ -309,6 +324,7 @@ def quantity(request):
 
 
 def delete(request):
+    '''Delete product from user's cart'''
     if request.is_ajax() and request.method == "POST":
             if request.user.is_authenticated:
                 # Get the id of the product and delete it
@@ -327,6 +343,7 @@ def delete(request):
 
 
 def checkout(request):
+    '''Accept payment from thes user and validate it'''
     if request.method == 'POST':
         if request.user.is_authenticated:
             # Get the total products and total price
@@ -361,6 +378,8 @@ def checkout(request):
 
 
 def shipping_info(request):
+    '''Get the shipping info from the user and validate the inputs,
+    Calculate latitude and longitude of that address'''
     if request.method == 'POST':
         if request.user.is_authenticated:
             # Check if the user already has a shipping info
@@ -411,6 +430,7 @@ def shipping_info(request):
 
 
 def update_shipping_info(request):
+    '''Update the any field of the shipping info and validate the value'''
     if request.method == 'POST':
         if request.user.is_authenticated:
             # Check if the user has a shipping_info
@@ -481,6 +501,7 @@ def update_shipping_info(request):
 
 
 def get_data(request):
+    '''Use web scraping and API to get som product form another websits'''
     name, resources = '', ''
     if request.method == 'POST':
         # Get the product name and the resource
@@ -492,7 +513,7 @@ def get_data(request):
     ebay_data = []
     souq_data = []
     another_websits = ['ebay', 'Tinydeal', 'Souq', 'OLX']
-    
+    # Validate the name
     if (not(len(name) == 0 or name.isspace())) and (resource in another_websits):
         if resource == "ebay":
             ebay_data = ebay_API(name)
@@ -514,6 +535,7 @@ def get_data(request):
 
 
 def comment_book(request):
+    '''Let the user to post a comment, if he/she is authenticated'''
     if request.method == 'POST':
         if request.user.is_authenticated:
             # get the value from the form
@@ -540,7 +562,9 @@ def comment_book(request):
 
 
 def deleteComments(request):
+    '''Delete the user's comment'''
     if request.is_ajax() and request.method == "POST":
+        # Get the id and delete the product from user's cart
         if request.user.is_authenticated:
             data = json.loads(request.body)
             id = data.get('id')
@@ -554,13 +578,17 @@ def deleteComments(request):
 
 
 def api_doc(request):
+    '''In post request let the user to get his/her token, if he/she is authenticated,
+    in Get render api page'''
     if request.method == 'POST':
         if request.user.is_authenticated:
+            # Get the token and send it to js
             t = Token.objects.filter(user=request.user).first()
             return JsonResponse({'token': t.key}, status=200)
         else:
             return JsonResponse({'error': 'Please create an account and login'})
     else:
+        # Show the api doc page for the user, in case of get request
         category = Category.objects.all()
         context = {
             'category': category,
@@ -570,8 +598,10 @@ def api_doc(request):
 
 
 class category_api(APIView):
+    '''API for categoy'''
+    # Make sure the user hase an authentication token in the header of the request
     permission_classes = (IsAuthenticated, )
-
+    # Return Json format for all category
     def get(self, request, format=None):
         category = Category.objects.all()
         serializer = CategorySerializer(category, many=True)
@@ -579,8 +609,10 @@ class category_api(APIView):
 
 
 class product_api(APIView):
+    '''API for products'''
+    # Make sure the user hase an authentication token in the header of the request
     permission_classes = (IsAuthenticated, )
-
+    # Return Json response for all the products
     def get(self, request, format=None):
         products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
@@ -588,7 +620,10 @@ class product_api(APIView):
 
 
 class search_product_api(generics.ListAPIView):
+    '''API for searched products'''
+    # Make sure the user hase an authentication token in the header of the request
     permission_classes = (IsAuthenticated, )
+    # Return JSON response for all product that match the search value
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [filters.SearchFilter]
